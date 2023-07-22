@@ -1,0 +1,15 @@
+using Gtk 4.0;
+
+template $LoadingWidget: Gtk.Box {
+    visible: true;
+    hexpand: true;
+    vexpand: true;
+    halign: center;
+    margin-top: 32;
+    margin-bottom: 32;
+    Gtk.Spinner {
+        spinning: true;
+        height-request: 32;
+        width-request: 32;
+    }
+}

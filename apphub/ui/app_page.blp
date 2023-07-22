@@ -1,0 +1,66 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $AppPage: Adw.Bin {
+  ScrolledWindow {
+    Box {
+      orientation: vertical;
+      margin-bottom: 10;
+      Adw.Clamp {
+        maximum-size: 860;
+        Box {
+          valign: start;
+          orientation: horizontal;
+          hexpand: true;
+          Image icon {
+            pixel-size: 128;
+            valign: start;
+          }
+          Box {
+            valign: center;
+            orientation: vertical;
+            hexpand: true;
+            margin-start: 10;
+            Label name_label {
+              halign: start;
+              styles ["title-1"]
+            }
+            Label dev_label {
+              halign: start;
+              styles ["subtitle"]
+            }
+          }
+          Button {
+            halign: end;
+            valign: center;
+            label: "Install";
+            styles ["suggested-action", "pill"]
+          }
+        }
+      }
+      Adw.Clamp {
+        margin-top: 28;
+        maximum-size: 860;
+        $ScreenshotCaracal caracal {}
+      }
+      Adw.Clamp {
+        maximum-size: 860;
+        Box {
+          margin-bottom: 10;
+          orientation: vertical;
+          Label summery_label {
+            margin-bottom: 10;
+            margin-top: 10;
+            wrap: true;
+            wrap-mode: word;
+            styles ["title-2"]
+          }
+          Label description_label {
+            wrap: true;
+            wrap-mode: word;
+          }
+        }
+      }
+    }
+  }
+}

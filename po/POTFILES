@@ -1,0 +1,6 @@
+data/com.bedsteler20.AppHub.desktop.in
+data/com.bedsteler20.AppHub.appdata.xml.in
+data/com.bedsteler20.AppHub.gschema.xml
+src/main.py
+src/window.py
+src/window.ui

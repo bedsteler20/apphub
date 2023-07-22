@@ -1,0 +1,30 @@
+{
+  "files.watcherExclude": {
+    "**/.dart_tool": true,
+    "_build/**": true,
+    ".flatpak/**": true
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "apphub/__init__.py": true
+  },
+  "files.associations": {
+    "*.wrap": "ini"
+  },
+  "blueprint-gtk.command": "flatpak",
+  "blueprint-gtk.arguments": [
+    "build",
+    ".flatpak/repo/",
+    "python3",
+    "subprojects/blueprint-compiler/blueprint-compiler.py"
+  ],
+  "C_Cpp.default.compileCommands": "_build/compile_commands.json",
+  "mesonbuild.configureOnOpen": false,
+  "mesonbuild.buildFolder": "_build",
+  "mesonbuild.mesonPath": "${workspaceFolder}/.flatpak/meson.sh"
+}

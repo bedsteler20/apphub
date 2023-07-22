@@ -1,0 +1,39 @@
+using Gtk 4.0;
+using Adw 1;
+template $ApphubWindow: Adw.ApplicationWindow {
+  default-height: 300;
+  default-width: 600;
+
+  Box {
+    orientation: vertical;
+    Adw.HeaderBar {
+      [start]
+      Button back_btn {
+        icon-name: "go-previous-symbolic";
+        action-name: "navigator.back";
+        visible: false;
+        styles ["flat", "symbolic"]
+      }
+      title-widget: SearchEntry search_bar {
+        width-request: 450;
+        placeholder-text: "Search";
+        hexpand: true;
+      };
+      [end]
+      MenuButton {
+        icon-name: "open-menu-symbolic";
+        menu-model: primary_menu;
+      }
+    }
+
+    Adw.ViewStack view_stack {}
+  }
+}
+
+
+menu primary_menu {
+  item(_("Preferences"), "app.preferences")
+  item(_("Keyboard Shortcuts"), "win.show-help-overlay")
+  item(_("About Apphub"), "app.about")
+
+}

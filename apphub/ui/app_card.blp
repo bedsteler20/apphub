@@ -1,0 +1,88 @@
+using Gtk 4.0;
+
+template $AppCard : Button {
+  width-request: 300;
+  hexpand: false;
+  vexpand: false;
+  // action-name: "navigator.visit";
+  styles [
+    "card",
+  ]
+  Box  {
+    margin-bottom: 10;
+    margin-end: 10;
+    margin-start: 10;
+    margin-top: 10;
+    orientation: horizontal;
+
+    styles [
+      "header",
+    ]
+
+    Image image {
+      pixel-size: 64;
+      valign: center;
+      margin-end: 10;
+      styles [
+        "icon-dropshadow",
+      ]
+    }
+
+    Box  {
+      orientation: vertical;
+      valign: center;
+      hexpand: true;
+
+      styles [
+        "title",
+      ]
+
+      Label name_label {
+        wrap: true; 
+        xalign: 0.0;
+        yalign: 0.5;
+        ellipsize: end;
+        lines: 3;
+        wrap-mode: word_char;
+
+        styles [
+          "heading",
+        ]
+      }
+
+      Label description_label {
+        valign: start;
+        vexpand: true;
+        wrap: true;
+        wrap-mode: word_char;
+        ellipsize: end;
+        lines: 2;
+        xalign: 0;
+        label: "A summery was not provided by the author";
+        styles [
+          "dim-label",
+        ]
+      }
+
+      Box verified_box {
+        orientation: horizontal;
+        valign: center;
+        visible: false;
+        Image {
+          icon-name: "check-plain-symbolic";
+          margin-end: 5;
+          styles ["dim-label", "accent"]
+        }
+
+        Label verified_label {
+          halign: start;
+          valign: center;
+          vexpand: true;
+          styles ["dim-label", "accent"]
+        }
+      }
+
+      
+    }
+  }
+}

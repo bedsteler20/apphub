@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/com/bedsteler20/AppHub">
+    <file preprocess="xml-stripblanks">window.ui</file>
+    <file preprocess="xml-stripblanks">app_card.ui</file>
+    <file preprocess="xml-stripblanks">app_grid.ui</file>
+    <file preprocess="xml-stripblanks">app_page.ui</file>
+    <file preprocess="xml-stripblanks">error_page.ui</file>
+    <file preprocess="xml-stripblanks">home_page.ui</file>
+    <file preprocess="xml-stripblanks">loading.ui</file>
+    <file preprocess="xml-stripblanks">nav_page.ui</file>
+    <file preprocess="xml-stripblanks">screenshots_caracal.ui</file>
+    <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
+    <file preprocess="xml-stripblanks">icons/check-plain-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/flatpak-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/home.svg</file>
+    <file>styles.css</file>
+  </gresource>
+</gresources>

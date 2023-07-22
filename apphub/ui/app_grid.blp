@@ -1,0 +1,16 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $AppGrid : Gtk.Box {
+  width-request: 860;
+  halign: center;
+  orientation: vertical;
+  Gtk.FlowBox flow {
+    homogeneous: true;
+    column-spacing: 15;
+    row-spacing: 15;
+    selection-mode: none;
+    hexpand: true;
+    halign: center;
+  }
+}
