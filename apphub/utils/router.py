@@ -1,4 +1,4 @@
-from typing import TypeVar
+from typing import TypeVar, TYPE_CHECKING
 from routes import Mapper
 from gi.repository import GObject, Adw, Gio, GLib
 from apphub.pages.error_page import ErrorPage
@@ -6,18 +6,21 @@ from apphub.pages.nav_page import NavPage
 from apphub.utils.gio_async import async_call
 T = TypeVar('T',)
 
+if TYPE_CHECKING:
+    from apphub.main import ApphubApplication
+
 
 # Inspired by https://github.com/vixalien/muzika/blob/main/src/navigation.ts
 
 class Route():
     url: str
 
-    def create(self, page_props: dict):
+    def create(self, page_props: dict, application: "ApphubApplication"):
         pass
 
 
 class AsyncRoute(Route):
-    def load_data(self, page_props: dict) -> T:
+    def load_data(self, page_props: dict, application: "ApphubApplication") -> T:
         """
         This method will be called before the create method is called.
         This will be running in a separate thread.The router will
@@ -27,7 +30,7 @@ class AsyncRoute(Route):
         """
         pass
 
-    def create(self, page_props: dict, data: T):
+    def create(self, page_props: dict, application: "ApphubApplication", data: T):
         pass
 
 
@@ -38,8 +41,9 @@ class Router(GObject.GObject):
     _history: list[str]
     _future: list[str]
 
-    def __init__(self, view: Adw.ViewStack, routes: list[Route]):
+    def __init__(self, view: Adw.ViewStack, app: "ApphubApplication", routes: list[Route]):
         GObject.GObject.__init__(self)
+        self.application = app
         self._future = []
         self._history = []
         self._mapper = Mapper()
@@ -63,13 +67,13 @@ class Router(GObject.GObject):
                     page.content = ErrorPage(error)
                     pass
                 else:
-                    page.content = route.create(page_props, result)
+                    page.content = route.create(page_props, self.application, result)
             self.is_loading = True
             page.loading = True
-            async_call(route.load_data, on_done, page_props)
+            async_call(route.load_data, on_done, page_props, self.application)
             pass
         else:
-            page.set_properties("content", route.create(page_props))
+            page.content = route.create(page_props, self.application)
         self._stack.add(page)
         self._stack.set_visible_child(page)
 

@@ -75,7 +75,7 @@ class AppUrls(TypedDict):
     vcs_browser: str | None
 
 
-class App(TypedDict):
+class FlathubApp(TypedDict):
     description: str
     screenshots: List[Screenshot]
     releases: List[Release]

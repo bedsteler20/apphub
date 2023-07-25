@@ -16,7 +16,7 @@ class ApphubWindow(Adw.ApplicationWindow):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.navigator = Router(self.view_stack, [
+        self.navigator = Router(self.view_stack, self.props.application, [
             HomePageRoute(),
             AppPageRoute(),
         ])

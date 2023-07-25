@@ -1,6 +1,6 @@
 from gi.repository import Adw, Gtk, GObject, Flatpak
 from apphub.api.client import FlathubClient
-from apphub.api.types import App
+from apphub.api.types import FlathubApp
 
 from apphub.components.screenshots_caracal import ScreenshotCaracal
 from apphub.utils.image import load_image
@@ -18,7 +18,7 @@ class AppPage(Adw.Bin):
     summery_label: Gtk.Label = Gtk.Template.Child()
     caracal: ScreenshotCaracal = Gtk.Template.Child()
 
-    def __init__(self, app: App):
+    def __init__(self, app: FlathubApp):
         super().__init__()
         load_image(self.icon, app["icon"])
         self.name_label.set_label(app['name'])
@@ -43,8 +43,8 @@ class AppPage(Adw.Bin):
 class AppPageRoute(AsyncRoute):
     url = "/app/{app_id}"
 
-    def create(self, page_props: dict, data: App):
+    def create(self, page_props: dict, application, data: FlathubApp):
         return AppPage(app=data)
 
-    def load_data(self, page_props: dict) -> App:
+    def load_data(self, page_props: dict, application) -> FlathubApp:
         return FlathubClient.app_info(page_props["app_id"])

@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 import requests
 
 if TYPE_CHECKING:
-    from apphub.api.types import App, QueryInfo
+    from apphub.api.types import FlathubApp, QueryInfo
 
 
 class FlathubClient():
@@ -30,5 +30,5 @@ class FlathubClient():
     def popular(page: int | None = None, per_page: int | None = None) -> "QueryInfo":
         return FlathubClient._query("/popular/last-month", page, per_page)
 
-    def app_info(id: str) -> "App":
+    def app_info(id: str) -> "FlathubApp":
         return FlathubClient._query(f"/appstream/{id}")

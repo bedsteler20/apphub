@@ -30,7 +30,6 @@ class ApphubApplication(Adw.Application):
         if not win:
             win = ApphubWindow(application=self)
         win.present()
-        print(get_installed_apps(Flatpak.Installation.new_user()))
 
     def on_about_action(self, widget, _):
         """Callback for the app.about action."""

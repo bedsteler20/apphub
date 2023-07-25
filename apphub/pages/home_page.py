@@ -23,12 +23,12 @@ class HomePage(Gtk.ScrolledWindow):
 class HomePageRoute(AsyncRoute):
     url = "/"
 
-    def create(self, page_props, data):
+    def create(self, page_props, application, data):
         if not hasattr(self, "widget"):
             self.widget = HomePage(**data)
         return self.widget
 
-    def load_data(self, page_props):
+    def load_data(self, page_props, application):
         if hasattr(self, "widget"):
             return {}
         return {
