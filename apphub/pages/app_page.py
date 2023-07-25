@@ -1,4 +1,4 @@
-from gi.repository import Adw, Gtk, GObject
+from gi.repository import Adw, Gtk, GObject, Flatpak
 from apphub.api.client import FlathubClient
 from apphub.api.types import App
 
@@ -30,7 +30,6 @@ class AppPage(Adw.Bin):
         description = app.get('description', "").replace("<p>", "").replace(
             "</p>", "\n\n").replace("<ul>", "\n").replace("</ul>", "").replace("<li>", " • ").replace("</li>", "\n")
         self.description_label.set_markup(description)
-
         screenshots = []
         for s in app["screenshots"]:
             if s.get("sizes") and s["sizes"].get("1248x702"):

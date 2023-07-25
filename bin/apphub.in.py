@@ -32,9 +32,11 @@ if "@build_type@" == "debug":
 
 if __name__ == '__main__':
     import gi
-    gi.require_version('Gtk', '4.0')
-    gi.require_version('Adw', '1')
-
+    gi.require_versions({
+        'Flatpak': '1.0',
+        'Gtk': '4.0',
+        'Adw': '1',
+    })
     from gi.repository import Gio
     resource = Gio.Resource.load(os.path.join(
         pkgdatadir, 'apphub.gresource'))

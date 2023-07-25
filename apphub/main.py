@@ -1,7 +1,8 @@
 import sys
 
-from gi.repository import Gtk, Gio, Adw, Gdk
+from gi.repository import Gtk, Gio, Adw, Gdk, Flatpak
 from apphub.pages.home_page import HomePageRoute
+from apphub.utils.flatpak import get_installed_apps
 from apphub.utils.router import Router
 from apphub.window import ApphubWindow
 
@@ -29,6 +30,7 @@ class ApphubApplication(Adw.Application):
         if not win:
             win = ApphubWindow(application=self)
         win.present()
+        print(get_installed_apps(Flatpak.Installation.new_user()))
 
     def on_about_action(self, widget, _):
         """Callback for the app.about action."""

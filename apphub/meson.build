@@ -14,7 +14,8 @@ install_data([
   'utils/gio_async.py',
   'utils/navigator.py',
   'utils/image.py',
-  'utils/router.py'
+  'utils/router.py',
+  'utils/flatpak.py'
 ], install_dir: moduledir/'utils')
 
 install_data([
