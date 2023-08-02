@@ -16,13 +16,13 @@
   "files.associations": {
     "*.wrap": "ini"
   },
-  "blueprint-gtk.command": "flatpak",
-  "blueprint-gtk.arguments": [
-    "build",
-    ".flatpak/repo/",
-    "python3",
-    "subprojects/blueprint-compiler/blueprint-compiler.py"
-  ],
+  // "blueprint-gtk.command": "flatpak",
+  // "blueprint-gtk.arguments": [
+  //   "build",
+  //   ".flatpak/repo/",
+  //   "python3",
+  //   "subprojects/blueprint-compiler/blueprint-compiler.py"
+  // ],
   "C_Cpp.default.compileCommands": "_build/compile_commands.json",
   "mesonbuild.configureOnOpen": false,
   "mesonbuild.buildFolder": "_build",

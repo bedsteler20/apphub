@@ -22,7 +22,7 @@ install_data([
   'components/loading.py',
   'components/app_card.py',
   'components/app_grid.py',
-  'components/screenshots_caracal.py'
+  'components/screenshots_caracal.py',
 ], install_dir: moduledir/'components')
 
 install_data([

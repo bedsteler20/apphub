@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="apphub">
 	<schema id="com.bedsteler20.AppHub" path="/com/bedsteler20/AppHub">
-		<key name='flatpak-installs' type='s'>
-			<default>'["/var/lib/flatpak", "~/.local/share/flatpak"]'</default>
+		<key name='prefer-user-flathub' type='b'>
+			<default>false</default>
 		</key>
 	</schema>
 </schemalist>

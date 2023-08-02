@@ -1,29 +1,28 @@
 import json
 import os
-from gi.repository import Flatpak, Gio, GLib
+from gi.repository import Flatpak, Gio, GLib, GObject
 
 
-def get_installed_apps(install: Flatpak.Installation) -> list[str]:
-    ids = []
-    for dir in os.listdir(install.get_path().get_path() + "/app"):
-        ids.append(dir)
-    return ids
+class FlatpakHelper(GObject.Object):
+    def __init__(self) -> None:
+        super().__init__()
+        # Flatpak tries to find the user installation in xdg-data but because
+        # our xdg-data dir is ~/.var/app/$APP_ID/data it wont be in there so we
+        # have to manually add it by it standard location
+        self.installation = Flatpak.Installation.new_for_path(Gio.File.new_for_path(
+            os.path.expanduser("~/.local/share/flatpak/")), True, None)
 
+    def is_app_installed(self, app_id: str) -> bool:
+        try:
+            self.installation.get_current_installed_app(app_id)
+            return True
+        except GLib.Error:
+            return False
+        
+    def open_app(self, app_id: str):
+        self.installation.launch(app_id)
 
-def get_flatpak_user_install() -> Flatpak.Installation:
-    return Flatpak.Installation.new_for_path(Gio.File.new_for_path(os.path.expanduser("~/.local/share/flatpak/")), True, None)
-
-
-def get_flatpak_system_install() -> Flatpak.Installation:
-    return Flatpak.Installation.new_for_path(Gio.File.new_for_path("/var/lib/flatpak"), False, None)
-
-
-def is_app_installed(app_id: str, install: Flatpak.Installation) -> bool:
-    try:
-        install.get_current_installed_app(app_id)
-        return True
-    except GLib.Error as e:
-        return False
-
-
-print(is_app_installed("com.valvesoftware.Steam", get_flatpak_user_install()))
+    @staticmethod
+    def find() -> "FlatpakHelper":
+        import apphub
+        return apphub.main.app.flatpak_helper

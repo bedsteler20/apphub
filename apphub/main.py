@@ -1,8 +1,8 @@
 import sys
+from apphub.utils.flatpak import FlatpakHelper
 
 from gi.repository import Gtk, Gio, Adw, Gdk, Flatpak
 from apphub.pages.home_page import HomePageRoute
-from apphub.utils.flatpak import get_installed_apps
 from apphub.utils.router import Router
 from apphub.window import ApphubWindow
 
@@ -15,6 +15,7 @@ class ApphubApplication(Adw.Application):
         self.create_action('quit', self.quit, ['<primary>q'])
         self.create_action('about', self.on_about_action)
         self.create_action('preferences', self.on_preferences_action)
+        self.flatpak_helper = FlatpakHelper()
 
     def _load_resource(self):
         display = Gdk.Display.get_display()
@@ -54,5 +55,6 @@ class ApphubApplication(Adw.Application):
 
 
 def main(version):
+    global app
     app = ApphubApplication()
     return app.run(sys.argv)

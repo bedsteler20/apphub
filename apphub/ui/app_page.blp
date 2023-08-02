@@ -30,11 +30,26 @@ template $AppPage: Adw.Bin {
               styles ["subtitle"]
             }
           }
-          Button {
-            halign: end;
+          Box {
             valign: center;
-            label: "Install";
-            styles ["suggested-action", "pill"]
+            orientation: vertical;
+            halign: end;
+            Button install_button {
+              label: "Install";
+              styles ["suggested-action", "pill"]
+            }
+            Box open_box {
+              orientation: horizontal;
+              visible: false;
+              Button open_button {
+                label: "Open";
+                styles ["pill", "raised"]
+              }
+              Button uninstall_button{
+                icon-name: "user-trash-symbolic";
+                styles ["circular", "destructive-action"]
+              }
+            }
           }
         }
       }
