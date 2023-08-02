@@ -1,4 +1,3 @@
-from apphub.utils.flatpak import FlatpakHelper
 from gi.repository import Adw, Gtk, GObject, Flatpak
 from apphub.api.client import FlathubClient
 from apphub.api.types import FlathubApp
@@ -6,6 +5,7 @@ from apphub.api.types import FlathubApp
 from apphub.components.screenshots_caracal import ScreenshotCaracal
 from apphub.utils.image import load_image
 from apphub.utils.router import AsyncRoute
+from apphub.utils.locate import locate
 
 
 @Gtk.Template(resource_path="/com/bedsteler20/AppHub/app_page.ui")
@@ -33,7 +33,7 @@ class AppPage(Adw.Bin):
         self.uninstall_button.connect("clicked", self.on_uninstall_btn_click)
         self.open_button.connect("clicked", self.on_open_btn_click)
         # Decide wether to show the install or open/uninstall button
-        self.is_installed = FlatpakHelper.find().is_app_installed(app["id"])
+        self.is_installed = locate.flatpak().is_app_installed(app["id"])
         self.install_button.set_visible(not self.is_installed)
         self.open_box.set_visible(self.is_installed)
 
@@ -63,10 +63,16 @@ class AppPage(Adw.Bin):
         pass
 
     def on_uninstall_btn_click(self, *args):
-        pass
+        dialog = Adw.MessageDialog(body=f"Do you want to uninstall {self.app_info['name']}",
+                                   transient_for=locate.window())
+        dialog.add_response("uninstall", "Uninstall")
+        dialog.add_response("cancel", "Cancel")
+        dialog.set_response_appearance("uninstall", Adw.ResponseAppearance.DESTRUCTIVE)
+        dialog.set_default_response("cancel")
+        dialog.show()
 
     def on_open_btn_click(self, *args):
-        FlatpakHelper.find().open_app(self.app_info["id"])
+        locate.find().open_app(self.app_info["id"])
 
 
 class AppPageRoute(AsyncRoute):

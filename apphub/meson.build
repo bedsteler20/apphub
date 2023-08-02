@@ -15,7 +15,8 @@ install_data([
   'utils/navigator.py',
   'utils/image.py',
   'utils/router.py',
-  'utils/flatpak.py'
+  'utils/flatpak.py',
+  'utils/locate.py',
 ], install_dir: moduledir/'utils')
 
 install_data([
