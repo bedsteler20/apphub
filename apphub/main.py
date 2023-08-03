@@ -1,3 +1,4 @@
+import os
 import sys
 from apphub.utils.flatpak import FlatpakHelper
 
@@ -15,6 +16,7 @@ class ApphubApplication(Adw.Application):
         self.create_action('quit', self.quit, ['<primary>q'])
         self.create_action('about', self.on_about_action)
         self.create_action('preferences', self.on_preferences_action)
+        self.create_action('open-browser', self.on_open_browser)
         self.flatpak_helper = FlatpakHelper()
 
     def _load_resource(self):
@@ -31,6 +33,13 @@ class ApphubApplication(Adw.Application):
         if not win:
             win = ApphubWindow(application=self)
         win.present()
+
+    def on_open_browser(self, widget, _):
+        uri: str = self.props.active_window.navigator.current_uri
+        if uri.startswith("/search/"):
+            q = uri.replace("/search/", "")
+            uri = f"/apps/search?q{q}"
+        os.system(f"xdg-open https://flathub.org{uri}")
 
     def on_about_action(self, widget, _):
         """Callback for the app.about action."""

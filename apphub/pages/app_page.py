@@ -4,7 +4,7 @@ from apphub.api.client import FlathubClient
 from apphub.api.types import FlathubApp
 
 from apphub.components.screenshots_caracal import ScreenshotCaracal
-from apphub.utils.image import load_image
+from apphub.utils.image import get_largest_size_string, load_image
 from apphub.utils.router import AsyncRoute
 from apphub.utils.locate import locate
 
@@ -41,8 +41,10 @@ class AppPage(Adw.Bin):
 
         screenshots = []
         for s in app["screenshots"]:
-            if s.get("sizes") and s["sizes"].get("1248x702"):
-                screenshots.append(s["sizes"]["1248x702"])
+            if s.get("sizes"):
+                size = get_largest_size_string(
+                    s["sizes"].keys(), 1248 * 702, 0)
+                screenshots.append(s["sizes"][size])
         if not screenshots:
             self.caracal.set_visible(False)
         else:
@@ -50,7 +52,7 @@ class AppPage(Adw.Bin):
 
 
 class AppPageRoute(AsyncRoute):
-    url = "/app/{app_id}"
+    url = "/apps/{app_id}"
 
     def create(self, page_props: dict, application, data: FlathubApp):
         return AppPage(app=data)

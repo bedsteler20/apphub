@@ -60,3 +60,19 @@ def load_pixbuf(image: Gtk.Image | Gtk.Picture | Adw.Avatar,
     elif isinstance(image, Adw.Avatar):
         texture = Gdk.Texture.new_for_pixbuf(pixbuf)
         image.set_custom_image(texture)
+
+
+def get_largest_size_string(sizes: list[str], max=99999, min=0):
+    """
+    Takes a list of strings that are formatted as 
+    1920x1080 or 102x1024 and returns the largest 
+    size string
+    """
+    biggest_str, biggest_n = None, min
+    for s in sizes:
+        split = s.split("x", 1)
+        num = int(split[0]) * int(split[1])
+        if num > biggest_n and num < max :
+            biggest_n = num
+            biggest_str = s
+    return biggest_str

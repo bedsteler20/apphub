@@ -1,8 +1,8 @@
 using Gtk 4.0;
 using Adw 1;
 template $ApphubWindow: Adw.ApplicationWindow {
-  default-height: 300;
-  default-width: 600;
+  default-height: 800;
+  default-width: 968;
 
   Box {
     orientation: vertical;
@@ -34,5 +34,6 @@ template $ApphubWindow: Adw.ApplicationWindow {
 menu primary_menu {
   item(_("Preferences"), "app.preferences")
   item(_("Keyboard Shortcuts"), "win.show-help-overlay")
+  item(_("Open in Browser"), "app.open-browser")
   item(_("About Apphub"), "app.about")
 }

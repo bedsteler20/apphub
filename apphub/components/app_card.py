@@ -19,7 +19,7 @@ class AppCard(Gtk.Button):
     verified_box: Gtk.Box = Gtk.Template.Child()
 
     def do_clicked(self, *args) -> None:
-        navigator.visit(self, f"/app/{self._app_id}")
+        navigator.visit(self, f"/apps/{self._app_id}")
 
     def set_app(self, app: "AppHitJson", load_icon=True):
         self.name_label.set_label(app['name'])

@@ -1,5 +1,7 @@
 from apphub.utils.locate import locate
 from gi.repository import Gtk, Adw
+from typing import TYPE_CHECKING
+from apphub.utils.flatpak import InstallState
 
 
 @Gtk.Template(resource_path="/com/bedsteler20/AppHub/install_button.ui")
@@ -20,11 +22,8 @@ class InstallButton(Adw.Bin):
         self.uninstall_button.connect("clicked", self.on_uninstall_btn_click)
         self.open_button.connect("clicked", self.on_open_btn_click)
         # Decide wether to show the install or open/uninstall button
-        self.is_installed = locate.flatpak().is_app_installed(app_id)
-        if self.is_installed:
-            self.set_child(self.open_box)
-        else:
-            self.set_child(self.install_button)
+        flatpak = locate.flatpak()
+        self.on_state_change(app_id, flatpak.get_state(app_id))
 
     def on_install_btn_click(self, *args):
         pass
@@ -41,3 +40,11 @@ class InstallButton(Adw.Bin):
 
     def on_open_btn_click(self, *args):
         locate.flatpak().open_app(self.app_id)
+
+    def on_state_change(self, app_id: str, state: InstallState):
+        if app_id != self.app_id:
+            return
+        elif state == InstallState.INSTALLED:
+            self.set_child(self.open_box)
+        elif state == InstallState.NOT_INSTALLED:
+            self.set_child(self.install_button)
