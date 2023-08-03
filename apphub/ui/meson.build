@@ -11,7 +11,8 @@ blueprints = custom_target('blueprints',
     'loading.blp',
     'nav_page.blp',
     'screenshots_caracal.blp',
-    'window.blp'
+    'window.blp',
+    'install_button.blp'
   ),
   output: '.',
   command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@'],

@@ -9,6 +9,7 @@
     <file preprocess="xml-stripblanks">home_page.ui</file>
     <file preprocess="xml-stripblanks">loading.ui</file>
     <file preprocess="xml-stripblanks">nav_page.ui</file>
+    <file preprocess="xml-stripblanks">install_button.ui</file>
     <file preprocess="xml-stripblanks">screenshots_caracal.ui</file>
     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
     <file preprocess="xml-stripblanks">icons/check-plain-symbolic.svg</file>

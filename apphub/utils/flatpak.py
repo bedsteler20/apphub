@@ -1,7 +1,14 @@
+from enum import Enum
 import json
 import os
 from gi.repository import Flatpak, Gio, GLib, GObject
 
+
+class InstallState(Enum):
+    INSTALLED = 0
+    NOT_INSTALLED = 1
+    DOWNLOADING = 2
+    REMOVING = 3
 
 class FlatpakHelper(GObject.Object):
     def __init__(self) -> None:

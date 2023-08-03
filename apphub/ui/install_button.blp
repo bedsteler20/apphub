@@ -1,0 +1,22 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $InstallButton: Adw.Bin {
+
+}
+
+Button install_button {
+    label: "Install";
+    styles ["suggested-action", "pill"]
+}
+Box open_box {
+    orientation: horizontal;
+    Button open_button {
+        label: "Open";
+        styles ["pill", "raised"]
+    }
+    Button uninstall_button {
+        icon-name: "user-trash-symbolic";
+        styles ["circular", "destructive-action"]
+    }
+}
