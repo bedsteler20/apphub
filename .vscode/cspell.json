@@ -1,0 +1,60 @@
+{
+  "version": "0.2",
+  "ignorePaths": [
+    "CODE_OF_CONDUCT.md",
+    "subprojects/*/",
+    "_build",
+    ".flatpak",
+    "po",
+    "*.svg",
+    "build-aux/flatpak.json",
+    "build-aux/python3-*.json",
+    "requirements*.txt"
+  ],
+  "dictionaryDefinitions": [],
+  "dictionaries": [],
+  "words": [
+    "accels",
+    "apphub",
+    "bugtracker",
+    "debugpy",
+    "devel",
+    "dropshadow",
+    "ellipsize",
+    "flathub",
+    "Flatpak",
+    "foss",
+    "freedesktop",
+    "gresource",
+    "gresources",
+    "gschema",
+    "gsignals",
+    "halign",
+    "hexpand",
+    "hicolor",
+    "hscrollbar",
+    "Interp",
+    "Pixbuf",
+    "Pixelbuf",
+    "subprojects",
+    "valign",
+    "vexpand",
+    "werror",
+    "xalign",
+    "yalign"
+  ],
+  "overrides": [
+    {
+      "filename": [
+        "meson.build",
+        "gresource.xml",
+        "*.gschema.xml",
+        "build-aux/*.json"
+      ],
+      "allowCompoundWords": true
+    }
+  ],
+  "ignoreWords": ["bedsteler"],
+  "import": [],
+  "enableFiletypes": ["build", "blp"]
+}

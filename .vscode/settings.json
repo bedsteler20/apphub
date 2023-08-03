@@ -2,7 +2,8 @@
   "files.watcherExclude": {
     "**/.dart_tool": true,
     "_build/**": true,
-    ".flatpak/**": true
+    ".flatpak/**": true,
+    "subprojects/blueprint-compiler/**/*.py": true
   },
   "files.exclude": {
     "**/.git": true,
@@ -11,10 +12,14 @@
     "**/CVS": true,
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
-    "apphub/__init__.py": true
+    "apphub/__init__.py": true,
+    "subprojects/blueprint-compiler": true
   },
   "files.associations": {
     "*.wrap": "ini"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
   },
   // "blueprint-gtk.command": "flatpak",
   // "blueprint-gtk.arguments": [

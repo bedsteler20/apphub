@@ -5,6 +5,9 @@
     "nico-castell.linux-desktop-file",
     "bodil.blueprint-gtk",
     "bilelmoussaoui.flatpak-vscode",
-    "bedsteler20.gnome-magic"
+    "bedsteler20.gnome-magic",
+    "streetsidesoftware.code-spell-checker",
+    "ms-python.black-formatter",
+    "ms-python.isort"
   ]
 }

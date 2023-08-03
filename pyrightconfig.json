@@ -1,3 +1,6 @@
 {
     "reportMissingModuleSource": "none",
+    "ignore": [
+        "subprojects"
+    ]
 }
