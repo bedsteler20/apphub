@@ -1,3 +1,15 @@
-
 [tool.isort]
 skip_gitignore = false
+extend_skip = [
+    "subprojects",
+    "tools/flatpak-json2yalm.py",
+    "tools/flatpak-pip-generator.py",
+]
+
+[tool.pyright]
+reportMissingModuleSource = "none"
+ignore = [
+    "subprojects",
+    "tools/flatpak-json2yalm.py",
+    "tools/flatpak-pip-generator.py",
+]
