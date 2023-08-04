@@ -8,11 +8,3 @@ updates:
       interval: "weekly"
       time: "09:00"
       timezone: "America/Chicago"
-  - directory: /build-aux
-    open-pull-requests-limit: 5
-    package-ecosystem: pip
-    rebase-strategy: auto
-    schedule:
-      interval: "weekly"
-      time: "09:00"
-      timezone: "America/Chicago"
