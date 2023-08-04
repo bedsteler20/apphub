@@ -1,4 +1,5 @@
 import threading
+
 from gi.repository import GObject
 
 # calls f on another thread
@@ -24,7 +25,9 @@ def async_call(f, on_done, *args, **kwargs):
     """
 
     if not on_done:
-        def on_done(r, e): return None
+
+        def on_done(r, e):
+            return None
 
     def do_call():
         result = None
@@ -39,6 +42,7 @@ def async_call(f, on_done, *args, **kwargs):
 
     thread = threading.Thread(target=do_call)
     thread.start()
+
 
 # free function decorator
 
@@ -68,8 +72,11 @@ def async_function(on_done=None):
     def wrapper(f):
         def run(*args, **kwargs):
             async_call(lambda: f(*args, **kwargs), on_done)
+
         return run
+
     return wrapper
+
 
 # method decorator
 
@@ -97,11 +104,16 @@ def async_method(on_done=None):
     """
 
     if not on_done:
-        def on_done(s, r, e): return None
+
+        def on_done(s, r, e):
+            return None
 
     def wrapper(f):
         def run(self, *args, **kwargs):
-            async_call(lambda: f(self, *args, **kwargs),
-                       lambda r, e: on_done(self, r, e))
+            async_call(
+                lambda: f(self, *args, **kwargs), lambda r, e: on_done(self, r, e)
+            )
+
         return run
+
     return wrapper

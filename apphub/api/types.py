@@ -1,6 +1,5 @@
 from enum import Enum
-from typing import Literal, Optional, TypeVar, TypedDict, List
-
+from typing import List, Literal, Optional, TypedDict, TypeVar
 
 T = TypeVar("T")
 
@@ -23,8 +22,7 @@ class AppHitJson(TypedDict):
     verification_verified: str
     verification_method: Literal["website", "login_provider", "manual"]
     verification_login_name: str | None
-    verification_login_provider: Literal["github",
-                                         "gitlab", "kde", "gnome"] | None
+    verification_login_provider: Literal["github", "gitlab", "kde", "gnome"] | None
     verification_login_is_organization: Literal["true", "false"] | None
     verification_website: str | None
     verification_timestamp: str
@@ -50,14 +48,17 @@ class Release(TypedDict):
     description: str | None
 
 
-AppMetadata = TypedDict("AppMetadata", {
-    "flathub::verification::verified": Optional[str],
-    "flathub::verification::timestamp": Optional[str],
-    "flathub::verification::method": Optional[str],
-    "flathub::verification::website": Optional[str],
-    "flathub::verification::login_is_organization": Optional[str],
-    "X-Flatpak-Tags": Optional[Literal["proprietary"]],
-})
+AppMetadata = TypedDict(
+    "AppMetadata",
+    {
+        "flathub::verification::verified": Optional[str],
+        "flathub::verification::timestamp": Optional[str],
+        "flathub::verification::method": Optional[str],
+        "flathub::verification::website": Optional[str],
+        "flathub::verification::login_is_organization": Optional[str],
+        "X-Flatpak-Tags": Optional[Literal["proprietary"]],
+    },
+)
 
 
 class Screenshot(TypedDict):

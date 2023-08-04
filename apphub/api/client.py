@@ -1,11 +1,12 @@
 from typing import TYPE_CHECKING
+
 import requests
 
 if TYPE_CHECKING:
     from apphub.api.types import FlathubApp, QueryInfo
 
 
-class FlathubClient():
+class FlathubClient:
     _url = "https://flathub.org/api/v2"
 
     @staticmethod
@@ -21,10 +22,14 @@ class FlathubClient():
             params["page"] = page
         return requests.get(FlathubClient._url + path, params=params).json()
 
-    def recently_added(page: int | None = None, per_page: int | None = None) -> "QueryInfo":
+    def recently_added(
+        page: int | None = None, per_page: int | None = None
+    ) -> "QueryInfo":
         return FlathubClient._query("/collection/recently-added", page, per_page)
 
-    def recently_updated(page: int | None = None, per_page: int | None = None) -> "QueryInfo":
+    def recently_updated(
+        page: int | None = None, per_page: int | None = None
+    ) -> "QueryInfo":
         return FlathubClient._query("/collection/recently-updated", page, per_page)
 
     def popular(page: int | None = None, per_page: int | None = None) -> "QueryInfo":

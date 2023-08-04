@@ -1,12 +1,14 @@
-from apphub.utils.locate import locate
-from gi.repository import Gtk, Adw
 from typing import TYPE_CHECKING
+
+from gi.repository import Adw, Gtk
+
 from apphub.utils.flatpak import InstallState
+from apphub.utils.locate import locate
 
 
 @Gtk.Template(resource_path="/com/bedsteler20/AppHub/install_button.ui")
 class InstallButton(Adw.Bin):
-    __gtype_name__ = 'InstallButton'
+    __gtype_name__ = "InstallButton"
 
     install_button: Adw.SplitButton = Gtk.Template.Child()
     open_box: Gtk.Box = Gtk.Template.Child()
@@ -29,12 +31,13 @@ class InstallButton(Adw.Bin):
         pass
 
     def on_uninstall_btn_click(self, *args):
-        dialog = Adw.MessageDialog(body=f"Do you want to uninstall {self.app_name}",
-                                   transient_for=locate.window())
+        dialog = Adw.MessageDialog(
+            body=f"Do you want to uninstall {self.app_name}",
+            transient_for=locate.window(),
+        )
         dialog.add_response("uninstall", "Uninstall")
         dialog.add_response("cancel", "Cancel")
-        dialog.set_response_appearance(
-            "uninstall", Adw.ResponseAppearance.DESTRUCTIVE)
+        dialog.set_response_appearance("uninstall", Adw.ResponseAppearance.DESTRUCTIVE)
         dialog.set_default_response("cancel")
         dialog.show()
 

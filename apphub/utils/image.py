@@ -1,12 +1,17 @@
-from gi.repository import Gtk, Adw, Gdk, GdkPixbuf, GLib
 import requests
+from gi.repository import Adw, Gdk, GdkPixbuf, GLib, Gtk
 
 from apphub.utils.gio_async import async_call
 
 
-def load_image(image: Gtk.Picture | Gtk.Image | Adw.Avatar,
-               href: str, width: int = None, height: int = None,
-               square: bool = None, upscale: bool = None):
+def load_image(
+    image: Gtk.Picture | Gtk.Image | Adw.Avatar,
+    href: str,
+    width: int = None,
+    height: int = None,
+    square: bool = None,
+    upscale: bool = None,
+):
     def asy():
         res = requests.get(href)
         return res.content
@@ -19,15 +24,20 @@ def load_image(image: Gtk.Picture | Gtk.Image | Adw.Avatar,
             pixelbuf = loader.get_pixbuf()
             if width is not None and height is not None:
                 pixelbuf = pixelbuf.scale_simple(
-                    width, height, GdkPixbuf.InterpType.HYPER)
+                    width, height, GdkPixbuf.InterpType.HYPER
+                )
             load_pixbuf(image, pixelbuf)
 
     async_call(asy, on_done)
 
 
-def load_image_batch(images: dict[str, Gtk.Picture | Gtk.Image | Adw.Avatar],
-                     width: int = None, height: int = None,
-                     square: bool = None, upscale: bool = None):
+def load_image_batch(
+    images: dict[str, Gtk.Picture | Gtk.Image | Adw.Avatar],
+    width: int = None,
+    height: int = None,
+    square: bool = None,
+    upscale: bool = None,
+):
     keys = images.keys()
 
     def asy():
@@ -45,14 +55,15 @@ def load_image_batch(images: dict[str, Gtk.Picture | Gtk.Image | Adw.Avatar],
                 pixelbuf = loader.get_pixbuf()
                 if width is not None and height is not None:
                     pixelbuf = pixelbuf.scale_simple(
-                        width, height, GdkPixbuf.InterpType.HYPER)
+                        width, height, GdkPixbuf.InterpType.HYPER
+                    )
                 load_pixbuf(images[k], pixelbuf)
                 del pixelbuf
+
     async_call(asy, on_done)
 
 
-def load_pixbuf(image: Gtk.Image | Gtk.Picture | Adw.Avatar,
-                pixbuf: GdkPixbuf.Pixbuf):
+def load_pixbuf(image: Gtk.Image | Gtk.Picture | Adw.Avatar, pixbuf: GdkPixbuf.Pixbuf):
     if isinstance(image, Gtk.Picture):
         image.set_pixbuf(pixbuf)
     elif isinstance(image, Gtk.Image):
@@ -64,15 +75,15 @@ def load_pixbuf(image: Gtk.Image | Gtk.Picture | Adw.Avatar,
 
 def get_largest_size_string(sizes: list[str], max=99999, min=0):
     """
-    Takes a list of strings that are formatted as 
-    1920x1080 or 102x1024 and returns the largest 
+    Takes a list of strings that are formatted as
+    1920x1080 or 102x1024 and returns the largest
     size string
     """
     biggest_str, biggest_n = None, min
     for s in sizes:
         split = s.split("x", 1)
         num = int(split[0]) * int(split[1])
-        if num > biggest_n and num < max :
+        if num > biggest_n and num < max:
             biggest_n = num
             biggest_str = s
     return biggest_str

@@ -1,7 +1,10 @@
-from enum import Enum
 import os
-from gi.repository import Flatpak, Gio, GLib, GObject, Adw
-from gi.repository.Flatpak import Installation, TransactionOperation, TransactionResult
+from enum import Enum
+
+from gi.repository import Adw, Flatpak, Gio, GLib, GObject
+from gi.repository.Flatpak import (Installation, TransactionOperation,
+                                   TransactionResult)
+
 from apphub.utils.locate import locate
 
 
@@ -36,8 +39,12 @@ class InstallTransaction(Flatpak.Transaction):
 
         return super().do_operation_error(operation, error, detail)
 
-    def do_operation_done(self, operation: TransactionOperation, commit: str, details: TransactionResult) -> None:
+    def do_operation_done(
+        self, operation: TransactionOperation, commit: str, details: TransactionResult
+    ) -> None:
         return super().do_operation_done(operation, commit, details)
+
+
 class UninstallTransaction(AppTransaction):
     __gtype_name__ = "UninstallTransaction"
 

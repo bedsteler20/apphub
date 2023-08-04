@@ -1,12 +1,12 @@
-from apphub.components.install_button import InstallButton
-from gi.repository import Adw, Gtk, GObject, Flatpak
+from gi.repository import Adw, Flatpak, GObject, Gtk
+
 from apphub.api.client import FlathubClient
 from apphub.api.types import FlathubApp
-
+from apphub.components.install_button import InstallButton
 from apphub.components.screenshots_caracal import ScreenshotCaracal
 from apphub.utils.image import get_largest_size_string, load_image
-from apphub.utils.router import AsyncRoute
 from apphub.utils.locate import locate
+from apphub.utils.router import AsyncRoute
 
 
 @Gtk.Template(resource_path="/com/bedsteler20/AppHub/app_page.ui")
@@ -28,22 +28,28 @@ class AppPage(Adw.Bin):
 
         # Load app info
         load_image(self.icon, app["icon"])
-        self.name_label.set_label(app['name'])
-        self.dev_label.set_label(f"By {app['developer_name']}" if app.get(
-            'developer_name') else "Unknown")
-        self.summery_label.set_label(
-            app['summary'] if app.get('summary') else "")
+        self.name_label.set_label(app["name"])
+        self.dev_label.set_label(
+            f"By {app['developer_name']}" if app.get("developer_name") else "Unknown"
+        )
+        self.summery_label.set_label(app["summary"] if app.get("summary") else "")
         self.description_label.set_use_markup(True)
         # TODO: Extract this to a helper function
-        description = app.get('description', "").replace("<p>", "").replace(
-            "</p>", "\n\n").replace("<ul>", "\n").replace("</ul>", "").replace("<li>", " • ").replace("</li>", "\n")
+        description = (
+            app.get("description", "")
+            .replace("<p>", "")
+            .replace("</p>", "\n\n")
+            .replace("<ul>", "\n")
+            .replace("</ul>", "")
+            .replace("<li>", " • ")
+            .replace("</li>", "\n")
+        )
         self.description_label.set_markup(description)
 
         screenshots = []
         for s in app["screenshots"]:
             if s.get("sizes"):
-                size = get_largest_size_string(
-                    s["sizes"].keys(), 1248 * 702, 0)
+                size = get_largest_size_string(s["sizes"].keys(), 1248 * 702, 0)
                 screenshots.append(s["sizes"][size])
         if not screenshots:
             self.caracal.set_visible(False)

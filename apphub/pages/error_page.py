@@ -1,12 +1,8 @@
-
 from gi.repository import Adw, Gtk
 
 
 def escape_label(label):
-    return label \
-        .replace("&", "&amp;") \
-        .replace("<", "&lt;") \
-        .replace(">", "&gt;")
+    return label.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
 def indent_stack(stack):
@@ -20,9 +16,9 @@ def error_to_string(error):
     return f"<b>{escape_label(error.__class__.__name__)}: </b>{escape_label(error.args[0])}\n{indent_stack(error.__traceback__.format() if hasattr(error, '__traceback__') else '')}"
 
 
-@Gtk.Template(resource_path='/com/bedsteler20/AppHub/error_page.ui')
+@Gtk.Template(resource_path="/com/bedsteler20/AppHub/error_page.ui")
 class ErrorPage(Gtk.Box):
-    __gtype_name__ = 'ErrorPage'
+    __gtype_name__ = "ErrorPage"
 
     more = Gtk.Template.Child()
     status = Gtk.Template.Child()
@@ -45,10 +41,11 @@ class ErrorPage(Gtk.Box):
     def set_more(self, show, label=None):
         self.more.set_visible(show)
         if label:
-            self.buffer.set_text('')
+            self.buffer.set_text("")
             n = "\n$"
             self.buffer.insert_markup(
-                self.buffer.get_start_iter(), f'<tt>{label.replace(n, "")}</tt>', -1)
+                self.buffer.get_start_iter(), f'<tt>{label.replace(n, "")}</tt>', -1
+            )
 
     def set_error(self, error):
         if isinstance(error, Exception):

@@ -1,11 +1,10 @@
 #!/usr/bin/env @PYTHON@
 # cSpell: enableCompoundWords
-import os
-import sys
-import signal
-import locale
 import gettext
-
+import locale
+import os
+import signal
+import sys
 
 VERSION = "@VERSION@"
 pkgdatadir = "@pkgdatadir@"

@@ -2,6 +2,7 @@
 skip_gitignore = false
 extend_skip = [
     "subprojects",
+    "bin",
     "tools/flatpak-json2yalm.py",
     "tools/flatpak-pip-generator.py",
 ]
@@ -13,3 +14,6 @@ ignore = [
     "tools/flatpak-json2yalm.py",
     "tools/flatpak-pip-generator.py",
 ]
+
+[tool.black]
+line-length = 88

@@ -1,10 +1,15 @@
-from typing import TypeVar, TYPE_CHECKING
+from typing import TYPE_CHECKING, TypeVar
+
+from gi.repository import Adw, Gio, GLib, GObject
 from routes import Mapper
-from gi.repository import GObject, Adw, Gio, GLib
+
 from apphub.pages.error_page import ErrorPage
 from apphub.pages.nav_page import NavPage
 from apphub.utils.gio_async import async_call
-T = TypeVar('T',)
+
+T = TypeVar(
+    "T",
+)
 
 if TYPE_CHECKING:
     from apphub.main import ApphubApplication
@@ -12,7 +17,8 @@ if TYPE_CHECKING:
 
 # Inspired by https://github.com/vixalien/muzika/blob/main/src/navigation.ts
 
-class Route():
+
+class Route:
     url: str
 
     def create(self, page_props: dict, application: "ApphubApplication"):
@@ -36,12 +42,15 @@ class AsyncRoute(Route):
 
 class Router(GObject.GObject):
     is_loading: bool = GObject.Property(
-        type=bool, default=False, flags=GObject.ParamFlags.READWRITE)
+        type=bool, default=False, flags=GObject.ParamFlags.READWRITE
+    )
 
     _history: list[str]
     _future: list[str]
 
-    def __init__(self, view: Adw.ViewStack, app: "ApphubApplication", routes: list[Route]):
+    def __init__(
+        self, view: Adw.ViewStack, app: "ApphubApplication", routes: list[Route]
+    ):
         GObject.GObject.__init__(self)
         self.application = app
         self._future = []
@@ -60,6 +69,7 @@ class Router(GObject.GObject):
         """
         page = NavPage()
         if issubclass(type(route), AsyncRoute):
+
             def on_done(result, error):
                 self.is_loading = False
                 page.loading = False
@@ -68,6 +78,7 @@ class Router(GObject.GObject):
                     pass
                 else:
                     page.content = route.create(page_props, self.application, result)
+
             self.is_loading = True
             page.loading = True
             async_call(route.load_data, on_done, page_props, self.application)
@@ -78,7 +89,11 @@ class Router(GObject.GObject):
         self._stack.set_visible_child(page)
 
     def navigate(self, url: str, history=True):
-        if history and len(self._history) == 0 or url != self._history[len(self._history) - 1]:
+        if (
+            history
+            and len(self._history) == 0
+            or url != self._history[len(self._history) - 1]
+        ):
             self.push_state(url)
             if self._stack.get_last_child() is not None:
                 self._stack.remove(self._stack.get_last_child())
@@ -99,12 +114,12 @@ class Router(GObject.GObject):
 
     def push_state(self, url: str):
         self._history.append(url)
-        self.notify('can-go-back')
-        self.notify('current-uri')
+        self.notify("can-go-back")
+        self.notify("current-uri")
 
     def replace_state(self, url: str):
         self._history[len(self._history) - 1] = url
-        self.notify('current-uri')
+        self.notify("current-uri")
 
     def go(self, n: int, navigate: bool = True):
         if n > 0:
@@ -121,7 +136,7 @@ class Router(GObject.GObject):
         state = self._history[-1]
 
         if not state:
-            state = '/'
+            state = "/"
 
         if navigate:
             self.navigate(state, True)
@@ -180,7 +195,8 @@ class Router(GObject.GObject):
             group.action_enabled_changed("back", self.can_go_back)
 
         visit_action = Gio.SimpleAction(
-            name="visit", parameter_type=GLib.VariantType("s"))
+            name="visit", parameter_type=GLib.VariantType("s")
+        )
         visit_action.connect("activate", visit)
         group.add_action(visit_action)
 
@@ -189,12 +205,14 @@ class Router(GObject.GObject):
         group.add_action(back_action)
 
         push_action = Gio.SimpleAction(
-            name="push-state", parameter_type=GLib.VariantType("s"))
+            name="push-state", parameter_type=GLib.VariantType("s")
+        )
         push_action.connect("activate", push_state)
         group.add_action(push_action)
 
         replace_action = Gio.SimpleAction(
-            name="replace-state", parameter_type=GLib.VariantType("s"))
+            name="replace-state", parameter_type=GLib.VariantType("s")
+        )
         replace_action.connect("activate", replace_state)
         group.add_action(replace_action)
 
