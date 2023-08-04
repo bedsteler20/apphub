@@ -4,6 +4,7 @@ on:
     paths:
       - requirements.txt
       - build-aux/requirements.txt
+  workflow_dispatch:
 jobs:
   update_deps:
     runs-on: ubuntu-latest
@@ -16,8 +17,7 @@ jobs:
           python-version: "3.10"
           cache: pip
       - run: pip install requirements-parser
-      - run: python3 tools/flatpak-pip-generator.py -r requirements.txt -o build-aux/flatpak/python3-requirements-devel
-      - run: python3 tools/flatpak-pip-generator.py -r build-aux/requirements.txt -o build-aux/flatpak/python3-requirements
+      - run: python3 tools/flatpak-pip-generator.py -r build-aux/requirements.txt -o python3-requirements && mv python3-requirements.json build-aux/flatpak/
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:

@@ -2,7 +2,8 @@ import os
 from enum import Enum
 
 from gi.repository import Adw, Flatpak, Gio, GLib, GObject
-from gi.repository.Flatpak import Installation, TransactionOperation, TransactionResult
+from gi.repository.Flatpak import (Installation, TransactionOperation,
+                                   TransactionResult)
 
 from apphub.utils.locate import locate
 
