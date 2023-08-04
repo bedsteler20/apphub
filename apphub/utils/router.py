@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, TypeVar
 
 from gi.repository import Adw, Gio, GLib, GObject
+
 from routes import Mapper
 
 from apphub.pages.error_page import ErrorPage

@@ -1,5 +1,6 @@
-import requests
 from gi.repository import Adw, Gdk, GdkPixbuf, GLib, Gtk
+
+import requests
 
 from apphub.utils.gio_async import async_call
 

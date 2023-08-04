@@ -1,19 +1,30 @@
 [tool.isort]
 skip_gitignore = false
+multi_line_output = 9
+sections = [
+  'FUTURE',
+  'STDLIB',
+  'GI',
+  'THIRDPARTY',
+  'FIRSTPARTY',
+  'LOCALFOLDER',
+]
+known_gi = ['gi']
 extend_skip = [
-    "subprojects",
-    "bin",
-    "tools/flatpak-json2yalm.py",
-    "tools/flatpak-pip-generator.py",
+  "subprojects",
+  "bin",
+  "tools/flatpak-json2yalm.py",
+  "tools/flatpak-pip-generator.py",
 ]
 
 [tool.pyright]
 reportMissingModuleSource = "none"
 ignore = [
-    "subprojects",
-    "tools/flatpak-json2yalm.py",
-    "tools/flatpak-pip-generator.py",
+  "subprojects",
+  "tools/flatpak-json2yalm.py",
+  "tools/flatpak-pip-generator.py",
 ]
 
 [tool.black]
+profile = "black"
 line-length = 88
