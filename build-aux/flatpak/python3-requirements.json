@@ -1,5 +1,5 @@
 {
-    "name": "build-aux/flatpak/python3-requirements",
+    "name": "python3-requirements",
     "buildsystem": "simple",
     "build-commands": [],
     "modules": [
