@@ -8,6 +8,7 @@
     "bedsteler20.gnome-magic",
     "streetsidesoftware.code-spell-checker",
     "ms-python.black-formatter",
-    "ms-python.isort"
+    "ms-python.isort",
+    "editorconfig.editorconfig"
   ]
 }

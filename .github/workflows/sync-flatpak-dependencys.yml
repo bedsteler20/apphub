@@ -1,0 +1,24 @@
+name: Sync Flatpak Dependencies
+on:
+  push:
+    paths:
+      - requirements.txt
+      - build-aux/requirements.txt
+jobs:
+  update_deps:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: pip
+      - run: pip install requirements-parser
+      - run: python3 tools/flatpak-pip-generator.py -r requirements.txt -o build-aux/flatpak/python3-requirements-devel
+      - run: python3 tools/flatpak-pip-generator.py -r build-aux/requirements.txt -o build-aux/flatpak/python3-requirements
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update flatpak dependencies
