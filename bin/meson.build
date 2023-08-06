@@ -14,3 +14,11 @@ configure_file(
     install: true,
     install_dir: get_option('bindir'),
 )
+
+configure_file(
+    input: 'transaction-helper.in.py',
+    output: 'transaction-helper',
+    configuration: conf,
+    install: true,
+    install_dir: get_option('bindir'),
+)

@@ -16,6 +16,7 @@ install_data([
   'utils/image.py',
   'utils/router.py',
   'utils/flatpak.py',
+  'utils/transaction.py',
   'utils/locate.py',
 ], install_dir: moduledir/'utils')
 

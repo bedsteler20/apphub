@@ -4,6 +4,13 @@ from typing import List, Literal, Optional, TypedDict, TypeVar
 T = TypeVar("T")
 
 
+class AppBundle(TypedDict):
+    value: str
+    type: str
+    runtime: str
+    sdk: str
+
+
 class AppHitJson(TypedDict):
     name: str
     keywords: List[str] | None
@@ -92,3 +99,4 @@ class FlathubApp(TypedDict):
     kudos: List[str]
     mimetypes: List[str]
     project_license: str
+    bundle: AppBundle

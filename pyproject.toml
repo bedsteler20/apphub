@@ -28,3 +28,15 @@ ignore = [
 [tool.black]
 profile = "black"
 line-length = 88
+exclude = '''
+
+(
+  /(
+      \.git
+    | _build
+    | \subprojects
+    | \tools/flatpak-json2yalm.py
+    | \tools/flatpak-pip-generator.py
+  )
+)
+'''

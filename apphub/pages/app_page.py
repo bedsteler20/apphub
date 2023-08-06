@@ -23,7 +23,7 @@ class AppPage(Adw.Bin):
 
     def __init__(self, app: FlathubApp):
         super().__init__()
-        self.install_button = InstallButton(app["name"], app["id"])
+        self.install_button = InstallButton(app)
         self.install_box.append(self.install_button)
 
         # Load app info

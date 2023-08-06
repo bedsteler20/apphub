@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-
+from gi.repository import GLib
 import requests
 
 if TYPE_CHECKING:
@@ -37,3 +37,7 @@ class FlathubClient:
 
     def app_info(id: str) -> "FlathubApp":
         return FlathubClient._query(f"/appstream/{id}")
+
+    def download_ref(app_id: str):
+        res = requests.get(f"https://dl.flathub.org/repo/appstream/{app_id}.flatpakref")
+        return GLib.Bytes.new(res.content)

@@ -4,62 +4,20 @@ from enum import Enum
 from gi.repository import Adw, Flatpak, Gio, GLib, GObject
 from gi.repository.Flatpak import Installation, TransactionOperation
 from gi.repository.Flatpak import TransactionResult
+from apphub.api.client import FlathubClient
+from apphub.api.types import AppHitJson, FlathubApp
 
 from apphub.utils.locate import locate
 
 
-class InstallState(Enum):
-    INSTALLED = 0
-    NOT_INSTALLED = 1
-    DOWNLOADING = 2
-    REMOVING = 3
-
-
-class AppTransaction(GObject.Object):
-    __gtype_name__ = "AppTransaction"
-    is_complete = GObject.Property(default=False, type=bool)
-
-    def __init__(self):
-        self.cancellable = Gio.Cancellable()
-
-
-class InstallTransaction(Flatpak.Transaction):
-    __gtype_name__ = "InstallTransaction"
-    is_complete = GObject.Property(default=False, type=bool)
-
-    def __init__(self, installation: Installation):
-        super().__init__(installation)
-
-    def do_operation_error(self, operation, error, detail) -> bool:
-        Adw.MessageDialog(
-            body=error.message,
-            title="Error installing",
-            transient_for=locate.window(),
-        ).show()
-
-        return super().do_operation_error(operation, error, detail)
-
-    def do_operation_done(
-        self, operation: TransactionOperation, commit: str, details: TransactionResult
-    ) -> None:
-        return super().do_operation_done(operation, commit, details)
-
-
-class UninstallTransaction(AppTransaction):
-    __gtype_name__ = "UninstallTransaction"
-
-    def __init__(self, app_id: str, install: Flatpak.Installation):
-        super().__init__()
 
 
 class FlatpakHelper(GObject.Object):
-    __gsignals__ = {
-        "state_change": (GObject.SIGNAL_RUN_FIRST, None, (str, int)),
-    }
 
     def __init__(self) -> None:
         super().__init__()
-        self._app_states: dict[str, int] = {}
+        self._pending_installs = []
+        self._pending_uninstalls = []
         # Flatpak tries to find the user installation in xdg-data but because
         # our xdg-data dir is ~/.var/app/$APP_ID/data it wont be in there so we
         # have to manually add it by it standard location
@@ -74,9 +32,12 @@ class FlatpakHelper(GObject.Object):
         self, app_id: str, install: Flatpak.Installation = None
     ) -> bool:
         if install is None:
-            return self.is_app_installed(
-                app_id, self.user_install
-            ) or self.is_app_installed(app_id, self.system_install)
+            if self.is_app_installed(app_id, self.user_install):
+                return True
+            elif self.is_app_installed(app_id, self.system_install):
+                return True
+            else:
+                return False
         try:
             install.get_current_installed_app(app_id)
             return True
@@ -85,19 +46,3 @@ class FlatpakHelper(GObject.Object):
 
     def open_app(self, app_id: str):
         os.system(f"flatpak-spawn --host flatpak run {app_id} &> /dev/null &")
-
-    def get_state(self, app_id: str):
-        if app_id in self._app_states.keys():
-            return self._app_states[app_id]
-        elif self.is_app_installed(app_id):
-            return InstallState.INSTALLED
-        else:
-            return InstallState.NOT_INSTALLED
-
-    def do_state_change(self, app_id: str, state: InstallState):
-        # Remove existing state storage if its not being removed or added
-        if state == InstallState.INSTALLED or state == InstallState.NOT_INSTALLED:
-            del self._app_states[app_id]
-
-    def install_app(self, app_id: str):
-        transaction = Flatpak.Transaction.new_for_installation()
