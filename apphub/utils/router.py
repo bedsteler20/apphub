@@ -18,6 +18,9 @@ if TYPE_CHECKING:
 
 # Inspired by https://github.com/vixalien/muzika/blob/main/src/navigation.ts
 
+# Maybe make this a independent glib library written in vala
+
+# TODO: (Wait for Gnome 45) migrate to new libadw`s builtin navigator components
 
 class Route:
     url: str

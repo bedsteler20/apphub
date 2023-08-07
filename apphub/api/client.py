@@ -22,17 +22,13 @@ class FlathubClient:
             params["page"] = page
         return requests.get(FlathubClient._url + path, params=params).json()
 
-    def recently_added(
-        page: int | None = None, per_page: int | None = None
-    ) -> "QueryInfo":
+    def recently_added(page: int = 1, per_page: int = 50) -> "QueryInfo":
         return FlathubClient._query("/collection/recently-added", page, per_page)
 
-    def recently_updated(
-        page: int | None = None, per_page: int | None = None
-    ) -> "QueryInfo":
+    def recently_updated(page: int = 1, per_page: int = 0) -> "QueryInfo":
         return FlathubClient._query("/collection/recently-updated", page, per_page)
 
-    def popular(page: int | None = None, per_page: int | None = None) -> "QueryInfo":
+    def popular(page: int = 1, per_page: int = 50) -> "QueryInfo":
         return FlathubClient._query("/popular/last-month", page, per_page)
 
     def app_info(id: str) -> "FlathubApp":

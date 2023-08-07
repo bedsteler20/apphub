@@ -1,84 +1,84 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $HomePage : Gtk.ScrolledWindow {
-    vexpand: true;
-    hscrollbar-policy: never;
-    
-    Adw.Clamp {
-      hexpand: false;
+template $HomePage: Gtk.ScrolledWindow {
+  vexpand: true;
+  hscrollbar-policy: never;
+
+  Adw.Clamp {
+    hexpand: false;
+    Box {
+      margin-top: 25;
+      margin-bottom: 25;
+      margin-start: 25;
+      margin-end: 25;
+      orientation: vertical;
+      spacing: 30;
       Box {
-        margin-top: 25;
-        margin-bottom: 25;
-        margin-start: 25;
-        margin-end: 25;
         orientation: vertical;
-        spacing: 30;
         Box {
-            orientation: vertical;
-            Box {
-              orientation: horizontal;
-              hexpand: true;
-              margin-bottom: 10;
-              Label {
-                halign: start;
-                label: "Recently Added Apps";
-                hexpand: true;
-                styles ["title-2"]
+          orientation: horizontal;
+          hexpand: true;
+          margin-bottom: 10;
+          Label {
+            halign: start;
+            label: "Recently Added Apps";
+            hexpand: true;
+            styles ["title-2"]
 
-              }
-              Button {
-                label: "More";
-                halign: end;
-                styles ["suggested-action"]
-            }
           }
-          $AppGrid recently_added_grid {}
-        }
-
-        Box {
-            orientation: vertical;
-            Box {
-              orientation: horizontal;
-              hexpand: true;
-              margin-bottom: 10;
-              Label {
-                halign: start;
-                label: "Recently Updated Apps";
-                hexpand: true;
-                styles ["title-2"]
-
-              }
-              Button {
-                label: "More";
-                halign: end;
-                styles ["suggested-action"]
-            }
+          Button recently_added_btn {
+            label: "More";
+            halign: end;
+            styles ["suggested-action"]
           }
-          $AppGrid recently_updated_grid {}
         }
-
-        Box {
-            orientation: vertical;
-            Box {
-              orientation: horizontal;
-              hexpand: true;
-              margin-bottom: 10;
-              Label {
-                halign: start;
-                label: "Popular Apps";
-                hexpand: true;
-                styles ["title-2"]
-              }
-              Button {
-                label: "More";
-                halign: end;
-                styles ["suggested-action"]
-            }
-          }
-          $AppGrid popular_grid {}
-        }
-
+        $AppGrid recently_added_grid {}
       }
+
+      Box {
+        orientation: vertical;
+        Box {
+          orientation: horizontal;
+          hexpand: true;
+          margin-bottom: 10;
+          Label {
+            halign: start;
+            label: "Recently Updated Apps";
+            hexpand: true;
+            styles ["title-2"]
+
+          }
+          Button recently_updated_btn {
+            label: "More";
+            halign: end;
+            styles ["suggested-action"]
+          }
+        }
+        $AppGrid recently_updated_grid {}
+      }
+
+      Box {
+        orientation: vertical;
+        Box {
+          orientation: horizontal;
+          hexpand: true;
+          margin-bottom: 10;
+          Label {
+            halign: start;
+            label: "Popular Apps";
+            hexpand: true;
+            styles ["title-2"]
+          }
+          Button popular_btn {
+            label: "More";
+            halign: end;
+            styles ["suggested-action"]
+          }
+        }
+        $AppGrid popular_grid {}
+      }
+
     }
+  }
 }

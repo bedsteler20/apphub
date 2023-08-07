@@ -32,7 +32,8 @@ install_data([
   'pages/error_page.py',
   'pages/home_page.py',
   'pages/nav_page.py',
-  'pages/app_page.py'
+  'pages/app_page.py',
+  'pages/collection_page.py',
 ], install_dir: moduledir/'pages')
 
 subdir('ui')

@@ -3,6 +3,7 @@ from gi.repository import Gtk
 from apphub.api.client import FlathubClient
 from apphub.api.types import QueryInfo
 from apphub.components.app_grid import AppGrid
+from apphub.utils.navigator import navigator
 from apphub.utils.router import AsyncRoute
 
 
@@ -12,6 +13,10 @@ class HomePage(Gtk.ScrolledWindow):
     recently_added_grid: AppGrid = Gtk.Template.Child()
     popular_grid: AppGrid = Gtk.Template.Child()
     recently_updated_grid: AppGrid = Gtk.Template.Child()
+
+    recently_added_btn: Gtk.Button = Gtk.Template.Child()
+    popular_btn: Gtk.Button = Gtk.Template.Child()
+    recently_updated_btn: Gtk.Button = Gtk.Template.Child()
 
     def __init__(
         self,
@@ -26,6 +31,18 @@ class HomePage(Gtk.ScrolledWindow):
         self.popular_grid.load_data(popular_apps)
         self.recently_updated_grid.load_data(recently_updated)
 
+        self.recently_added_btn.connect(
+            "clicked",
+            lambda *a: navigator.visit(self, "/collection/recently-added/1"),
+        )
+        self.popular_btn.connect(
+            "clicked", lambda *a: navigator.visit(self, "/popular/last-month/1")
+        )
+        self.recently_updated_btn.connect(
+            "clicked",
+            lambda *a: navigator.visit(self, "/collection/recently-updated/1"),
+        )
+
 
 class HomePageRoute(AsyncRoute):
     url = "/"
@@ -39,7 +56,7 @@ class HomePageRoute(AsyncRoute):
         if hasattr(self, "widget"):
             return {}
         return {
-            "recently_added": FlathubClient.recently_added(),
-            "popular_apps": FlathubClient.popular(),
-            "recently_updated": FlathubClient.recently_updated(),
+            "recently_added": FlathubClient.recently_added(1, 12),
+            "popular_apps": FlathubClient.popular(1, 12),
+            "recently_updated": FlathubClient.recently_updated(1, 12),
         }

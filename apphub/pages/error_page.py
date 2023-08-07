@@ -1,21 +1,6 @@
 from gi.repository import Adw, Gtk
 
 
-def escape_label(label):
-    return label.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-
-
-def indent_stack(stack):
-    return escape_label(
-        "\n".join(f"    {escape_label(line)}" for line in stack.split("\n"))
-    )
-
-
-def error_to_string(error):
-    # must show error name, message, and stack
-    return f"<b>{escape_label(error.__class__.__name__)}: </b>{escape_label(error.args[0])}\n{indent_stack(error.__traceback__.format() if hasattr(error, '__traceback__') else '')}"
-
-
 @Gtk.Template(resource_path="/com/bedsteler20/AppHub/error_page.ui")
 class ErrorPage(Gtk.Box):
     __gtype_name__ = "ErrorPage"
@@ -50,7 +35,7 @@ class ErrorPage(Gtk.Box):
     def set_error(self, error):
         if isinstance(error, Exception):
             self.set_message(error.args[0])
-            self.set_more(True, error_to_string(error))
+            self.set_more(True, str(error))
         else:
             self.set_message(f"Error: {error}" if error else "Unknown error")
             self.set_more(False)

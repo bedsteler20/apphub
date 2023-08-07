@@ -29,14 +29,17 @@
     "gresources",
     "gschema",
     "gsignals",
+    "haha",
     "halign",
     "hexpand",
     "hicolor",
     "hscrollbar",
     "Interp",
+    "libadw",
     "Pixbuf",
     "Pixelbuf",
     "subprojects",
+    "vala",
     "valign",
     "vexpand",
     "werror",
@@ -54,7 +57,12 @@
       "allowCompoundWords": true
     }
   ],
-  "ignoreWords": ["bedsteler"],
+  "ignoreWords": [
+    "bedsteler"
+  ],
   "import": [],
-  "enableFiletypes": ["build", "blp"]
+  "enableFiletypes": [
+    "build",
+    "blp"
+  ]
 }

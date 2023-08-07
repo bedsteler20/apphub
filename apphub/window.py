@@ -3,6 +3,8 @@ from gi.repository import Adw, GObject, Gtk
 from apphub.api.client import FlathubClient
 from apphub.components.loading import LoadingWidget
 from apphub.pages.app_page import AppPageRoute
+from apphub.pages.collection_page import PopularPageRoute, RecentlyAddedPageRoute
+from apphub.pages.collection_page import RecentlyUpdatedPageRoute
 from apphub.pages.home_page import HomePageRoute
 from apphub.utils.router import Router
 
@@ -22,6 +24,9 @@ class ApphubWindow(Adw.ApplicationWindow):
             [
                 HomePageRoute(),
                 AppPageRoute(),
+                PopularPageRoute(),
+                RecentlyAddedPageRoute(),
+                RecentlyUpdatedPageRoute(),
             ],
         )
         self.navigator.navigate("/")

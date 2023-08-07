@@ -1,0 +1,19 @@
+using Gtk 4.0;
+using Adw 1;
+template $CollectionPage: Gtk.ScrolledWindow {
+    vexpand: true;
+    hscrollbar-policy: never;
+
+    Adw.Clamp {
+        hexpand: false;
+        Box {
+            margin-top: 25;
+            margin-bottom: 25;
+            margin-start: 25;
+            margin-end: 25;
+            orientation: vertical;
+            spacing: 30;
+            $AppGrid app_grid {}
+        }
+    }
+}

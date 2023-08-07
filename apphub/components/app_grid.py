@@ -1,3 +1,4 @@
+import math
 from gi.repository import GObject, Gtk
 
 from apphub.api.types import QueryInfo
@@ -11,31 +12,26 @@ class AppGrid(Gtk.Box):
     __gtype_name__ = "AppGrid"
 
     flow: Gtk.FlowBox = Gtk.Template.Child()
-    rows: int = GObject.Property(
-        type=int, default=4, minimum=1, maximum=69, flags=GObject.ParamFlags.READWRITE
-    )
     columns: int = GObject.Property(
-        type=int, default=3, minimum=1, maximum=69, flags=GObject.ParamFlags.READWRITE
+        type=int,
+        default=3,
+        minimum=1,
+        maximum=69,  # haha funny number
+        flags=GObject.ParamFlags.READWRITE,
     )
-    cards: AppCard = []
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self._flow = Gtk.FlowBox()
-
         self._flow.set_min_children_per_line(self.columns)
         self.append(self._flow)
-
-        self.cards: list[AppCard] = []
-        for y in range(self.columns):
-            for x in range(self.rows):
-                card = AppCard()
-                self._flow.append(card)
-                self.cards.append(card)
+        print(self.get_width())
 
     def load_data(self, info: "QueryInfo"):
         batch = {}
-        for i in range(len(self.cards)):
-            self.cards[i].set_app(info["hits"][i], load_icon=False)
-            batch[info["hits"][i]["icon"]] = self.cards[i].image
+        for i in range(len(info["hits"])):
+            card = AppCard()
+            self._flow.append(card)
+            card.set_app(info["hits"][i], load_icon=False)
+            batch[info["hits"][i]["icon"]] = card.image
         load_image_batch(batch)

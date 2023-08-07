@@ -1,0 +1,16 @@
+{
+  "component": {
+    "scope": "python",
+    "prefix": "comp",
+    "body": [
+      "@Gtk.Template(resource_path=\"/com/bedsteler20/AppHub/$TM_FILENAME_BASE.ui\")",
+      "class $1($2):",
+      "   __gtype_name__ = \"$1\"",
+      "   ",
+      "   def __init__(self, **kwargs):",
+      "       super().__init__(**kwargs)",
+      "       "
+    ],
+    "description": "Component"
+  }
+}
