@@ -47,3 +47,12 @@ class RecentlyUpdatedPageRoute(AsyncRoute):
 
     def load_data(self, page_props: dict, application) -> QueryInfo:
         return FlathubClient.recently_updated(page_props.get("page"))
+
+class SearchPageRoute(AsyncRoute):
+    url = "/search/{query}"
+
+    def create(self, page_props: dict, application, data: QueryInfo):
+        return CollectionPage("/apps/collection/recently-updated", data)
+
+    def load_data(self, page_props: dict, application) -> QueryInfo:
+        return FlathubClient.search(page_props.get("query"))

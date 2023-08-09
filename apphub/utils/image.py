@@ -56,12 +56,17 @@ def load_image_batch(
     square: bool = None,
     upscale: bool = None,
     group_size: int = 12,
+    on_first_loaded=None,
 ):
+    has_triggered_first = False
     for k in list(images.keys()):
         cached = load_cache_icon(k)
         if cached is not None:
             load_pixbuf(images[k], cached)
             del images[k]
+            if not has_triggered_first and on_first_loaded is not None:
+                has_triggered_first = True
+                on_first_loaded()
     next_group = None
     if len(images) > group_size:
         next_group = dict(list(images.items())[group_size:])
@@ -75,6 +80,7 @@ def load_image_batch(
         return data
 
     def on_done(res, err):
+        has_triggered_first = False
         if res is not None:
             for k in keys:
                 loader = GdkPixbuf.PixbufLoader()
@@ -87,6 +93,9 @@ def load_image_batch(
                     )
                 load_pixbuf(images[k], pixelbuf)
                 del pixelbuf
+                if not has_triggered_first and on_first_loaded is not None:
+                    has_triggered_first = True
+                    on_first_loaded()
         if next_group is not None:
             load_image_batch(next_group, width, height, square, upscale, group_size)
 

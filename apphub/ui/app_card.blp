@@ -1,14 +1,18 @@
 using Gtk 4.0;
 
-template $AppCard : Button {
+template $AppCard: Button {
   width-request: 300;
   hexpand: false;
   vexpand: false;
+  margin-bottom: 5;
+  margin-end: 5;
+  margin-start: 5;
+  margin-top: 5;
   // action-name: "navigator.visit";
   styles [
     "card",
   ]
-  Box  {
+  Box {
     margin-bottom: 10;
     margin-end: 10;
     margin-start: 10;
@@ -28,7 +32,7 @@ template $AppCard : Button {
       ]
     }
 
-    Box  {
+    Box {
       orientation: vertical;
       valign: center;
       hexpand: true;
@@ -38,7 +42,7 @@ template $AppCard : Button {
       ]
 
       Label name_label {
-        wrap: true; 
+        wrap: true;
         xalign: 0.0;
         yalign: 0.5;
         ellipsize: end;
@@ -82,7 +86,7 @@ template $AppCard : Button {
         }
       }
 
-      
+
     }
   }
 }

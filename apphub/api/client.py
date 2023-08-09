@@ -36,3 +36,6 @@ class FlathubClient:
     def app_info(id: str) -> "FlathubApp":
         return FlathubClient._query(f"/appstream/{id}")
 
+    def search(query: str) -> "QueryInfo":
+        uri = FlathubClient._url + "/search"
+        return requests.post(uri, json={"query": query}).json()

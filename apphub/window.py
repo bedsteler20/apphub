@@ -3,7 +3,7 @@ from gi.repository import Adw, GObject, Gtk
 from apphub.api.client import FlathubClient
 from apphub.components.loading import LoadingWidget
 from apphub.pages.app_page import AppPageRoute
-from apphub.pages.collection_page import PopularPageRoute
+from apphub.pages.collection_page import PopularPageRoute, SearchPageRoute
 from apphub.pages.collection_page import RecentlyAddedPageRoute
 from apphub.pages.collection_page import RecentlyUpdatedPageRoute
 from apphub.pages.home_page import HomePageRoute
@@ -16,6 +16,7 @@ class ApphubWindow(Adw.ApplicationWindow):
 
     view_stack: Adw.NavigationView = Gtk.Template.Child()
     back_btn: Gtk.Button = Gtk.Template.Child()
+    search_bar: Gtk.SearchBar = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -28,6 +29,7 @@ class ApphubWindow(Adw.ApplicationWindow):
                 PopularPageRoute(),
                 RecentlyAddedPageRoute(),
                 RecentlyUpdatedPageRoute(),
+                SearchPageRoute(),
             ],
         )
         self.navigator.navigate("/")
@@ -35,3 +37,10 @@ class ApphubWindow(Adw.ApplicationWindow):
         self.navigator.bind_property(
             "can_go_back", self.back_btn, "visible", GObject.BindingFlags.DEFAULT
         )
+        self.search_bar.connect("activate", self.on_search)
+
+    def on_search(self, *a):
+        if self.navigator.current_uri.startswith("/search"):
+            self.view_stack.pop()
+        self.navigator.navigate(f"/search/{self.search_bar.get_text()}")
+

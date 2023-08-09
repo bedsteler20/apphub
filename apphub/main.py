@@ -21,6 +21,7 @@ class ApphubApplication(Adw.Application):
         self.create_action("preferences", self.on_preferences_action)
         self.create_action("open-browser", self.on_open_browser)
         self.flatpak_helper = FlatpakHelper()
+        self.set_accels_for_action("navigator.back", ["<Alt>Left", "Back"])
 
     def _load_resource(self):
         display = Gdk.Display.get_display()

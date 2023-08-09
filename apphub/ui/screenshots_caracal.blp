@@ -3,16 +3,23 @@ using Adw 1;
 
 template $ScreenshotCaracal: Adw.Bin {
   Box {
+    height-request: 351;
+    $LoadingWidget {}
+  }
+}
+
+
+Box content {
     orientation: vertical;
     height-request: 351;
 
     Adw.Carousel carousel {
       spacing: 100;
       allow-scroll-wheel: false;
+      styles ["vertical", "view"]
     }
 
     Adw.CarouselIndicatorDots carousel_indicator {
       carousel: carousel;
     }
   }
-}

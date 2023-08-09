@@ -9,6 +9,7 @@ from apphub.utils.image import load_image_batch
 class ScreenshotCaracal(Adw.Bin):
     __gtype_name__ = "ScreenshotCaracal"
     carousel: Adw.Carousel = Gtk.Template.Child()
+    content: Gtk.Box = Gtk.Template.Child()
 
     def load(self, images: list[str]):
         batch = {}
@@ -18,7 +19,15 @@ class ScreenshotCaracal(Adw.Bin):
                 css_classes=["rounded-image"],
             )
             batch[url] = img
+            img.set_margin_bottom(15)
+            img.set_margin_top(15)
             self.carousel.append(img)
         load_image_batch(
-            batch, height=702, width=1248, square=False, upscale=True, group_size=1
+            batch,
+            height=702,
+            width=1248,
+            square=False,
+            upscale=True,
+            group_size=1,
+            on_first_loaded=lambda: self.set_child(self.content),
         )
