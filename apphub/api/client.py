@@ -1,8 +1,10 @@
 from typing import TYPE_CHECKING
 
-from gi.repository import GLib, Gio
-from apphub.globals import settings
+from gi.repository import Gio, GLib
+
 import requests
+
+from apphub.globals import settings
 
 if TYPE_CHECKING:
     from apphub.api.types import FlathubApp, QueryInfo

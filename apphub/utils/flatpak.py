@@ -1,6 +1,7 @@
 import os
 
 from gi.repository import Flatpak, GObject
+
 from apphub.globals import settings
 
 

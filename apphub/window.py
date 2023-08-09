@@ -3,9 +3,10 @@ from gi.repository import Adw, GObject, Gtk
 from apphub.api.client import FlathubClient
 from apphub.components.loading import LoadingWidget
 from apphub.pages.app_page import AppPageRoute
-from apphub.pages.collection_page import PopularPageRoute, SearchPageRoute
+from apphub.pages.collection_page import PopularPageRoute
 from apphub.pages.collection_page import RecentlyAddedPageRoute
 from apphub.pages.collection_page import RecentlyUpdatedPageRoute
+from apphub.pages.collection_page import SearchPageRoute
 from apphub.pages.home_page import HomePageRoute
 from apphub.utils.router import Router
 
@@ -43,4 +44,3 @@ class ApphubWindow(Adw.ApplicationWindow):
         if self.navigator.current_uri.startswith("/search"):
             self.view_stack.pop()
         self.navigator.navigate(f"/search/{self.search_bar.get_text()}")
-

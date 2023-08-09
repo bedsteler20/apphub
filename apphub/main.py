@@ -2,8 +2,8 @@ import os
 import sys
 
 from gi.repository import Adw, Flatpak, Gdk, Gio, Gtk
-from apphub.components.settings_window import SettingsWindow
 
+from apphub.components.settings_window import SettingsWindow
 from apphub.pages.home_page import HomePageRoute
 from apphub.utils.flatpak import FlatpakHelper
 from apphub.utils.router import Router

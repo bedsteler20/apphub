@@ -3,10 +3,10 @@ from typing import TYPE_CHECKING
 from gi.repository import Adw, Gtk
 
 from apphub.api.types import FlathubApp
+from apphub.globals import settings
 from apphub.utils.locate import locate
 from apphub.utils.transaction import InstallState, Transaction
 from apphub.utils.transaction import check_install_state
-from apphub.globals import settings
 
 
 @Gtk.Template(resource_path="/com/bedsteler20/AppHub/install_button.ui")

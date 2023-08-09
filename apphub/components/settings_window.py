@@ -1,4 +1,5 @@
-from gi.repository import Gtk, Adw
+from gi.repository import Adw, Gtk
+
 import requests
 
 from apphub.globals import settings
