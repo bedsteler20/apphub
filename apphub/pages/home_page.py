@@ -33,14 +33,14 @@ class HomePage(Gtk.ScrolledWindow):
 
         self.recently_added_btn.connect(
             "clicked",
-            lambda *a: navigator.visit(self, "/collection/recently-added/1"),
+            lambda *a: navigator.visit(self, "/apps/collection/recently-added/1"),
         )
         self.popular_btn.connect(
-            "clicked", lambda *a: navigator.visit(self, "/popular/last-month/1")
+            "clicked", lambda *a: navigator.visit(self, "/apps/popular/last-month/1")
         )
         self.recently_updated_btn.connect(
             "clicked",
-            lambda *a: navigator.visit(self, "/collection/recently-updated/1"),
+            lambda *a: navigator.visit(self, "/apps/collection/recently-updated/1"),
         )
 
 

@@ -22,6 +22,7 @@ if TYPE_CHECKING:
 
 # TODO: (Wait for Gnome 45) migrate to new libadw`s builtin navigator components
 
+
 class Route:
     url: str
 
@@ -49,24 +50,26 @@ class Router(GObject.GObject):
         type=bool, default=False, flags=GObject.ParamFlags.READWRITE
     )
 
-    _history: list[str]
-    _future: list[str]
-
     def __init__(
-        self, view: Adw.ViewStack, app: "ApphubApplication", routes: list[Route]
+        self, view: Adw.NavigationView, app: "ApphubApplication", routes: list[Route]
     ):
         GObject.GObject.__init__(self)
         self.application = app
-        self._future = []
         self._history = []
         self._mapper = Mapper()
         self._stack = view
         for route in routes:
             self._mapper.connect(route.url, route=route.url)
         self._routes = routes
-        pass
+        self._stack.connect("popped", self._on_pop)
 
-    def _endpoint(self, route: Route, page_props: dict, history: bool):
+    def _on_pop(self, view, page):
+        if page is not None:
+            self._history.pop()
+            self.notify("can_go_back")
+            self.notify("current_uri")
+
+    def _endpoint(self, route: Route, page_props: dict):
         """
         This method handles rendering a route to the view if the route
         needs to load data asynchronously it fetches the data
@@ -89,32 +92,24 @@ class Router(GObject.GObject):
             pass
         else:
             page.content = route.create(page_props, self.application)
-        self._stack.add(page)
-        self._stack.set_visible_child(page)
+        self._stack.push(Adw.NavigationPage.new(page, ""))
+        # self._stack.set_vi(w)
 
-    def navigate(self, url: str, history=True):
-        if (
-            history
-            and len(self._history) == 0
-            or url != self._history[len(self._history) - 1]
-        ):
-            self.push_state(url)
-            if self._stack.get_last_child() is not None:
-                self._stack.remove(self._stack.get_last_child())
+    def navigate(self, url: str):
+        self.push_state(url)
         props = self._mapper.match(url)
         if props is None:
             self._load_404()
             return
         for route in self._routes:
             if route.url == props["route"]:
-                self._endpoint(route, props, history)
+                self._endpoint(route, props)
                 break
 
     def _load_404(self):
         page = NavPage()
         page.content = ErrorPage("404 Not Found")
-        self._stack.add(page)
-        self._stack.set_visible_child(page)
+        self._stack.push(Adw.NavigationPage.new(page, ""))
 
     def push_state(self, url: str):
         self._history.append(url)
@@ -125,52 +120,16 @@ class Router(GObject.GObject):
         self._history[len(self._history) - 1] = url
         self.notify("current-uri")
 
-    def go(self, n: int, navigate: bool = True):
-        if n > 0:
-            self._history.extend(self._future[-n:])
-            del self._future[-n:]
-        elif n < 0:
-            self._future.extend(self._history[n:])
-            del self._history[n:]
-
-        self.notify("can_go_back")
-        self.notify("can_go_forward")
-        self.notify("current_uri")
-
-        state = self._history[-1]
-
-        if not state:
-            state = "/"
-
-        if navigate:
-            self.navigate(state, True)
-
-    def back(self, navigate=True):
-        page = self._stack.get_visible_child()
-        self.go(-1, navigate)
-        self._stack.remove(page)
-
-    def forward(self, navigate=False):
-        self.go(1, navigate)
-
-    def reload(self, navigate=False):
-        self.go(0, navigate)
+    def back(self):
+        self._stack.pop()
 
     @GObject.Property(type=bool, default=False)
     def can_go_back(self):
         return len(self._history) > 1
 
-    @GObject.Property(type=bool, default=False)
-    def can_go_forward(self):
-        return len(self._history) > 0
-
     @GObject.Property(type=str)
     def current_uri(self):
         return self._history[len(self._history) - 1]
-
-    can_go_forward: bool
-    can_go_back: bool
-    current_uri: str
 
     def get_action_group(self):
         group = Gio.SimpleActionGroup()

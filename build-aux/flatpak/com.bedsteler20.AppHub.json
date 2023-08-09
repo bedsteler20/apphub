@@ -34,6 +34,7 @@
         "python3-debugpy.json",
         "python3-requirements.json",
         "flatpak.json",
+	"libadw.json",
         {
             "name": "apphub",
             "builddir": true,

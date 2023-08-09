@@ -1,9 +1,10 @@
 import math
-from gi.repository import Gtk, Adw
+
+from gi.repository import Adw, Gtk
+
 from apphub.api.client import FlathubClient
 from apphub.api.types import QueryInfo
 from apphub.components.app_grid import AppGrid
-
 from apphub.utils.router import AsyncRoute
 
 
@@ -19,30 +20,30 @@ class CollectionPage(Gtk.ScrolledWindow):
 
 
 class PopularPageRoute(AsyncRoute):
-    url = "/popular/last-month/{page}"
+    url = "/apps/popular/last-month/{page}"
 
     def create(self, page_props: dict, application, data: QueryInfo):
-        return CollectionPage("/popular/last-month", data)
+        return CollectionPage("/apps/popular/last-month", data)
 
     def load_data(self, page_props: dict, application) -> QueryInfo:
         return FlathubClient.popular(page_props.get("page"))
 
 
 class RecentlyAddedPageRoute(AsyncRoute):
-    url = "/collection/recently-added/{page}"
+    url = "/apps/collection/recently-added/{page}"
 
     def create(self, page_props: dict, application, data: QueryInfo):
-        return CollectionPage("/collection/recently-added", data)
+        return CollectionPage("/apps/collection/recently-added", data)
 
     def load_data(self, page_props: dict, application) -> QueryInfo:
         return FlathubClient.recently_added(page_props.get("page"))
 
 
 class RecentlyUpdatedPageRoute(AsyncRoute):
-    url = "/collection/recently-updated/{page}"
+    url = "/apps/collection/recently-updated/{page}"
 
     def create(self, page_props: dict, application, data: QueryInfo):
-        return CollectionPage("/collection/recently-updated", data)
+        return CollectionPage("/apps/collection/recently-updated", data)
 
     def load_data(self, page_props: dict, application) -> QueryInfo:
         return FlathubClient.recently_updated(page_props.get("page"))

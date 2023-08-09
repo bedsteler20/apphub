@@ -1,4 +1,5 @@
 import math
+
 from gi.repository import GObject, Gtk
 
 from apphub.api.types import QueryInfo

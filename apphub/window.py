@@ -3,7 +3,8 @@ from gi.repository import Adw, GObject, Gtk
 from apphub.api.client import FlathubClient
 from apphub.components.loading import LoadingWidget
 from apphub.pages.app_page import AppPageRoute
-from apphub.pages.collection_page import PopularPageRoute, RecentlyAddedPageRoute
+from apphub.pages.collection_page import PopularPageRoute
+from apphub.pages.collection_page import RecentlyAddedPageRoute
 from apphub.pages.collection_page import RecentlyUpdatedPageRoute
 from apphub.pages.home_page import HomePageRoute
 from apphub.utils.router import Router
@@ -13,7 +14,7 @@ from apphub.utils.router import Router
 class ApphubWindow(Adw.ApplicationWindow):
     __gtype_name__ = "ApphubWindow"
 
-    view_stack: Adw.ViewStack = Gtk.Template.Child()
+    view_stack: Adw.NavigationView = Gtk.Template.Child()
     back_btn: Gtk.Button = Gtk.Template.Child()
 
     def __init__(self, **kwargs):

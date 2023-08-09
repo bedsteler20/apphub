@@ -1,4 +1,5 @@
 import os
+
 from gi.repository import Adw, Gdk, GdkPixbuf, GLib, Gtk
 
 import requests

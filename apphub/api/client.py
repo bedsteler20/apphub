@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
+
 from gi.repository import GLib
+
 import requests
 
 if TYPE_CHECKING:

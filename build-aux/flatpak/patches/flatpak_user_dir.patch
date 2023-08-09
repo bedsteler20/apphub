@@ -1,0 +1,13 @@
+diff --git a/common/flatpak-dir.c b/common/flatpak-dir.c
+index ba7f3085..68bced6f 100644
+--- a/common/flatpak-dir.c
++++ b/common/flatpak-dir.c
+@@ -1867,7 +1867,7 @@ flatpak_get_user_base_dir_location (void)
+       if (user_dir != NULL && *user_dir != 0)
+         path = user_dir;
+       else
+-        path = free_me = g_build_filename (g_get_user_data_dir (), "flatpak", NULL);
++        path = free_me = g_build_filename (g_get_home_dir (), ".local", "share", "flatpak", NULL);
+ 
+       setup_value = (gsize) g_file_new_for_path (path);
+ 

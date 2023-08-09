@@ -1,7 +1,8 @@
 import json
 import os
 from typing import Literal
-from gi.repository import GObject, Gio, GLib, Flatpak
+
+from gi.repository import Flatpak, GLib, GObject
 
 from apphub.utils.locate import locate
 
