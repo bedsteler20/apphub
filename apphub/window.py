@@ -35,9 +35,3 @@ class ApphubWindow(Adw.ApplicationWindow):
         self.navigator.bind_property(
             "can_go_back", self.back_btn, "visible", GObject.BindingFlags.DEFAULT
         )
-
-    @staticmethod
-    def find() -> "ApphubWindow":
-        import apphub
-
-        return apphub.main.app.props.active_window

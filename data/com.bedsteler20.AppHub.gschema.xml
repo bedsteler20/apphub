@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="apphub">
-	<schema id="com.bedsteler20.AppHub" path="/com/bedsteler20/AppHub">
-		<key name='prefer-user-flathub' type='b'>
-			<default>false</default>
-		</key>
-	</schema>
+  <schema id="com.bedsteler20.AppHub" path="/com/bedsteler20/AppHub">
+    <key name="prefered-installatin" type="s">
+      <default>'user'</default>
+    </key>
+  </schema>
 </schemalist>

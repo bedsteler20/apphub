@@ -26,6 +26,7 @@ install_data([
   'components/app_grid.py',
   'components/screenshots_caracal.py',
   'components/install_button.py',
+  'components/settings_window.py'
 ], install_dir: moduledir/'components')
 
 install_data([

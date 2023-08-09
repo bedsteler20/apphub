@@ -1,7 +1,6 @@
 import os
 
-from gi.repository import  Flatpak, GObject
-
+from gi.repository import Flatpak, GObject
 
 
 class FlatpakHelper(GObject.Object):

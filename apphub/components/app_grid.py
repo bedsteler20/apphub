@@ -26,7 +26,6 @@ class AppGrid(Gtk.Box):
         self._flow = Gtk.FlowBox()
         self._flow.set_min_children_per_line(self.columns)
         self.append(self._flow)
-        print(self.get_width())
 
     def load_data(self, info: "QueryInfo"):
         batch = {}

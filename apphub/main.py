@@ -2,6 +2,7 @@ import os
 import sys
 
 from gi.repository import Adw, Flatpak, Gdk, Gio, Gtk
+from apphub.components.settings_window import SettingsWindow
 
 from apphub.pages.home_page import HomePageRoute
 from apphub.utils.flatpak import FlatpakHelper
@@ -58,7 +59,8 @@ class ApphubApplication(Adw.Application):
         about.present()
 
     def on_preferences_action(self, widget, _):
-        print("app.preferences action activated")
+        win = SettingsWindow(transient_for=self.props.active_window)
+        win.present()
 
     def create_action(self, name, callback, shortcuts=None):
         action = Gio.SimpleAction.new(name, None)
