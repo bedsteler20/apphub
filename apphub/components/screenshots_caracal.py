@@ -20,9 +20,5 @@ class ScreenshotCaracal(Adw.Bin):
             batch[url] = img
             self.carousel.append(img)
         load_image_batch(
-            batch,
-            height=702,
-            width=1248,
-            square=False,
-            upscale=True,
+            batch, height=702, width=1248, square=False, upscale=True, group_size=1
         )
