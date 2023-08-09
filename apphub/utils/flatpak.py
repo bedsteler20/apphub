@@ -1,6 +1,7 @@
 import os
 
 from gi.repository import Flatpak, GObject
+from apphub.globals import settings
 
 
 class FlatpakHelper(GObject.Object):
@@ -10,6 +11,15 @@ class FlatpakHelper(GObject.Object):
         self._pending_uninstalls = []
         self.user_install = Flatpak.Installation.new_user()
         self.system_install = Flatpak.Installation.new_system()
+
+    def get_preferred_installation(self):
+        name = settings.get_string("preferred-installation")
+        if name == "user":
+            return self.user_install
+        elif name == "system":
+            return self.system_install
+        else:
+            return None
 
     def is_app_installed(
         self, app_id: str, install: Flatpak.Installation = None

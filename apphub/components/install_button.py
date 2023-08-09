@@ -6,6 +6,7 @@ from apphub.api.types import FlathubApp
 from apphub.utils.locate import locate
 from apphub.utils.transaction import InstallState, Transaction
 from apphub.utils.transaction import check_install_state
+from apphub.globals import settings
 
 
 @Gtk.Template(resource_path="/com/bedsteler20/AppHub/install_button.ui")
@@ -32,8 +33,8 @@ class InstallButton(Adw.Bin):
     def on_install_btn_click(self, *args):
         transaction = Transaction(
             action="install",
-            installation=locate.flatpak().user_install,
-            remote="flathub",
+            installation=locate.flatpak().get_preferred_installation(),
+            remote=settings.get_string("flathub-remote-id"),
             app_id=self.app["id"],
             ref=self.app["bundle"]["value"],
         )
@@ -49,7 +50,7 @@ class InstallButton(Adw.Bin):
             return
         transaction = Transaction(
             action="uninstall",
-            installation=locate.flatpak().user_install,
+            installation=locate.flatpak().get_preferred_installation(),
             remote="flathub",
             app_id=self.app["id"],
             ref=self.app["bundle"]["value"],

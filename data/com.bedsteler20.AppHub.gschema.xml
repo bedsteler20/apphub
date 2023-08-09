@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="apphub">
-  <schema id="com.bedsteler20.AppHub" path="/com/bedsteler20/AppHub">
-    <key name="prefered-installatin" type="s">
+  <schema id="com.bedsteler20.AppHub" path="/com/bedsteler20/AppHub/">
+    <key name="preferred-installation" type="s">
       <default>'user'</default>
+    </key>
+    <key name="flathub-api" type="s">
+      <default>'https://flathub.org/api/v2'</default>
+    </key>
+    <key name="flathub-remote-id" type="s">
+      <default>'flathub'</default>
     </key>
   </schema>
 </schemalist>

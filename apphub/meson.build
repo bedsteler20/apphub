@@ -1,7 +1,8 @@
 install_data([
     'main.py',
     '__init__.py',
-    'window.py'
+    'window.py',
+    'globals.py',
 ], install_dir: moduledir)
 
 install_data([

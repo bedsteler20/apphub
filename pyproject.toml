@@ -13,7 +13,6 @@ known_gi = ['gi']
 extend_skip = [
   "subprojects",
   "bin",
-  "tools/flatpak-json2yalm.py",
   "tools/flatpak-pip-generator.py",
 ]
 
@@ -21,7 +20,6 @@ extend_skip = [
 reportMissingModuleSource = "none"
 ignore = [
   "subprojects",
-  "tools/flatpak-json2yalm.py",
   "tools/flatpak-pip-generator.py",
 ]
 
@@ -35,7 +33,6 @@ exclude = '''
       \.git
     | _build
     | \subprojects
-    | \tools/flatpak-json2yalm.py
     | \tools/flatpak-pip-generator.py
   )
 )

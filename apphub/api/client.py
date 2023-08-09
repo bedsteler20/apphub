@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
-from gi.repository import GLib
-
+from gi.repository import GLib, Gio
+from apphub.globals import settings
 import requests
 
 if TYPE_CHECKING:
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 class FlathubClient:
-    _url = "https://flathub.org/api/v2"
+    _url = settings.get_string("flathub-api")
 
     @staticmethod
     def set_url(url):
@@ -36,6 +36,3 @@ class FlathubClient:
     def app_info(id: str) -> "FlathubApp":
         return FlathubClient._query(f"/appstream/{id}")
 
-    def download_ref(app_id: str):
-        res = requests.get(f"https://dl.flathub.org/repo/appstream/{app_id}.flatpakref")
-        return GLib.Bytes.new(res.content)

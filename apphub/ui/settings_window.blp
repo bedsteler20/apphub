@@ -1,6 +1,31 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $SettingsWindow : Adw.PreferencesWindow {
-    
+template $SettingsWindow: Adw.PreferencesWindow {
+    title: _("Preferences");
+
+    Adw.PreferencesPage {
+        Adw.PreferencesGroup {
+            title: _("Flathub");
+            description: _("Requires Restart");
+            Adw.ActionRow {
+                title: _("API Endpoint");
+                activatable-widget: api_entry;
+                Gtk.Entry api_entry {
+                    placeholder-text: "flathub.org/api/v2";
+                    margin-bottom: 10;
+                    margin-top: 10;
+                }
+            }
+            Adw.ActionRow {
+                title: _("Flatpak Remote Id");
+                activatable-widget: remote_entry;
+                Gtk.Entry remote_entry {
+                    placeholder-text: "flathub";
+                    margin-bottom: 10;
+                    margin-top: 10;
+                }
+            }
+        }
+    }
 }

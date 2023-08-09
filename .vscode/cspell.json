@@ -15,6 +15,7 @@
   "dictionaries": [],
   "words": [
     "accels",
+    "activatable",
     "apphub",
     "bugtracker",
     "debugpy",
@@ -62,7 +63,7 @@
   ],
   "import": [],
   "enableFiletypes": [
-    "build",
-    "blp"
+    "meson",
+    "blueprint-gtk"
   ]
 }
