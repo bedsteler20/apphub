@@ -10,16 +10,16 @@ template $ScreenshotCaracal: Adw.Bin {
 
 
 Box content {
-    orientation: vertical;
-    height-request: 351;
+  orientation: vertical;
+  height-request: 351;
 
-    Adw.Carousel carousel {
-      spacing: 100;
-      allow-scroll-wheel: false;
-      styles ["vertical", "view"]
-    }
-
-    Adw.CarouselIndicatorDots carousel_indicator {
-      carousel: carousel;
-    }
+  Adw.Carousel carousel {
+    spacing: 100;
+    allow-scroll-wheel: false;
+    styles ["vertical", "view", "rounded-image"]
   }
+
+  Adw.CarouselIndicatorDots carousel_indicator {
+    carousel: carousel;
+  }
+}

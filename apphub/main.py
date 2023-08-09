@@ -24,7 +24,7 @@ class ApphubApplication(Adw.Application):
         self.set_accels_for_action("navigator.back", ["<Alt>Left", "Back"])
 
     def _load_resource(self):
-        display = Gdk.Display.get_display()
+        display = Gdk.Display.get_default()
         icon_theme = Gtk.IconTheme.get_for_display(display)
         style_provider = Gtk.CssProvider()
         style_provider.load_from_resource("/com/bedsteler20/AppHub/styles.css")
@@ -34,6 +34,7 @@ class ApphubApplication(Adw.Application):
         )
 
     def do_activate(self):
+        self._load_resource()
         win = self.props.active_window
         if not win:
             win = ApphubWindow(application=self)
