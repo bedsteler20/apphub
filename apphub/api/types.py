@@ -45,7 +45,7 @@ class QueryInfo(TypedDict):
     processingTimeMs: int
     hitsPerPage: int
     page: int
-    totalPage: int
+    totalPages: int
     totalHits: int
 
 

@@ -5,6 +5,8 @@ from gi.repository import Adw, Gtk
 from apphub.api.client import FlathubClient
 from apphub.api.types import QueryInfo
 from apphub.components.app_grid import AppGrid
+from apphub.components.pager_buttons import PagerButtons
+from apphub.utils.locate import locate
 from apphub.utils.router import AsyncRoute
 
 
@@ -13,10 +15,12 @@ class CollectionPage(Gtk.ScrolledWindow):
     __gtype_name__ = "CollectionPage"
 
     app_grid: AppGrid = Gtk.Template.Child()
+    pager: PagerButtons = Gtk.Template.Child()
 
     def __init__(self, url: str, data: QueryInfo):
         super().__init__()
         self.app_grid.load_data(data)
+        self.pager.build(data["page"], data["totalPages"])
 
 
 class PopularPageRoute(AsyncRoute):

@@ -14,10 +14,7 @@ class ScreenshotCaracal(Adw.Bin):
     def load(self, images: list[str]):
         batch = {}
         for url in images:
-            img = Gtk.Picture(
-                content_fit=Gtk.ContentFit.FILL,
-                css_classes=["rounded-image"],
-            )
+            img = Gtk.Picture(content_fit=Gtk.ContentFit.FILL)
             batch[url] = img
             img.set_margin_bottom(15)
             img.set_margin_top(15)

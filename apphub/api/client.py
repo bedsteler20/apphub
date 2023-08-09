@@ -1,3 +1,4 @@
+import math
 from typing import TYPE_CHECKING
 
 from gi.repository import Gio, GLib
@@ -40,4 +41,15 @@ class FlathubClient:
 
     def search(query: str) -> "QueryInfo":
         uri = FlathubClient._url + "/search"
-        return requests.post(uri, json={"query": query}).json()
+        # Search dose not split into pages on the server so
+        # it has to be done client side
+        dat: "QueryInfo" = requests.post(
+            uri,
+            json={"query": query},
+        ).json()
+        dat["totalHits"] = len(dat["hits"])
+        dat["totalPages"] = 1
+        dat["page"] = 1
+        dat["hitsPerPage"] = dat["totalHits"]
+
+        return dat

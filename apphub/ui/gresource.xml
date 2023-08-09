@@ -13,6 +13,7 @@
     <file preprocess="xml-stripblanks">screenshots_caracal.ui</file>
     <file preprocess="xml-stripblanks">collection_page.ui</file>
     <file preprocess="xml-stripblanks">settings_window.ui</file>
+    <file preprocess="xml-stripblanks">pager_buttons.ui</file>
     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
     <file preprocess="xml-stripblanks">icons/check-plain-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/flatpak-symbolic.svg</file>
