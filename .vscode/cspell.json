@@ -14,6 +14,7 @@
   "dictionaryDefinitions": [],
   "dictionaries": [],
   "words": [
+    "aarch",
     "accels",
     "activatable",
     "apphub",
@@ -37,8 +38,10 @@
     "hscrollbar",
     "Interp",
     "libadw",
+    "pcsc",
     "Pixbuf",
     "Pixelbuf",
+    "pulseaudio",
     "subprojects",
     "vala",
     "valign",

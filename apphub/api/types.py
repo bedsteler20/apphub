@@ -11,6 +11,44 @@ class AppBundle(TypedDict):
     sdk: str
 
 
+class BusPermission(TypedDict):
+    own: List[str]
+    talk: List[str]
+
+
+class AppPermissions(
+    TypedDict(
+        "AppPermissions", {"session-bus": BusPermission, "system-bus": BusPermission}
+    )
+):
+    sockets: List[
+        Literal[
+            "cups",
+            "fallback-x11",
+            "gpg-agent",
+            "pcsc",
+            "pulseaudio",
+            "session-bus",
+            "ssh-auth",
+            "system-bus",
+            "x11",
+            "wayland",
+        ]
+    ]
+    devices: List[Literal["all", "dri", "kvm", "shm"]]
+    shared: List[Literal["ipc", "network"]]
+    filesystems: List[str]
+
+
+class AppManifest(TypedDict):
+    name: str
+    runtime: str
+    sdk: str
+    command: str
+    tags: list[str]
+    permissions: AppPermissions
+
+
 class AppHitJson(TypedDict):
     name: str
     keywords: List[str] | None
@@ -37,6 +75,11 @@ class AppHitJson(TypedDict):
     updated_at: int
     added_at: int
     installs_last_month: int
+    arches: List[Literal["aarch64", "x86_64"]]
+    download_size: int
+    timestamp: int
+    installed_size: int
+    metadata: "AppManifest"
 
 
 class QueryInfo(TypedDict):

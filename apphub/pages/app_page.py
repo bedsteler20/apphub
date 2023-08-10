@@ -29,9 +29,10 @@ class AppPage(Adw.Bin):
         # Load app info
         load_image(self.icon, app["icon"])
         self.name_label.set_label(app["name"])
-        self.dev_label.set_label(
-            f"By {app['developer_name']}" if app.get("developer_name") else "Unknown"
-        )
+        if app.get("developer_name"):
+            self.dev_label.set_label(f"By {app['developer_name']}")
+        else:
+            self.dev_label.set_visible(False)
         self.summery_label.set_label(app["summary"] if app.get("summary") else "")
         self.description_label.set_use_markup(True)
         # TODO: Extract this to a helper function

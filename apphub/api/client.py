@@ -37,7 +37,9 @@ class FlathubClient:
         return FlathubClient._query("/popular/last-month", page, per_page)
 
     def app_info(id: str) -> "FlathubApp":
-        return FlathubClient._query(f"/appstream/{id}")
+        app = FlathubClient._query(f"/appstream/{id}")
+        app.update(FlathubClient._query(f"/summary/{id}"))
+        return app
 
     def search(query: str) -> "QueryInfo":
         uri = FlathubClient._url + "/search"
