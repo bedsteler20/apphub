@@ -2,7 +2,6 @@ install_data([
     'main.py',
     '__init__.py',
     'window.py',
-    'globals.py',
 ], install_dir: moduledir)
 
 install_data([
@@ -18,7 +17,7 @@ install_data([
   'utils/router.py',
   'utils/flatpak.py',
   'utils/transaction.py',
-  'utils/locate.py',
+  'utils/patterns.py',
 ], install_dir: moduledir/'utils')
 
 install_data([

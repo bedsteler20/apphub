@@ -4,6 +4,7 @@ from apphub.api.client import FlathubClient
 from apphub.api.types import QueryInfo
 from apphub.components.app_grid import AppGrid
 from apphub.utils.navigator import navigator
+from apphub.utils.patterns import inject
 from apphub.utils.router import AsyncRoute
 
 
@@ -46,6 +47,7 @@ class HomePage(Gtk.ScrolledWindow):
 
 class HomePageRoute(AsyncRoute):
     url = "/"
+    api: FlathubClient = inject("flathub_client")
 
     def create(self, page_props, application, data):
         if not hasattr(self, "widget"):
@@ -56,7 +58,7 @@ class HomePageRoute(AsyncRoute):
         if hasattr(self, "widget"):
             return {}
         return {
-            "recently_added": FlathubClient.recently_added(1, 12),
-            "popular_apps": FlathubClient.popular(1, 12),
-            "recently_updated": FlathubClient.recently_updated(1, 12),
+            "recently_added": self.api.recently_added(1, 12),
+            "popular_apps": self.api.popular(1, 12),
+            "recently_updated": self.api.recently_updated(1, 12),
         }

@@ -1,11 +1,11 @@
 import os
 
-from gi.repository import Adw, Gdk, GdkPixbuf, GLib, Gtk
+from gi.repository import Adw, Gdk, GdkPixbuf, Gio, GLib, Gtk
 
 import requests
 
 from apphub.utils.gio_async import async_call
-from apphub.utils.locate import locate
+from apphub.utils.patterns import inject
 
 
 def load_image(
@@ -40,7 +40,11 @@ def load_cache_icon(url: str):
         f = url.replace(
             "https://dl.flathub.org/repo/appstream/x86_64/icons/128x128/", ""
         )
-        flatpak_dir = locate.flatpak().user_install.get_path().get_path()
+        flatpak_dir = (
+            Gio.Application.get_default()
+            .flatpak_helper.user_install.get_path()
+            .get_path()
+        )
         fi = os.path.join(
             flatpak_dir, "appstream/flathub/x86_64/active/icons/128x128", f
         )

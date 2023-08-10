@@ -3,6 +3,7 @@ import sys
 
 from gi.repository import Adw, Flatpak, Gdk, Gio, Gtk
 
+from apphub.api.client import FlathubClient
 from apphub.components.settings_window import SettingsWindow
 from apphub.pages.home_page import HomePageRoute
 from apphub.utils.flatpak import FlatpakHelper
@@ -11,16 +12,21 @@ from apphub.window import ApphubWindow
 
 
 class ApphubApplication(Adw.Application):
+    settings = Gio.Settings(schema="com.bedsteler20.AppHub")
+    flathub_client = FlathubClient()
+    flatpak_helper = FlatpakHelper()
+    transactions = []
+
     def __init__(self):
         super().__init__(
             application_id="com.bedsteler20.AppHub",
             flags=Gio.ApplicationFlags.FLAGS_NONE,
         )
+        # Actions
         self.create_action("quit", self.quit, ["<primary>q"])
         self.create_action("about", self.on_about_action)
         self.create_action("preferences", self.on_preferences_action)
         self.create_action("open-browser", self.on_open_browser)
-        self.flatpak_helper = FlatpakHelper()
         self.set_accels_for_action("navigator.back", ["<Alt>Left", "Back"])
 
     def _load_resource(self):

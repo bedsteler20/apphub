@@ -1,11 +1,13 @@
 import os
 
-from gi.repository import Flatpak, GObject
+from gi.repository import Flatpak, Gio, GObject
 
-from apphub.globals import settings
+from apphub.utils.patterns import inject
 
 
 class FlatpakHelper(GObject.Object):
+    setting: Gio.Settings = inject("settings")
+
     def __init__(self) -> None:
         super().__init__()
         self._pending_installs = []
@@ -14,7 +16,7 @@ class FlatpakHelper(GObject.Object):
         self.system_install = Flatpak.Installation.new_system()
 
     def get_preferred_installation(self):
-        name = settings.get_string("preferred-installation")
+        name = self.settings.get_string("preferred-installation")
         if name == "user":
             return self.user_install
         elif name == "system":

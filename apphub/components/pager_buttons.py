@@ -1,7 +1,7 @@
 from gi.repository import Gtk
 
-from apphub.utils.locate import locate
 from apphub.utils.navigator import navigator
+from apphub.utils.patterns import inject
 
 
 @Gtk.Template(resource_path="/com/bedsteler20/AppHub/pager_buttons.ui")
@@ -17,6 +17,8 @@ class PagerButtons(Gtk.Box):
     btn_5: Gtk.Button = Gtk.Template.Child()
     dots_l: Gtk.Label = Gtk.Template.Child()
     dots_f: Gtk.Label = Gtk.Template.Child()
+
+    current_uri = inject("props.active_window.navigator.current_uri")
 
     def build(self, current_page, max_pages):
         current_page = int(current_page)
@@ -87,6 +89,7 @@ class PagerButtons(Gtk.Box):
 
     def _on_click(self, btn: Gtk.Button):
         pg = int(btn.get_label())
-        old_url: str = locate.window().navigator.current_uri
-        new_url: str = old_url.removesuffix(f"/{self._current_page}") + f"/{pg}"
+        new_url: str = (
+            self.current_uri.removesuffix(f"/{self._current_page}") + f"/{pg}"
+        )
         navigator.visit(self, new_url)

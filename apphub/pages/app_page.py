@@ -5,7 +5,7 @@ from apphub.api.types import FlathubApp
 from apphub.components.install_button import InstallButton
 from apphub.components.screenshots_caracal import ScreenshotCaracal
 from apphub.utils.image import get_largest_size_string, load_image
-from apphub.utils.locate import locate
+from apphub.utils.patterns import inject
 from apphub.utils.router import AsyncRoute
 
 
@@ -60,9 +60,10 @@ class AppPage(Adw.Bin):
 
 class AppPageRoute(AsyncRoute):
     url = "/apps/{app_id}"
+    api: FlathubClient = inject("flathub_client")
 
     def create(self, page_props: dict, application, data: FlathubApp):
         return AppPage(app=data)
 
     def load_data(self, page_props: dict, application) -> FlathubApp:
-        return FlathubClient.app_info(page_props["app_id"])
+        return self.api.app_info(page_props["app_id"])

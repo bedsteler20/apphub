@@ -2,13 +2,11 @@ import json
 import os
 from typing import Literal
 
-from gi.repository import Flatpak, GLib, GObject
+from gi.repository import Flatpak, Gio, GLib, GObject
 
-from apphub.utils.locate import locate
+from apphub.utils.patterns import inject
 
 HELPER_EXECUTABLE = "/app/bin/transaction-helper"
-global transactions
-transactions = []
 
 
 class InstallState:
@@ -24,6 +22,8 @@ class Transaction(GObject.Object):
         "error": (GObject.SIGNAL_RUN_FIRST, None, (str, int)),
         "done": (GObject.SIGNAL_RUN_FIRST, None, ()),
     }
+
+    transactions: list["Transaction"] = inject("transactions")
 
     def __init__(
         self,
@@ -46,9 +46,9 @@ class Transaction(GObject.Object):
         ]
 
     def run(self):
-        if self in transactions:
+        if self in self.transactions:
             return
-        transactions.append(self)
+        self.transactions.append(self)
         pid, id_in, id_out, id_err = GLib.spawn_async(
             self._exec,
             flags=GLib.SPAWN_DO_NOT_REAP_CHILD,
@@ -74,18 +74,19 @@ class Transaction(GObject.Object):
             pass
 
     def _on_done(self, pid, retval, *argv):
-        transactions.remove(self)
+        self.transactions.remove(self)
 
 
 def check_install_state(app_id) -> InstallState:
-    for transaction in transactions:
+    app = Gio.Application.get_default()
+    for transaction in app.transactions:
         if transaction.app_id == app_id:
             if transaction.action == "install":
                 return InstallState.INSTAlLING
             elif transaction.action == "uninstall":
                 return InstallState.UNINSTALLING
             break
-    if locate.flatpak().is_app_installed(app_id):
+    if app.flatpak_helper.is_app_installed(app_id):
         return InstallState.INSTALLED
     else:
         return InstallState.NOT_INSTALLED

@@ -1,12 +1,15 @@
 from typing import TYPE_CHECKING
 
-from gi.repository import Adw, Gtk
+from gi.repository import Adw, Gio, Gtk
 
 from apphub.api.types import FlathubApp
-from apphub.globals import settings
-from apphub.utils.locate import locate
+from apphub.utils.flatpak import FlatpakHelper
+from apphub.utils.patterns import inject
 from apphub.utils.transaction import InstallState, Transaction
 from apphub.utils.transaction import check_install_state
+
+if TYPE_CHECKING:
+    from apphub.window import ApphubWindow
 
 
 @Gtk.Template(resource_path="/com/bedsteler20/AppHub/install_button.ui")
@@ -19,6 +22,10 @@ class InstallButton(Adw.Bin):
     open_button: Gtk.Button = Gtk.Template.Child()
     installing_label: Gtk.Label = Gtk.Template.Child()
     uninstalling_label: Gtk.Label = Gtk.Template.Child()
+
+    flatpak: "FlatpakHelper" = inject("flatpak_helper")
+    settings: "Gio.Settings" = inject("settings")
+    window: "ApphubWindow" = inject("props.active_window")
 
     def __init__(self, app: FlathubApp):
         self.app = app
@@ -33,8 +40,8 @@ class InstallButton(Adw.Bin):
     def on_install_btn_click(self, *args):
         transaction = Transaction(
             action="install",
-            installation=locate.flatpak().get_preferred_installation(),
-            remote=settings.get_string("flathub-remote-id"),
+            installation=self.flatpak.get_preferred_installation(),
+            remote=self.settings.get_string("flathub-remote-id"),
             app_id=self.app["id"],
             ref=self.app["bundle"]["value"],
         )
@@ -50,7 +57,7 @@ class InstallButton(Adw.Bin):
             return
         transaction = Transaction(
             action="uninstall",
-            installation=locate.flatpak().get_preferred_installation(),
+            installation=self.flatpak.get_preferred_installation(),
             remote="flathub",
             app_id=self.app["id"],
             ref=self.app["bundle"]["value"],
@@ -63,7 +70,7 @@ class InstallButton(Adw.Bin):
     def on_uninstall_btn_click(self, *args):
         dialog = Adw.MessageDialog(
             body=f"Do you want to uninstall {self.app['name']}",
-            transient_for=locate.window(),
+            transient_for=self.window,
         )
         dialog.add_response("uninstall", "Uninstall")
         dialog.add_response("cancel", "Cancel")
@@ -73,7 +80,7 @@ class InstallButton(Adw.Bin):
         dialog.show()
 
     def on_open_btn_click(self, *args):
-        locate.flatpak().open_app(self.app["id"])
+        self.flatpak.open_app(self.app["id"])
 
     def rebuild(self, state: str):
         if state == InstallState.UNINSTALLING:
