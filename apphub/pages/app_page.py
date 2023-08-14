@@ -1,7 +1,8 @@
-from gi.repository import Adw, Flatpak, GObject, Gtk
+from gi.repository import Adw, Gtk
 
 from apphub.api.client import FlathubClient
 from apphub.api.types import FlathubApp
+from apphub.components.app_links import AppLinks
 from apphub.components.install_button import InstallButton
 from apphub.components.screenshots_caracal import ScreenshotCaracal
 from apphub.utils.image import get_largest_size_string, load_image
@@ -20,11 +21,13 @@ class AppPage(Adw.Bin):
     summery_label: Gtk.Label = Gtk.Template.Child()
     caracal: ScreenshotCaracal = Gtk.Template.Child()
     install_box: Gtk.Box = Gtk.Template.Child()
+    app_links: AppLinks = Gtk.Template.Child()
 
     def __init__(self, app: FlathubApp):
         super().__init__()
         self.install_button = InstallButton(app)
         self.install_box.append(self.install_button)
+        self.app_links.build(app)
 
         # Load app info
         load_image(self.icon, app["icon"])

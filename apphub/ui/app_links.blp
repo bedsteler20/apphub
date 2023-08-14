@@ -1,0 +1,462 @@
+// cspell:ignore harddisk
+using Gtk 4.0;
+using Adw 1;
+
+
+template $AppLinks: FlowBox {
+    homogeneous: true;
+    column-spacing: 8;
+    row-spacing: 8;
+    selection-mode: none;
+
+}
+
+Box install_size_card {
+    Box {
+        margin-top: 15;
+        margin-bottom: 15;
+        margin-start: 15;
+        margin-end: 15;
+        orientation: horizontal;
+        spacing: 10;
+        Image {
+            icon-size: large;
+            icon-name: "harddisk-inverted-symbolic";
+        }
+        Box {
+            orientation: vertical;
+            hexpand: true;
+            Label {
+                label: "Install Size";
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                styles ["heading"]
+            }
+            Label install_size_label {
+                halign: start;
+                label: "~ 100 KB";
+                wrap: true;
+                overflow: hidden;
+                hexpand: true;
+                styles ["caption"]
+            }
+        }
+    }
+}
+
+Box download_size_card {
+
+    styles ["card"]
+    Box {
+        margin-top: 15;
+        margin-bottom: 15;
+        margin-start: 15;
+        margin-end: 15;
+        orientation: horizontal;
+        spacing: 10;
+        Image {
+            icon-size: large;
+            icon-name: "arrow3-down-symbolic";
+        }
+        Box {
+            orientation: vertical;
+            hexpand: true;
+            Label {
+                label: "Download Size";
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                styles ["heading"]
+            }
+            Label download_size_label {
+                halign: start;
+                label: "20 KB";
+                wrap: true;
+                overflow: hidden;
+                hexpand: true;
+                styles ["caption"]
+            }
+        }
+    }
+}
+
+Box arch_card {
+
+    styles ["card"]
+    Box {
+        margin-top: 15;
+        margin-bottom: 15;
+        margin-start: 15;
+        margin-end: 15;
+        orientation: horizontal;
+        spacing: 10;
+
+        Image {
+            icon-size: large;
+            icon-name: "computer-chip-symbolic";
+        }
+        Box {
+            orientation: vertical;
+            hexpand: true;
+            Label {
+                label: "Available Architectures";
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                styles ["heading"]
+            }
+            Label arch_label {
+                halign: start;
+                label: "aarch64, x86_64";
+                wrap: true;
+                overflow: hidden;
+                hexpand: true;
+                styles ["caption"]
+            }
+        }
+    }
+}
+
+Box installs_card {
+
+    styles ["card"]
+    Box {
+        margin-top: 15;
+        margin-bottom: 15;
+        margin-start: 15;
+        margin-end: 15;
+        orientation: horizontal;
+        spacing: 10;
+
+        Image {
+            icon-size: large;
+            icon-name: "inbox-symbolic";
+        }
+        Box {
+            orientation: vertical;
+            hexpand: true;
+            Label {
+                label: "Installs";
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                styles ["heading"]
+            }
+            Label installs_label {
+                halign: start;
+                label: "42069";
+                wrap: true;
+                overflow: hidden;
+                hexpand: true;
+                styles ["caption"]
+            }
+        }
+    }
+}
+
+Box license_card {
+
+    styles ["card"]
+    Box {
+        margin-top: 15;
+        margin-bottom: 15;
+        margin-start: 15;
+        margin-end: 15;
+        orientation: horizontal;
+        spacing: 10;
+
+        Image {
+            icon-size: large;
+            icon-name: "bank-symbolic";
+        }
+        Box {
+            orientation: vertical;
+            hexpand: true;
+            Label {
+                label: "License";
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                styles ["heading"]
+            }
+            Label license_label {
+                halign: start;
+                label: "GNU General Public License v3.0 or later";
+                wrap: true;
+                overflow: hidden;
+                hexpand: true;
+                styles ["caption"]
+            }
+        }
+    }
+}
+
+Button website_card {
+    clicked => $on_website_clicked();
+    styles ["card"]
+    Box {
+        margin-top: 15;
+        margin-bottom: 15;
+        margin-start: 15;
+        margin-end: 15;
+        orientation: horizontal;
+        spacing: 10;
+        hexpand: false;
+        Image {
+            icon-size: large;
+            icon-name: "globe-symbolic";
+        }
+        Box {
+            orientation: vertical;
+
+            Label {
+                label: "Website";
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                styles ["heading"]
+            }
+            Label website_label {
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                hexpand: true;
+                styles ["caption"]
+            }
+        }
+        Image {
+            icon-name: "adw-external-link-symbolic";
+        }
+    }
+}
+
+Button issues_card {
+    clicked => $on_issues_clicked();
+    styles ["card"]
+    Box {
+        margin-top: 15;
+        margin-bottom: 15;
+        margin-start: 15;
+        margin-end: 15;
+        orientation: horizontal;
+        spacing: 10;
+        hexpand: false;
+        Image {
+            icon-size: large;
+            icon-name: "bug-symbolic";
+        }
+        Box {
+            orientation: vertical;
+            Label {
+                label: "Report an Issue";
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                styles ["heading"]
+            }
+            Label issues_label {
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                hexpand: true;
+                styles ["caption"]
+            }
+        }
+        Image {
+            icon-name: "adw-external-link-symbolic";
+        }
+    }
+}
+
+Button contribute_card {
+    clicked => $on_contribute_clicked();
+    styles ["card"]
+    Box {
+        margin-top: 15;
+        margin-bottom: 15;
+        margin-start: 15;
+        margin-end: 15;
+        orientation: horizontal;
+        spacing: 10;
+        hexpand: false;
+        Image {
+            icon-size: large;
+            icon-name: "merge-symbolic";
+        }
+        Box {
+            orientation: vertical;
+            Label {
+                label: "Contribute";
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                styles ["heading"]
+            }
+            Label contribute_label {
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                hexpand: true;
+                styles ["caption"]
+            }
+        }
+        Image {
+            icon-name: "adw-external-link-symbolic";
+        }
+    }
+}
+
+Button help_card {
+    clicked => $on_help_clicked();
+    styles ["card"]
+    Box {
+        margin-top: 15;
+        margin-bottom: 15;
+        margin-start: 15;
+        margin-end: 15;
+        orientation: horizontal;
+        spacing: 10;
+        hexpand: false;
+        Image {
+            icon-size: large;
+            icon-name: "open-book-symbolic";
+        }
+        Box {
+            orientation: vertical;
+            Label {
+                label: "Help";
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                styles ["heading"]
+            }
+            Label help_label {
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                hexpand: true;
+                styles ["caption"]
+            }
+        }
+        Image {
+            icon-name: "adw-external-link-symbolic";
+        }
+    }
+}
+
+Button translate_card {
+    clicked => $on_translate_clicked();
+    styles ["card"]
+    Box {
+        margin-top: 15;
+        margin-bottom: 15;
+        margin-start: 15;
+        margin-end: 15;
+        orientation: horizontal;
+        spacing: 10;
+        hexpand: false;
+        Image {
+            icon-size: large;
+            icon-name: "language-symbolic";
+        }
+        Box {
+            orientation: vertical;
+            Label {
+                label: "Contribute Translation";
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                styles ["heading"]
+            }
+            Label translate_label {
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                hexpand: true;
+                styles ["caption"]
+            }
+        }
+        Image {
+            icon-name: "adw-external-link-symbolic";
+        }
+    }
+}
+
+Button donate_card {
+    clicked => $on_donates_clicked();
+    styles ["card"]
+    Box {
+        margin-top: 15;
+        margin-bottom: 15;
+        margin-start: 15;
+        margin-end: 15;
+        orientation: horizontal;
+        spacing: 10;
+        hexpand: false;
+        Image {
+            icon-size: large;
+            icon-name: "heart-filled-symbolic";
+        }
+        Box {
+            orientation: vertical;
+            Label {
+                label: "Report an Issue";
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                styles ["heading"]
+            }
+            Label donate_label {
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                hexpand: true;
+                styles ["caption"]
+            }
+        }
+        Image {
+            icon-name: "adw-external-link-symbolic";
+        }
+    }
+}
+
+Button manifest_card {
+    clicked => $on_manifest_clicked();
+    styles ["card"]
+    Box {
+        margin-top: 15;
+        margin-bottom: 15;
+        margin-start: 15;
+        margin-end: 15;
+        orientation: horizontal;
+        spacing: 10;
+        hexpand: false;
+        Image {
+            icon-size: large;
+            icon-name: "code-symbolic";
+        }
+        Box {
+            orientation: vertical;
+
+            Label {
+                label: "Manifest";
+                halign: start;
+                wrap: true;
+                overflow: hidden;
+                styles ["heading"]
+            }
+            Label manifest_label {
+                halign: start;
+                label: "https://github.com/flathub/io.github.nokse22.inspector";
+                wrap: true;
+                overflow: hidden;
+                hexpand: true;
+                styles ["caption"]
+            }
+        }
+        Image {
+            icon-name: "adw-external-link-symbolic";
+        }
+    }
+}

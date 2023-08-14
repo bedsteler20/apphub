@@ -23,15 +23,13 @@ class AppGrid(Gtk.Box):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self._flow = Gtk.FlowBox()
-        self._flow.set_min_children_per_line(self.columns)
-        self.append(self._flow)
+        self.flow.set_min_children_per_line(self.columns)
 
     def load_data(self, info: "QueryInfo"):
         batch = {}
         for i in range(len(info["hits"])):
             card = AppCard()
-            self._flow.append(card)
+            self.flow.append(card)
             card.set_app(info["hits"][i], load_icon=False)
             batch[info["hits"][i]["icon"]] = card.image
         load_image_batch(batch)

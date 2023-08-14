@@ -80,6 +80,7 @@ class AppHitJson(TypedDict):
     timestamp: int
     installed_size: int
     metadata: "AppManifest"
+    urls: "AppUrls"
 
 
 class QueryInfo(TypedDict):

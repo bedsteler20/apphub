@@ -18,6 +18,7 @@ install_data([
   'utils/flatpak.py',
   'utils/transaction.py',
   'utils/patterns.py',
+  'utils/misc.py'
 ], install_dir: moduledir/'utils')
 
 install_data([
@@ -27,7 +28,8 @@ install_data([
   'components/screenshots_caracal.py',
   'components/install_button.py',
   'components/settings_window.py',
-  'components/pager_buttons.py'
+  'components/pager_buttons.py',
+  'components/app_links.py',
 ], install_dir: moduledir/'components')
 
 install_data([
