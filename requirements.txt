@@ -1,4 +1,4 @@
-debugpy==1.6.7
+debugpy==1.6.7.post1
 requirements-parser==0.5.0
 pygobject-stubs @ git+https://github.com/bedsteler20/pygobject-stubs@gnome-45
 pre-commit==3.3.3
