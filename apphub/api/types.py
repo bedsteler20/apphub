@@ -144,3 +144,10 @@ class FlathubApp(TypedDict):
     mimetypes: List[str]
     project_license: str
     bundle: AppBundle
+
+
+class BasicAppInfo(TypedDict):
+    name: str
+    id: str
+    summary: str
+    icon: str
