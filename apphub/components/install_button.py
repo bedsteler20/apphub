@@ -46,11 +46,19 @@ class InstallButton(Adw.Bin):
             ref=self.app["bundle"]["value"],
         )
         transaction.connect("done", lambda *a: self.rebuild(InstallState.INSTALLED))
-        transaction.connect(
-            "error", lambda *a: self.rebuild(InstallState.NOT_INSTALLED)
-        )
+        transaction.connect("error", self.on_error)
         self.rebuild(InstallState.INSTAlLING)
         transaction.run()
+
+    def on_error(self, transaction: Transaction, error: str, code: int):
+        dialog = Adw.MessageDialog(
+            title="An error occurred",
+            body=error,
+            transient_for=self.window,
+        )
+        dialog.add_response("ok", "Ok")
+        dialog.show()
+        self.rebuild(InstallState.NOT_INSTALLED)
 
     def do_uninstall(self, widget, response):
         if response != "uninstall":

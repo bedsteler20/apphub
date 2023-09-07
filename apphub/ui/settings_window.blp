@@ -26,6 +26,20 @@ template $SettingsWindow: Adw.PreferencesWindow {
                     margin-top: 10;
                 }
             }
+            Adw.EntryRow {
+                title: _("Flatpak Remote Id");
+
+            }
+
+            Adw.ComboRow install_location_combo {
+                activatable-widget: install_location_combo;
+                title: _("Flatpak Install Location");
+
+                model: Gtk.StringList {
+                    strings["System", "User"]
+                };
+            }
+
         }
     }
 }

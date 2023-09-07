@@ -67,6 +67,7 @@ class Transaction(GObject.Object):
         try:
             js = json.loads(dat)
             if js["type"] == "error":
+                print(js["message"])
                 self.emit("error", js["message"], 1)
             elif js["type"] == "done":
                 self.emit("done")
