@@ -1,39 +1,46 @@
 using Gtk 4.0;
 using Adw 1;
+
 Adw.ApplicationWindow root {
-  default-height: 800;
-  default-width: 968;
+	default-height: 800;
+	default-width: 968;
 
-  Box {
-    orientation: vertical;
-    Adw.HeaderBar {
-      [start]
-      Button back_btn {
-        icon-name: "go-previous-symbolic";
-        action-name: "navigator.back";
-        visible: false;
-        styles ["flat", "symbolic"]
-      }
-      title-widget: SearchEntry search_bar {
-        width-request: 450;
-        placeholder-text: "Search";
-        hexpand: true;
-      };
-      [end]
-      MenuButton {
-        icon-name: "open-menu-symbolic";
-        menu-model: primary_menu;
-      }
-    }
+	Box {
+		orientation: vertical;
 
-    Adw.NavigationView view_stack {}
-  }
+		Adw.HeaderBar {
+			[start]
+			Button back_btn {
+				icon-name: "go-previous-symbolic";
+				action-name: "app.navigator.back";
+
+				visible: false;
+				styles [
+					"flat",
+					"symbolic"
+				]
+			}
+
+			title-widget: SearchEntry search_bar {
+				width-request: 450;
+				placeholder-text: "Search";
+				hexpand: true;
+			};
+
+			[end]
+			MenuButton {
+				icon-name: "open-menu-symbolic";
+				menu-model: primary_menu;
+			}
+		}
+
+		Adw.NavigationView view_stack {}
+	}
 }
 
-
 menu primary_menu {
-  item(_("Preferences"), "app.preferences")
-  item(_("Keyboard Shortcuts"), "win.show-help-overlay")
-  item(_("Open in Browser"), "app.open-browser")
-  item(_("About Apphub"), "app.about")
+	item (_("Preferences"), "app.preferences")
+	item (_("Keyboard Shortcuts"), "win.show-help-overlay")
+	item (_("Open in Browser"), "app.open-browser")
+	item (_("About Apphub"), "app.about")
 }

@@ -1,47 +1,36 @@
 mod flathub;
+mod navigator;
 mod utils;
 mod widgets;
 
 use adw::prelude::*;
+use gtk::gio;
+use gtk::glib;
 
 use crate::utils::APP_ID;
 
 fn main() {
+    gio::resources_register_include!("compiled.gresource").expect("Failed to register resources");
     let app = adw::Application::new(Some(APP_ID), Default::default());
     app.connect_activate(active);
-    println!("Hello, world!");
     app.run();
 }
 
+#[allow(deprecated)]
+fn setup_resources() {
+    let icon_theme = gtk::IconTheme::default();
+    icon_theme.add_resource_path("/dev/bedsteler20/AppHub/icons/");
+    let provider = gtk::CssProvider::new();
+    provider.load_from_bytes(&glib::Bytes::from_static(include_bytes!("styles.css")));
+    gtk::StyleContext::add_provider_for_display(
+        &gtk::gdk::Display::default().unwrap(),
+        &provider,
+        gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
+    )
+}
+
 pub fn active(app: &adw::Application) {
+    setup_resources();
     let window = widgets::window(app);
     window.present();
 }
-
-// fn build_ui() -> impl IsA<gtk::Widget> {
-//     let box_ = gtk::Box::new(gtk::Orientation::Vertical, 0);
-//     let (sender, receiver) = async_channel::bounded(1);
-
-//     RUNTIME.spawn(clone!(@strong sender => async move {
-//         let response = reqwest::get("https://flathub.org/api/v2/popular/last-month").await;
-//         sender.send(response).await.expect("The channel needs to be open.");
-//     }));
-
-//     // The main loop executes the asynchronous block
-//     glib::spawn_future_local(clone!(@strong box_ => async move {
-//         while let Ok(response) = receiver.recv().await {
-//             if let Ok(response) = response {
-//                 let query_info = response.json::<flathub::QueryInfo>().await;
-//                 if let Ok(query_info) = query_info {
-//                     box_.append(&widgets::app_group(&query_info));
-//                 } else {
-//                     println!("Could not parse the response.");
-//                 }
-//             } else {
-//                 println!("Could not make a `GET` request.");
-//             }
-//         }
-//     }));
-
-//     return box_;
-// }

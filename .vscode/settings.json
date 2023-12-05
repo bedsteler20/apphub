@@ -1,8 +1,20 @@
 {
-  "explorer.fileNesting.enabled": true,
-  "explorer.fileNesting.patterns": {
-    "Cargo.toml": "Cargo.lock",
-    "*.rs": "${basename}.blp"
-  },
-  "cSpell.words": ["pixbuf", "reqwest"]
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "Cargo.toml": "Cargo.lock",
+        "*.rs": "${basename}.blp"
+    },
+    "cSpell.words": [
+        "apphub",
+        "ashpd",
+        "bugtracker",
+        "flathub",
+        "gresource",
+        "halign",
+        "hexpand",
+        "pixbuf",
+        "reqwest",
+        "valign",
+        "vexpand"
+    ]
 }

@@ -3,7 +3,7 @@
 //! crates.io: [https://crates.io/crates/gtk_widget_macro](https://crates.io/crates/gtk_widget_macro)
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{self, Data, DeriveInput, Fields, Type};
+use syn::{self, Data, DeriveInput, Fields};
 
 #[proc_macro_derive(GtkWidget, attributes(str))]
 pub fn gtk_widget_macro_derive(input: TokenStream) -> TokenStream {
@@ -23,14 +23,13 @@ fn impl_gtk_widget_macro(ast: &DeriveInput) -> TokenStream {
         _ => panic!("expected a struct with named fields"),
     };
     let field_name = fields.iter().map(|field| &field.ident);
-    let field_type = fields.iter().map(|field| &field.ty);
 
     let gen = quote! {
         impl #name {
             fn new(builder: gtk::Builder) -> Self {
                 Self {
                     #(
-                        #field_name: builder.object(stringify!(#field_name)).unwrap(),
+                        #field_name: builder.object(stringify!(#field_name)).expect(format!("gtk child {} not found", stringify!(#field_name)).as_str()),
                     )*
                 }
             }
@@ -38,5 +37,3 @@ fn impl_gtk_widget_macro(ast: &DeriveInput) -> TokenStream {
     };
     gen.into()
 }
-
-

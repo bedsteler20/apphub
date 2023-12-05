@@ -7,6 +7,7 @@ Gtk.ScrolledWindow root {
 
   Adw.Clamp {
     hexpand: false;
+
     Box {
       margin-top: 25;
       margin-bottom: 25;
@@ -14,68 +15,93 @@ Gtk.ScrolledWindow root {
       margin-end: 25;
       orientation: vertical;
       spacing: 30;
+
       Box recently_added_box {
         orientation: vertical;
+
         Box {
           orientation: horizontal;
           hexpand: true;
           margin-bottom: 10;
+
           Label {
             halign: start;
             label: "Recently Added Apps";
             hexpand: true;
-            styles ["title-2"]
 
+            styles [
+              "title-2"
+            ]
           }
+
           Button recently_added_btn {
             label: "More";
             halign: end;
-            styles ["suggested-action"]
+
+            styles [
+              "suggested-action"
+            ]
           }
         }
       }
 
       Box recently_updated_box {
         orientation: vertical;
+
         Box {
           orientation: horizontal;
           hexpand: true;
           margin-bottom: 10;
+
           Label {
             halign: start;
             label: "Recently Updated Apps";
             hexpand: true;
-            styles ["title-2"]
 
+            styles [
+              "title-2"
+            ]
           }
+
           Button recently_updated_btn {
             label: "More";
             halign: end;
-            styles ["suggested-action"]
+
+            styles [
+              "suggested-action"
+            ]
           }
         }
       }
 
       Box popular_box {
         orientation: vertical;
+
         Box {
           orientation: horizontal;
           hexpand: true;
           margin-bottom: 10;
+
           Label {
             halign: start;
             label: "Popular Apps";
             hexpand: true;
-            styles ["title-2"]
+
+            styles [
+              "title-2"
+            ]
           }
+
           Button popular_btn {
             label: "More";
             halign: end;
-            styles ["suggested-action"]
+
+            styles [
+              "suggested-action"
+            ]
           }
         }
       }
-
     }
   }
 }

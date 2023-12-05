@@ -8,9 +8,11 @@ Button root {
   margin-end: 5;
   margin-start: 5;
   margin-top: 5;
+
   styles [
     "card",
   ]
+
   Box {
     margin-bottom: 10;
     margin-end: 10;
@@ -26,6 +28,7 @@ Button root {
       pixel-size: 64;
       valign: center;
       margin-end: 10;
+
       styles [
         "icon-dropshadow",
       ]
@@ -62,6 +65,7 @@ Button root {
         lines: 2;
         xalign: 0;
         label: "A summery was not provided by the author";
+
         styles [
           "dim-label",
         ]
@@ -71,21 +75,28 @@ Button root {
         orientation: horizontal;
         valign: center;
         visible: false;
+
         Image {
           icon-name: "check-plain-symbolic";
           margin-end: 5;
-          styles ["dim-label", "accent"]
+
+          styles [
+            "dim-label",
+            "accent"
+          ]
         }
 
         Label verified_label {
           halign: start;
           valign: center;
           vexpand: true;
-          styles ["dim-label", "accent"]
+
+          styles [
+            "dim-label",
+            "accent"
+          ]
         }
       }
-
-
     }
   }
 }
