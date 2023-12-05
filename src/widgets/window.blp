@@ -5,10 +5,19 @@ Adw.ApplicationWindow root {
 	default-height: 800;
 	default-width: 968;
 
-	Box {
-		orientation: vertical;
+    Adw.Breakpoint {
+        condition ("max-width: 550sp")
+        setters {
+            switcher_bar.reveal: true;
+            view_switcher.visible: false;
+        }
+    }
 
-		Adw.HeaderBar {
+
+    content: Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar header_bar {
+            
 			[start]
 			Button back_btn {
 				icon-name: "go-previous-symbolic";
@@ -21,11 +30,10 @@ Adw.ApplicationWindow root {
 				]
 			}
 
-			title-widget: SearchEntry search_bar {
-				width-request: 450;
-				placeholder-text: "Search";
-				hexpand: true;
-			};
+            title-widget: Adw.ViewSwitcher view_switcher {
+                stack: view_stack;
+                policy: wide;
+            };
 
 			[end]
 			MenuButton {
@@ -34,9 +42,26 @@ Adw.ApplicationWindow root {
 			}
 		}
 
-		Adw.NavigationView view_stack {}
+        content: Adw.ViewStack view_stack {
+            
+        };
+
+        [bottom]
+        Adw.ViewSwitcherBar switcher_bar {
+            stack: view_stack;
+        }
+    };
+
+	Box {
+		orientation: vertical;
+
+		
+
 	}
 }
+
+Adw.NavigationView nav_stack {}
+
 
 menu primary_menu {
 	item (_("Preferences"), "app.preferences")

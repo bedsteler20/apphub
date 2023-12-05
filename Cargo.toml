@@ -6,7 +6,6 @@ edition = "2021"
 build = "build.rs"
 
 
-
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
@@ -16,6 +15,7 @@ adw = { version = "0.5.3", package = "libadwaita", features = [
 ] }
 ashpd = "0.6.7"
 async-channel = "2.1.1"
+bytesize = "1.3.0"
 gtk = { version = "0.7.3", package = "gtk4", features = [
     "gnome_45",
     "blueprint",

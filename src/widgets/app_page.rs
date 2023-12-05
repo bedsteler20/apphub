@@ -24,9 +24,9 @@ struct Template {
 pub fn app_page(app_id: &String) -> adw::NavigationPage {
     let ui: Template = blueprint!(Template, "src/widgets/app_page.blp");
 
-    let build_ui = clone!(@strong ui => move |app_info: flathub::AppInfo| {
+    let build_ui = clone!(@strong ui => move |app_info: flathub::AppInfo, summery: flathub::AppSummary| {
         ui.name_label.set_text(&app_info.name);
-        ui.app_links.set_child(Some(&widgets::app_links(&app_info)));
+        ui.app_links.set_child(Some(&widgets::app_links(&app_info, &summery)));
 
         if let Some(summery) = app_info.summary.as_ref() {
             ui.summary_label.set_text(summery);
@@ -57,25 +57,33 @@ pub fn app_page(app_id: &String) -> adw::NavigationPage {
 
     let lazy = widgets::lazy(clone!(@strong ui => move |bin| {
         let (sender, receiver) = async_channel::bounded(1);
-        RUNTIME.spawn(clone!(@strong sender, @strong app_id => async move {
-            let response = reqwest::get(&format!("https://flathub.org/api/v2/appstream/{}", &app_id)).await;
-            sender.send(response).await.expect("The channel needs to be open.");
-        }));
 
+        RUNTIME.spawn(clone!(@strong sender, @strong app_id => async move {
+            let app_info = flathub::app_info(&app_id).await;
+            let app_summary = flathub::app_summary(&app_id).await;
+            sender.send((app_info, app_summary)).await.expect("The channel needs to be open.");
+        }));
 
         glib::spawn_future_local(clone!(@strong bin => async move {
             while let Ok(response) = receiver.recv().await {
-                if let Ok(response) = response {
-                    let app_info = response.json::<flathub::AppInfo>().await;
-                    if let Ok(app_info) = app_info {
-                        build_ui(app_info);
-                        bin.set_child(Some(&ui.root));
-                    } else {
-                        println!("Could not parse the response.");
+                let (app_info, app_summary) = response;
+                if app_info.is_err() || app_summary.is_err() {
+                    if let Err(err) = app_info {
+                        println!("Error reading app_info: {}", err);
                     }
-                } else {
-                    println!("Could not get the response.");
+                    if let Err(err) = app_summary {
+                        println!("Error reading app_summary: {}", err);
+                    }
+                    sender.close();
+                    receiver.close();
+                    return;
                 }
+                let app_info = app_info.unwrap();
+                let app_summary = app_summary.unwrap();
+                build_ui(app_info, app_summary);
+                bin.set_child(Some(&ui.root));
+                sender.close();
+                receiver.close();
             }
         }));
     }));

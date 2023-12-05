@@ -9,20 +9,18 @@ use crate::widgets;
 #[derive(GtkWidget, Clone)]
 struct Template {
     pub root: adw::ApplicationWindow,
-    pub search_bar: gtk::SearchEntry,
-    pub view_stack: adw::NavigationView,
+    pub nav_stack: adw::NavigationView,
     pub back_btn: gtk::Button,
+    pub view_switcher: adw::ViewSwitcher,
+    pub view_stack: adw::ViewStack,
+    pub switcher_bar: adw::ViewSwitcherBar
 }
 
 pub fn window(app: &adw::Application) -> adw::ApplicationWindow {
     let ui: Template = blueprint!(Template, "src/widgets/window.blp");
     ui.root.set_application(Some(app));
 
-    ui.search_bar.connect_search_changed(|search_bar| {
-        println!("{}", search_bar.text().as_str());
-    });
-
-    ui.view_stack
+    ui.nav_stack
         .connect_visible_page_notify(clone!(@strong ui => move |view| {
             let page = view.visible_page().unwrap();
             if page.tag().unwrap().to_string() == widgets::HOME_PAGE_TAG {
@@ -32,7 +30,7 @@ pub fn window(app: &adw::Application) -> adw::ApplicationWindow {
             }
         }));
 
-    connect_navigator(app, &ui.root, &ui.view_stack);
+    connect_navigator(app, &ui.root, &ui.nav_stack);
 
     return ui.root;
 }

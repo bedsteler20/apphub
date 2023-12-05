@@ -20,9 +20,9 @@ struct Template {
 }
 
 enum DataTagged {
-    RecentlyAdded(reqwest::Result<reqwest::Response>),
-    RecentlyUpdated(reqwest::Result<reqwest::Response>),
-    Popular(reqwest::Result<reqwest::Response>),
+    RecentlyAdded(reqwest::Result<flathub::QueryInfo>),
+    RecentlyUpdated(reqwest::Result<flathub::QueryInfo>),
+    Popular(reqwest::Result<flathub::QueryInfo>),
 }
 
 pub fn home_page() -> adw::NavigationPage {
@@ -44,15 +44,15 @@ pub fn home_page() -> adw::NavigationPage {
         let (sender, receiver) = async_channel::bounded::<DataTagged>(3);
 
         RUNTIME.spawn(clone!(@strong sender => async move {
-            let response = reqwest::get("https://flathub.org/api/v2/collection/recently-added?per_page=12&page=1").await;
+            let response = flathub::query(flathub::Query::RecentlyAdded, 1, 12).await;
             sender.send(DataTagged::RecentlyAdded(response)).await.expect("The channel needs to be open.");
         }));
         RUNTIME.spawn(clone!(@strong sender => async move {
-            let response = reqwest::get("https://flathub.org/api/v2/collection/recently-updated?per_page=12&page=1").await;
+            let response = flathub::query(flathub::Query::RecentlyUpdated, 1, 12).await;
             sender.send(DataTagged::RecentlyUpdated(response)).await.expect("The channel needs to be open.");
         }));
         RUNTIME.spawn(clone!(@strong sender => async move {
-            let response = reqwest::get("https://flathub.org/api/v2/popular/last-month?per_page=12&page=1").await;
+            let response = flathub::query(flathub::Query::Popular, 1, 12).await;
             sender.send(DataTagged::Popular(response)).await.expect("The channel needs to be open.");
         }));
 
@@ -61,41 +61,27 @@ pub fn home_page() -> adw::NavigationPage {
             while let Ok(response) = receiver.recv().await {
                 count += 1;
                 match response {
-                    DataTagged::RecentlyAdded(response) => {
-                        if let Ok(response) = response {
-                            let query_info = response.json::<flathub::QueryInfo>().await;
-                            if let Ok(query_info) = query_info {
-                                ui.recently_added_box.append(&widgets::app_grid(&query_info));
-                            } else {
-                                println!("Could not parse the response.");
-                            }
-                        } else {
-                            println!("Could not make a `GET` request.");
-                        }
+                    DataTagged::RecentlyAdded(Ok(query_info)) => {
+                        ui.recently_added_box.append(&widgets::app_grid(&query_info));
                     },
-                    DataTagged::RecentlyUpdated(response) => {
-                        if let Ok(response) = response {
-                            let query_info = response.json::<flathub::QueryInfo>().await;
-                            if let Ok(query_info) = query_info {
-                                ui.recently_updated_box.append(&widgets::app_grid(&query_info));
-                            } else {
-                                println!("Could not parse the response.");
-                            }
-                        } else {
-                            println!("Could not make a `GET` request.");
-                        }
+                    DataTagged::Popular(Ok(query_info)) => {
+                        ui.popular_box.append(&widgets::app_grid(&query_info));
                     },
-                    DataTagged::Popular(response) => {
-                        if let Ok(response) = response {
-                            let query_info = response.json::<flathub::QueryInfo>().await;
-                            if let Ok(query_info) = query_info {
-                                ui.popular_box.append(&widgets::app_grid(&query_info));
-                            } else {
-                                println!("Could not parse the response.");
-                            }
-                        } else {
-                            println!("Could not make a `GET` request.");
-                        }
+                    DataTagged::RecentlyUpdated(Ok(query_info)) => {
+                        ui.recently_updated_box.append(&widgets::app_grid(&query_info));
+                    },
+                    // TODO: Add error Widget
+                    DataTagged::RecentlyAdded(Err(_)) => {
+                        println!("Could not make a `GET` request.");
+                        break;
+                    },
+                    DataTagged::RecentlyUpdated(Err(_)) => {
+                        println!("Could not make a `GET` request.");
+                        break;
+                    },
+                    DataTagged::Popular(Err(_)) => {
+                        println!("Could not make a `GET` request.");
+                        break;
                     },
                 }
                 if count == 3 {

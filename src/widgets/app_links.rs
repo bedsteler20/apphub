@@ -1,3 +1,4 @@
+use bytesize::ByteSize;
 use gtk::{
     glib::{clone, IsA},
     prelude::*,
@@ -16,8 +17,6 @@ struct Template {
     download_size_card: gtk::Box,
     arch_label: gtk::Label,
     arch_card: gtk::Box,
-    installs_card: gtk::Box,
-    installs_label: gtk::Label,
     license_card: gtk::Box,
     license_label: gtk::Label,
     website_card: gtk::Button,
@@ -36,7 +35,7 @@ struct Template {
     manifest_label: gtk::Label,
 }
 
-pub fn app_links(app_info: &flathub::AppInfo) -> impl IsA<Widget> {
+pub fn app_links(app_info: &flathub::AppInfo, summary: &flathub::AppSummary) -> impl IsA<Widget> {
     let ui: Template = blueprint!(Template, "src/widgets/app_links.blp");
 
     if let Some(links) = app_info.urls.as_ref() {
@@ -95,16 +94,24 @@ pub fn app_links(app_info: &flathub::AppInfo) -> impl IsA<Widget> {
         ui.root.append(&ui.license_card);
     }
 
-    {
-        let link = format!("https://github.com/flathub/{}", &app_info.id);
-        ui.manifest_label.set_text(&link);
-        ui.root.append(&ui.manifest_card);
-        ui.manifest_card
-            .connect_clicked(clone!(@strong link => move |_| {
-                open_url(link.clone());
-            }));
-    }
+    let link = format!("https://github.com/flathub/{}", &app_info.id);
+    ui.manifest_label.set_text(&link);
+    ui.root.append(&ui.manifest_card);
+    ui.manifest_card
+        .connect_clicked(clone!(@strong link => move |_| {
+            open_url(link.clone());
+        }));
 
+    ui.arch_label.set_text(&summary.arches.join(", "));
+    ui.root.append(&ui.arch_card);
+
+    ui.install_size_label
+        .set_text(ByteSize::b(summary.installed_size).to_string().as_str());
+    ui.root.append(&ui.install_size_card);
+
+    ui.download_size_label
+        .set_text(ByteSize::b(summary.installed_size).to_string().as_str());
+    ui.root.append(&ui.download_size_card);
 
     return ui.root;
 }

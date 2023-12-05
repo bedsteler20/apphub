@@ -28,11 +28,9 @@ pub fn app_card(app: &flathub::AppHit) -> impl IsA<Widget> {
     if let Some(icon) = app.icon.as_ref() {
         widgets::image(icon, &ui.image);
     }
-    // BUG: After navigation to a new page the button is staying focused 
+    // BUG: After navigation to a new page the button is staying focused
     // preventing the user from scrolling with the mouse wheel.
     ui.root.set_focus_on_click(false);
-
-
 
     return ui.root;
 }

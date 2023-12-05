@@ -13,6 +13,10 @@ macro_rules! blueprint {
     };
 }
 
+pub fn resource_path(path: &str) -> String {
+    return format!("/dev/bedsteler20/Apphub/{}", path);
+}
+
 pub fn open_url(url: String) {
     RUNTIME.spawn(async move {
         if let Ok(url) = reqwest::Url::parse(&url) {

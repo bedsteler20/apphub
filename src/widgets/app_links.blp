@@ -118,42 +118,6 @@ Box arch_card {
     }
 }
 
-Box installs_card {
-
-    styles ["card"]
-    Box {
-        margin-top: 15;
-        margin-bottom: 15;
-        margin-start: 15;
-        margin-end: 15;
-        orientation: horizontal;
-        spacing: 10;
-
-        Image {
-            icon-size: large;
-            icon-name: "inbox-symbolic";
-        }
-        Box {
-            orientation: vertical;
-            hexpand: true;
-            Label {
-                label: "Installs";
-                halign: start;
-                wrap: true;
-                overflow: hidden;
-                styles ["heading"]
-            }
-            Label installs_label {
-                halign: start;
-                label: "42069";
-                wrap: true;
-                overflow: hidden;
-                hexpand: true;
-                styles ["caption"]
-            }
-        }
-    }
-}
 
 Box license_card {
 
