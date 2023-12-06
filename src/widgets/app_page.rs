@@ -1,6 +1,8 @@
+use std::rc::Rc;
+
 use crate::blueprint;
-use crate::flatbus;
 use crate::flathub;
+use crate::flatpak;
 use crate::utils::Context;
 use crate::utils::RUNTIME;
 use crate::widgets;
@@ -28,12 +30,11 @@ struct Template {
 pub fn app_page(ctx: &Context, app_id: &String) -> adw::NavigationPage {
     let ui: Template = blueprint!(Template, "src/widgets/app_page.blp");
 
-    let build_ui = clone!(@strong ui => move |app_info: flathub::AppInfo, summery: flathub::AppSummary| {
-        ui.name_label.set_text(&app_info.name);
-        ui.app_links.set_child(Some(&widgets::app_links(&app_info, &summery)));
+    let build_ui = clone!(@strong ui, @strong ctx => move |app_info: flathub::AppInfo, summery: flathub::AppSummary| {
         let app_id = app_info.id.clone();
 
-        if flatbus::is_app_installed(&app_info.id).unwrap_or(false) {
+        // ======== Setup State ========
+        if flatpak::is_app_installed(&app_info.id).unwrap_or(false) {
             ui.install_btn.set_visible(false);
             ui.uninstall_btn.set_visible(true);
             ui.open_btn.set_visible(true);
@@ -43,10 +44,95 @@ pub fn app_page(ctx: &Context, app_id: &String) -> adw::NavigationPage {
             ui.open_btn.set_visible(false);
         }
 
+        // ======== Bind State ========
+        let transact_handle = Rc::new(ctx.transactions.subscribe(Box::new(clone!(@strong ui, @strong app_id => move |state| {
+            if state.app_id().clone() != app_id {
+                return;
+            }
+            match state {
+                flatpak::TransactionState::Done { type_, .. } => {
+                    match type_ {
+                        flatpak::TransactionType::Install => {
+                            ui.install_btn.set_visible(false);
+                            ui.uninstall_btn.set_visible(true);
+                            ui.open_btn.set_visible(true);
+                        },
+                        flatpak::TransactionType::Uninstall => {
+                            ui.install_btn.set_visible(true);
+                            ui.uninstall_btn.set_visible(false);
+                            ui.open_btn.set_visible(false);
+                        },
+                        _ => {},
+                    }
+                },
+                flatpak::TransactionState::Progress { .. } => {},
+                flatpak::TransactionState::Start {type_, .. } => {
+                    match type_ {
+                        flatpak::TransactionType::Install => {
+                            ui.install_btn.set_visible(false);
+                            ui.uninstall_btn.set_visible(true);
+                            ui.open_btn.set_visible(true);
+                        },
+                        flatpak::TransactionType::Uninstall => {
+                            ui.install_btn.set_visible(true);
+                            ui.uninstall_btn.set_visible(false);
+                            ui.open_btn.set_visible(false);
+                        },
+                        _ => {},
+                    }
+                },
+                flatpak::TransactionState::Cancel {  type_, .. } => {
+                    match type_ {
+                        flatpak::TransactionType::Install => {
+                            ui.install_btn.set_visible(true);
+                            ui.uninstall_btn.set_visible(false);
+                            ui.open_btn.set_visible(false);
+                        },
+                        flatpak::TransactionType::Uninstall => {
+                            ui.install_btn.set_visible(false);
+                            ui.uninstall_btn.set_visible(true);
+                            ui.open_btn.set_visible(true);
+                        },
+                        _ => {},
+                    }
+                },
+                flatpak::TransactionState::Error {type_, error, .. } => {
+                    println!("Error: {}", error);
+                    match type_ {
+                        flatpak::TransactionType::Install => {
+                            ui.install_btn.set_visible(true);
+                            ui.uninstall_btn.set_visible(false);
+                            ui.open_btn.set_visible(false);
+                        },
+                        flatpak::TransactionType::Uninstall => {
+                            ui.install_btn.set_visible(false);
+                            ui.uninstall_btn.set_visible(true);
+                            ui.open_btn.set_visible(true);
+                        },
+                        _ => {},
+                    }
+                },
+            }
+        }))));
 
+        ui.install_btn.connect_clicked(clone!(@strong app_id, @strong ctx => move |_| {
+            ctx.transactions.emit(flatpak::TransactionState::Start {
+                app_id: app_id.clone(),
+                type_: flatpak::TransactionType::Install,
+            });
+        }));
+
+        ui.root.connect_destroy(clone!(@strong ctx => move |_| {
+            ctx.transactions.unsubscribe(transact_handle.as_ref().to_owned());
+        }));
+
+
+        // ======== Display Data ========
+        ui.name_label.set_text(&app_info.name);
+        ui.app_links.set_child(Some(&widgets::app_links(&app_info, &summery)));
 
         ui.open_btn.connect_clicked(clone!(@strong app_id => move |_| {
-            flatbus::open_app(&app_id);
+            flatpak::open_app(&app_id);
         }));
 
         if let Some(summery) = app_info.summary.as_ref() {

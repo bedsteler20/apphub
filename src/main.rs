@@ -1,8 +1,7 @@
+mod flatpak;
 mod flathub;
 mod utils;
 mod widgets;
-mod flatbus;
-mod event_bus;
 
 use adw::prelude::*;
 use gtk::gdk;

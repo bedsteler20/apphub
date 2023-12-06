@@ -30,7 +30,7 @@ pub struct InstalledAppInfo {
 
 pub fn is_app_installed(app_id: &String) -> Result<bool, glib::Error> {
     let refs = get_installed_refs()?;
-    for (install, r) in refs {
+    for (_, r) in refs {
         if let Some(id) = r.name() {
             if id.to_string() == app_id.to_owned() {
                 return Ok(true);
@@ -69,7 +69,7 @@ pub fn list_installed_apps() -> Result<Vec<InstalledAppInfo>, glib::Error> {
 }
 
 pub fn open_app(app_id: &str) {
-    let cmd = std::process::Command::new("flatpak")
+    let _ = std::process::Command::new("flatpak")
         .arg("run")
         .arg(app_id)
         .spawn();

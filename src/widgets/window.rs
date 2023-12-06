@@ -29,12 +29,8 @@ pub fn window(app: &adw::Application) -> adw::ApplicationWindow {
     let ctx = Context {
         app: app.clone(),
         window: ui.root.clone(),
-        bus: crate::event_bus::EventBus::new(),
+        transactions: crate::flatpak::TransactionChanel::new(),
     };
-
-    ctx.bus.connect_install_start(Box::new(|app_id| {
-        println!("Installing {}", app_id);
-    }));
 
     let home_page = widgets::home_page(&ctx);
     home_page.set_tag(Some(HOME_PAGE_TAG));
