@@ -12,7 +12,6 @@ pub use app_card::app_card;
 pub use app_grid::app_grid;
 pub use app_page::app_page;
 pub use home_page::home_page;
-pub use home_page::TAG as HOME_PAGE_TAG;
 pub use image::image;
 pub use lazy::lazy;
 pub use screenshots_caracal::screenshots_caracal;

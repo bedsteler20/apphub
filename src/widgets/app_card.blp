@@ -1,18 +1,22 @@
 using Gtk 4.0;
-
-Button root {
+using Adw 1;
+Adw.Clamp root {
+    maximum-size: 300;
+    orientation: horizontal;
+Button btn {
   width-request: 300;
-  hexpand: false;
+  hexpand: true;
   vexpand: false;
-  margin-bottom: 5;
-  margin-end: 5;
-  margin-start: 5;
-  margin-top: 5;
+  halign: center;
+//   margin-bottom: 5;
+//   margin-end: 5;
+//   margin-start: 5;
+//   margin-top: 5;
 
   styles [
     "card",
   ]
-
+  
   Box {
     margin-bottom: 10;
     margin-end: 10;
@@ -99,4 +103,5 @@ Button root {
       }
     }
   }
+}
 }

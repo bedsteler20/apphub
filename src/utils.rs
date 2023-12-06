@@ -13,6 +13,12 @@ macro_rules! blueprint {
     };
 }
 
+#[derive(Clone)]
+pub struct Context {
+    pub window: adw::ApplicationWindow,
+    pub app: adw::Application,
+}
+
 pub fn resource_path(path: &str) -> String {
     return format!("/dev/bedsteler20/Apphub/{}", path);
 }

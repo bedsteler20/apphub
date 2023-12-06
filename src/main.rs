@@ -1,7 +1,7 @@
 mod flathub;
-mod navigator;
 mod utils;
 mod widgets;
+mod flatbus;
 
 use adw::prelude::*;
 use gtk::gdk;

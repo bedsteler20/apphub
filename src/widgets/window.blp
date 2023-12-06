@@ -4,6 +4,8 @@ using Adw 1;
 Adw.ApplicationWindow root {
 	default-height: 800;
 	default-width: 968;
+    width-request: 400;
+    height-request: 800;
 
     Adw.Breakpoint {
         condition ("max-width: 550sp")
@@ -48,16 +50,10 @@ Adw.ApplicationWindow root {
 
         [bottom]
         Adw.ViewSwitcherBar switcher_bar {
+            reveal: true;
             stack: view_stack;
         }
     };
-
-	Box {
-		orientation: vertical;
-
-		
-
-	}
 }
 
 Adw.NavigationView nav_stack {}
