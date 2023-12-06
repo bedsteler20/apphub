@@ -13,6 +13,7 @@
         "gresource",
         "halign",
         "hexpand",
+        "libflatpak",
         "pixbuf",
         "reqwest",
         "valign",

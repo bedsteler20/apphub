@@ -1,107 +1,103 @@
 using Gtk 4.0;
 using Adw 1;
-Adw.Clamp root {
-    maximum-size: 300;
-    orientation: horizontal;
-Button btn {
-  width-request: 300;
-  hexpand: true;
-  vexpand: false;
-  halign: center;
-//   margin-bottom: 5;
-//   margin-end: 5;
-//   margin-start: 5;
-//   margin-top: 5;
 
-  styles [
-    "card",
-  ]
-  
-  Box {
-    margin-bottom: 10;
-    margin-end: 10;
-    margin-start: 10;
-    margin-top: 10;
-    orientation: horizontal;
-
+Button root {
+    width-request: 300;
+    hexpand: true;
+    vexpand: false;
+    halign: center;
+    //   margin-bottom: 5;
+    //   margin-end: 5;
+    //   margin-start: 5;
+    //   margin-top: 5;
     styles [
-      "header",
+        "card",
     ]
 
-    Image image {
-      pixel-size: 64;
-      valign: center;
-      margin-end: 10;
-
-      styles [
-        "icon-dropshadow",
-      ]
-    }
-
     Box {
-      orientation: vertical;
-      valign: center;
-      hexpand: true;
-
-      styles [
-        "title",
-      ]
-
-      Label name_label {
-        wrap: true;
-        xalign: 0.0;
-        yalign: 0.5;
-        ellipsize: end;
-        lines: 3;
-        wrap-mode: word_char;
-
-        styles [
-          "heading",
-        ]
-      }
-
-      Label description_label {
-        valign: start;
-        vexpand: true;
-        wrap: true;
-        wrap-mode: word_char;
-        ellipsize: end;
-        lines: 2;
-        xalign: 0;
-        label: "A summery was not provided by the author";
-
-        styles [
-          "dim-label",
-        ]
-      }
-
-      Box verified_box {
+        margin-bottom: 10;
+        margin-end: 10;
+        margin-start: 10;
+        margin-top: 10;
         orientation: horizontal;
-        valign: center;
-        visible: false;
 
-        Image {
-          icon-name: "check-plain-symbolic";
-          margin-end: 5;
+        styles [
+            "header",
+        ]
 
-          styles [
-            "dim-label",
-            "accent"
-          ]
+        Image image {
+            pixel-size: 64;
+            valign: center;
+            margin-end: 10;
+
+            styles [
+                "icon-dropshadow",
+            ]
         }
 
-        Label verified_label {
-          halign: start;
-          valign: center;
-          vexpand: true;
+        Box {
+            orientation: vertical;
+            valign: center;
+            hexpand: true;
 
-          styles [
-            "dim-label",
-            "accent"
-          ]
+            styles [
+                "title",
+            ]
+
+            Label name_label {
+                wrap: true;
+                xalign: 0.0;
+                yalign: 0.5;
+                ellipsize: end;
+                lines: 3;
+                wrap-mode: word_char;
+
+                styles [
+                    "heading",
+                ]
+            }
+
+            Label description_label {
+                valign: start;
+                vexpand: true;
+                wrap: true;
+                wrap-mode: word_char;
+                ellipsize: end;
+                lines: 2;
+                xalign: 0;
+                label: "A summery was not provided by the author";
+
+                styles [
+                    "dim-label",
+                ]
+            }
+
+            Box verified_box {
+                orientation: horizontal;
+                valign: center;
+                visible: false;
+
+                Image {
+                    icon-name: "check-plain-symbolic";
+                    margin-end: 5;
+
+                    styles [
+                        "dim-label",
+                        "accent"
+                    ]
+                }
+
+                Label verified_label {
+                    halign: start;
+                    valign: center;
+                    vexpand: true;
+
+                    styles [
+                        "dim-label",
+                        "accent"
+                    ]
+                }
+            }
         }
-      }
     }
-  }
-}
 }

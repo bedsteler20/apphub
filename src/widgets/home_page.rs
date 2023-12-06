@@ -42,6 +42,7 @@ pub fn home_page(ctx: &Context) -> adw::NavigationPage {
         let (sender, receiver) = async_channel::bounded::<DataTagged>(3);
 
         RUNTIME.spawn(clone!(@strong sender => async move {
+
             let response = flathub::query(flathub::Query::RecentlyAdded, 1, 12).await;
             sender.send(DataTagged::RecentlyAdded(response)).await.expect("The channel needs to be open.");
         }));

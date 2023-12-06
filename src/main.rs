@@ -2,6 +2,7 @@ mod flathub;
 mod utils;
 mod widgets;
 mod flatbus;
+mod event_bus;
 
 use adw::prelude::*;
 use gtk::gdk;
@@ -34,6 +35,7 @@ fn setup_resources() {
 
 pub fn active(app: &adw::Application) {
     setup_resources();
+
     let window = widgets::window(app);
     window.present();
 }

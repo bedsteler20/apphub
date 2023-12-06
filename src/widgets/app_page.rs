@@ -1,5 +1,7 @@
 use crate::blueprint;
+use crate::flatbus;
 use crate::flathub;
+use crate::utils::Context;
 use crate::utils::RUNTIME;
 use crate::widgets;
 use adw::prelude::*;
@@ -14,19 +16,38 @@ struct Template {
     pub icon: gtk::Image,
     pub name_label: gtk::Label,
     pub dev_label: gtk::Label,
-    pub install_box: gtk::Box,
+    pub install_btn: gtk::Button,
+    pub uninstall_btn: gtk::Button,
+    pub open_btn: gtk::Button,
     pub caracal_container: adw::Clamp,
     pub summary_label: gtk::Label,
     pub description_label: gtk::Label,
     pub app_links: adw::Bin,
 }
 
-pub fn app_page(app_id: &String) -> adw::NavigationPage {
+pub fn app_page(ctx: &Context, app_id: &String) -> adw::NavigationPage {
     let ui: Template = blueprint!(Template, "src/widgets/app_page.blp");
 
     let build_ui = clone!(@strong ui => move |app_info: flathub::AppInfo, summery: flathub::AppSummary| {
         ui.name_label.set_text(&app_info.name);
         ui.app_links.set_child(Some(&widgets::app_links(&app_info, &summery)));
+        let app_id = app_info.id.clone();
+
+        if flatbus::is_app_installed(&app_info.id).unwrap_or(false) {
+            ui.install_btn.set_visible(false);
+            ui.uninstall_btn.set_visible(true);
+            ui.open_btn.set_visible(true);
+        } else {
+            ui.install_btn.set_visible(true);
+            ui.uninstall_btn.set_visible(false);
+            ui.open_btn.set_visible(false);
+        }
+
+
+
+        ui.open_btn.connect_clicked(clone!(@strong app_id => move |_| {
+            flatbus::open_app(&app_id);
+        }));
 
         if let Some(summery) = app_info.summary.as_ref() {
             ui.summary_label.set_text(summery);

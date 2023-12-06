@@ -2,16 +2,19 @@
 using Gtk 4.0;
 using Adw 1;
 
-
 FlowBox root {
     homogeneous: true;
     column-spacing: 8;
     row-spacing: 8;
     selection-mode: none;
-
+    min-children-per-line: 2;
 }
 
 Box install_size_card {
+    styles [
+        "card"
+    ]
+
     Box {
         margin-top: 15;
         margin-bottom: 15;
@@ -19,35 +22,47 @@ Box install_size_card {
         margin-end: 15;
         orientation: horizontal;
         spacing: 10;
+
         Image {
             icon-size: large;
             icon-name: "harddisk-inverted-symbolic";
         }
+
         Box {
             orientation: vertical;
             hexpand: true;
+
             Label {
                 label: "Install Size";
                 halign: start;
                 wrap: true;
                 overflow: hidden;
-                styles ["heading"]
+
+                styles [
+                    "heading"
+                ]
             }
+
             Label install_size_label {
                 halign: start;
                 label: "~ 100 KB";
                 wrap: true;
                 overflow: hidden;
                 hexpand: true;
-                styles ["caption"]
+
+                styles [
+                    "caption"
+                ]
             }
         }
     }
 }
 
 Box download_size_card {
+    styles [
+        "card"
+    ]
 
-    styles ["card"]
     Box {
         margin-top: 15;
         margin-bottom: 15;
@@ -55,35 +70,47 @@ Box download_size_card {
         margin-end: 15;
         orientation: horizontal;
         spacing: 10;
+
         Image {
             icon-size: large;
             icon-name: "arrow3-down-symbolic";
         }
+
         Box {
             orientation: vertical;
             hexpand: true;
+
             Label {
                 label: "Download Size";
                 halign: start;
                 wrap: true;
                 overflow: hidden;
-                styles ["heading"]
+
+                styles [
+                    "heading"
+                ]
             }
+
             Label download_size_label {
                 halign: start;
                 label: "20 KB";
                 wrap: true;
                 overflow: hidden;
                 hexpand: true;
-                styles ["caption"]
+
+                styles [
+                    "caption"
+                ]
             }
         }
     }
 }
 
 Box arch_card {
+    styles [
+        "card"
+    ]
 
-    styles ["card"]
     Box {
         margin-top: 15;
         margin-bottom: 15;
@@ -96,32 +123,42 @@ Box arch_card {
             icon-size: large;
             icon-name: "computer-chip-symbolic";
         }
+
         Box {
             orientation: vertical;
             hexpand: true;
+
             Label {
                 label: "Available Architectures";
                 halign: start;
                 wrap: true;
                 overflow: hidden;
-                styles ["heading"]
+
+                styles [
+                    "heading"
+                ]
             }
+
             Label arch_label {
                 halign: start;
                 label: "aarch64, x86_64";
                 wrap: true;
                 overflow: hidden;
                 hexpand: true;
-                styles ["caption"]
+
+                styles [
+                    "caption"
+                ]
             }
         }
     }
 }
 
-
 Box license_card {
+    styles [
+        "card"
+    ]
 
-    styles ["card"]
     Box {
         margin-top: 15;
         margin-bottom: 15;
@@ -134,30 +171,42 @@ Box license_card {
             icon-size: large;
             icon-name: "bank-symbolic";
         }
+
         Box {
             orientation: vertical;
             hexpand: true;
+
             Label {
                 label: "License";
                 halign: start;
                 wrap: true;
                 overflow: hidden;
-                styles ["heading"]
+
+                styles [
+                    "heading"
+                ]
             }
+
             Label license_label {
                 halign: start;
                 label: "GNU General Public License v3.0 or later";
                 wrap: true;
                 overflow: hidden;
                 hexpand: true;
-                styles ["caption"]
+
+                styles [
+                    "caption"
+                ]
             }
         }
     }
 }
 
 Button website_card {
-    styles ["card"]
+    styles [
+        "card"
+    ]
+
     Box {
         margin-top: 15;
         margin-bottom: 15;
@@ -166,10 +215,12 @@ Button website_card {
         orientation: horizontal;
         spacing: 10;
         hexpand: false;
+
         Image {
             icon-size: large;
             icon-name: "globe-symbolic";
         }
+
         Box {
             orientation: vertical;
 
@@ -178,16 +229,24 @@ Button website_card {
                 halign: start;
                 wrap: true;
                 overflow: hidden;
-                styles ["heading"]
+
+                styles [
+                    "heading"
+                ]
             }
+
             Label website_label {
                 halign: start;
                 wrap: true;
                 overflow: hidden;
                 hexpand: true;
-                styles ["caption"]
+
+                styles [
+                    "caption"
+                ]
             }
         }
+
         Image {
             icon-name: "adw-external-link-symbolic";
         }
@@ -195,7 +254,10 @@ Button website_card {
 }
 
 Button issues_card {
-    styles ["card"]
+    styles [
+        "card"
+    ]
+
     Box {
         margin-top: 15;
         margin-bottom: 15;
@@ -204,27 +266,38 @@ Button issues_card {
         orientation: horizontal;
         spacing: 10;
         hexpand: false;
+
         Image {
             icon-size: large;
             icon-name: "bug-symbolic";
         }
+
         Box {
             orientation: vertical;
+
             Label {
                 label: "Report an Issue";
                 halign: start;
                 wrap: true;
                 overflow: hidden;
-                styles ["heading"]
+
+                styles [
+                    "heading"
+                ]
             }
+
             Label issues_label {
                 halign: start;
                 wrap: true;
                 overflow: hidden;
                 hexpand: true;
-                styles ["caption"]
+
+                styles [
+                    "caption"
+                ]
             }
         }
+
         Image {
             icon-name: "adw-external-link-symbolic";
         }
@@ -232,7 +305,10 @@ Button issues_card {
 }
 
 Button contribute_card {
-    styles ["card"]
+    styles [
+        "card"
+    ]
+
     Box {
         margin-top: 15;
         margin-bottom: 15;
@@ -241,27 +317,38 @@ Button contribute_card {
         orientation: horizontal;
         spacing: 10;
         hexpand: false;
+
         Image {
             icon-size: large;
             icon-name: "merge-symbolic";
         }
+
         Box {
             orientation: vertical;
+
             Label {
                 label: "Contribute";
                 halign: start;
                 wrap: true;
                 overflow: hidden;
-                styles ["heading"]
+
+                styles [
+                    "heading"
+                ]
             }
+
             Label contribute_label {
                 halign: start;
                 wrap: true;
                 overflow: hidden;
                 hexpand: true;
-                styles ["caption"]
+
+                styles [
+                    "caption"
+                ]
             }
         }
+
         Image {
             icon-name: "adw-external-link-symbolic";
         }
@@ -269,7 +356,10 @@ Button contribute_card {
 }
 
 Button help_card {
-    styles ["card"]
+    styles [
+        "card"
+    ]
+
     Box {
         margin-top: 15;
         margin-bottom: 15;
@@ -278,27 +368,38 @@ Button help_card {
         orientation: horizontal;
         spacing: 10;
         hexpand: false;
+
         Image {
             icon-size: large;
             icon-name: "open-book-symbolic";
         }
+
         Box {
             orientation: vertical;
+
             Label {
                 label: "Help";
                 halign: start;
                 wrap: true;
                 overflow: hidden;
-                styles ["heading"]
+
+                styles [
+                    "heading"
+                ]
             }
+
             Label help_label {
                 halign: start;
                 wrap: true;
                 overflow: hidden;
                 hexpand: true;
-                styles ["caption"]
+
+                styles [
+                    "caption"
+                ]
             }
         }
+
         Image {
             icon-name: "adw-external-link-symbolic";
         }
@@ -306,7 +407,10 @@ Button help_card {
 }
 
 Button translate_card {
-    styles ["card"]
+    styles [
+        "card"
+    ]
+
     Box {
         margin-top: 15;
         margin-bottom: 15;
@@ -315,27 +419,38 @@ Button translate_card {
         orientation: horizontal;
         spacing: 10;
         hexpand: false;
+
         Image {
             icon-size: large;
             icon-name: "language-symbolic";
         }
+
         Box {
             orientation: vertical;
+
             Label {
                 label: "Contribute Translation";
                 halign: start;
                 wrap: true;
                 overflow: hidden;
-                styles ["heading"]
+
+                styles [
+                    "heading"
+                ]
             }
+
             Label translate_label {
                 halign: start;
                 wrap: true;
                 overflow: hidden;
                 hexpand: true;
-                styles ["caption"]
+
+                styles [
+                    "caption"
+                ]
             }
         }
+
         Image {
             icon-name: "adw-external-link-symbolic";
         }
@@ -343,7 +458,10 @@ Button translate_card {
 }
 
 Button donate_card {
-    styles ["card"]
+    styles [
+        "card"
+    ]
+
     Box {
         margin-top: 15;
         margin-bottom: 15;
@@ -352,27 +470,38 @@ Button donate_card {
         orientation: horizontal;
         spacing: 10;
         hexpand: false;
+
         Image {
             icon-size: large;
             icon-name: "heart-filled-symbolic";
         }
+
         Box {
             orientation: vertical;
+
             Label {
                 label: "Report an Issue";
                 halign: start;
                 wrap: true;
                 overflow: hidden;
-                styles ["heading"]
+
+                styles [
+                    "heading"
+                ]
             }
+
             Label donate_label {
                 halign: start;
                 wrap: true;
                 overflow: hidden;
                 hexpand: true;
-                styles ["caption"]
+
+                styles [
+                    "caption"
+                ]
             }
         }
+
         Image {
             icon-name: "adw-external-link-symbolic";
         }
@@ -380,7 +509,10 @@ Button donate_card {
 }
 
 Button manifest_card {
-    styles ["card"]
+    styles [
+        "card"
+    ]
+
     Box {
         margin-top: 15;
         margin-bottom: 15;
@@ -389,10 +521,12 @@ Button manifest_card {
         orientation: horizontal;
         spacing: 10;
         hexpand: false;
+
         Image {
             icon-size: large;
             icon-name: "code-symbolic";
         }
+
         Box {
             orientation: vertical;
 
@@ -401,17 +535,25 @@ Button manifest_card {
                 halign: start;
                 wrap: true;
                 overflow: hidden;
-                styles ["heading"]
+
+                styles [
+                    "heading"
+                ]
             }
+
             Label manifest_label {
                 halign: start;
                 label: "https://github.com/flathub/io.github.nokse22.inspector";
                 wrap: true;
                 overflow: hidden;
                 hexpand: true;
-                styles ["caption"]
+
+                styles [
+                    "caption"
+                ]
             }
         }
+
         Image {
             icon-name: "adw-external-link-symbolic";
         }

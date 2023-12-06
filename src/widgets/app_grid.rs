@@ -1,5 +1,3 @@
-use ashpd::desktop::print::Orientation;
-use gtk::glib::clone;
 use macros::GtkWidget;
 
 use crate::{blueprint, utils::Context};
@@ -15,7 +13,11 @@ struct Template {
 pub fn app_grid(ctx: &Context, query: &flathub::QueryInfo) -> impl IsA<Widget> {
     let ui: Template = blueprint!(Template, "src/widgets/app_grid.blp");
     for app in &query.hits {
-        ui.flow.append(&widgets::app_card(app));
+        let clamp = adw::Clamp::new();
+        clamp.set_maximum_size(300);
+        clamp.set_orientation(gtk::Orientation::Horizontal);
+        clamp.set_child(Some(&widgets::app_card(app)));
+        ui.flow.append(&clamp);
     }
     return ui.flow;
 }

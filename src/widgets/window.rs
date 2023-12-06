@@ -29,7 +29,12 @@ pub fn window(app: &adw::Application) -> adw::ApplicationWindow {
     let ctx = Context {
         app: app.clone(),
         window: ui.root.clone(),
+        bus: crate::event_bus::EventBus::new(),
     };
+
+    ctx.bus.connect_install_start(Box::new(|app_id| {
+        println!("Installing {}", app_id);
+    }));
 
     let home_page = widgets::home_page(&ctx);
     home_page.set_tag(Some(HOME_PAGE_TAG));
@@ -37,8 +42,8 @@ pub fn window(app: &adw::Application) -> adw::ApplicationWindow {
     ui.view_stack.add_titled_with_icon(
         &ui.nav_stack,
         Some(HOME_VIEW_TAG),
-        "Flathub",
-        "home-symbolic",
+        "Explore",
+        "compass-symbolic",
     );
     ui.nav_stack.push(&home_page);
 
@@ -74,7 +79,7 @@ pub fn window(app: &adw::Application) -> adw::ApplicationWindow {
             "app" => {
                 let app_id = parts[2];
                 println!("Visiting app {}", app_id);
-                let app_page = widgets::app_page(&app_id.to_string());
+                let app_page = widgets::app_page(&ctx, &app_id.to_string());
                 ui.nav_stack.push(&app_page);
             }
             _ => {

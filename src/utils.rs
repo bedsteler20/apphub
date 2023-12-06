@@ -1,5 +1,7 @@
 use gtk::glib::once_cell::sync::Lazy;
 use tokio::runtime::Runtime;
+
+use crate::event_bus::EventBus;
 pub const APP_ID: &str = "dev.bedsteler20.AppHub";
 pub static RUNTIME: Lazy<Runtime> =
     Lazy::new(|| Runtime::new().expect("Setting up tokio runtime needs to succeed."));
@@ -17,6 +19,7 @@ macro_rules! blueprint {
 pub struct Context {
     pub window: adw::ApplicationWindow,
     pub app: adw::Application,
+    pub bus: EventBus
 }
 
 pub fn resource_path(path: &str) -> String {
