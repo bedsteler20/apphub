@@ -1,9 +1,6 @@
-use gtk::{
-    gio::{self, Cancellable},
-    glib,
-};
-use libflatpak::prelude::*;
+use crate::prelude::*;
 
+// ======== Data Structs ========
 pub enum InstallLocation {
     System,
     User,
@@ -27,6 +24,8 @@ pub struct InstalledAppInfo {
     pub icon: Option<String>,
     pub from_flathub: bool,
 }
+
+// ======== API Functions ========
 
 pub fn is_app_installed(app_id: &String) -> Result<bool, glib::Error> {
     let refs = get_installed_refs()?;

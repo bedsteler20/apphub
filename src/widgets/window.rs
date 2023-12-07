@@ -1,13 +1,5 @@
-use adw::prelude::*;
-use gtk::gio;
-use gtk::glib;
-use gtk::glib::clone;
-use gtk::prelude::*;
-use macros::GtkWidget;
+use crate::prelude::*;
 
-use crate::blueprint;
-use crate::utils::Context;
-use crate::widgets;
 
 static HOME_VIEW_TAG: &str = "home_view";
 
@@ -29,7 +21,7 @@ pub fn window(app: &adw::Application) -> adw::ApplicationWindow {
     let ctx = Context {
         app: app.clone(),
         window: ui.root.clone(),
-        transactions: crate::flatpak::TransactionChanel::new(),
+        transaction_store: Rc::new(store::TransactionStore::new()),
     };
 
     let home_page = widgets::home_page(&ctx);
@@ -38,7 +30,7 @@ pub fn window(app: &adw::Application) -> adw::ApplicationWindow {
     ui.view_stack.add_titled_with_icon(
         &ui.nav_stack,
         Some(HOME_VIEW_TAG),
-        "Explore",
+        &tr!("Explore"),
         "compass-symbolic",
     );
     ui.nav_stack.push(&home_page);
@@ -74,7 +66,6 @@ pub fn window(app: &adw::Application) -> adw::ApplicationWindow {
         match parts[1] {
             "app" => {
                 let app_id = parts[2];
-                println!("Visiting app {}", app_id);
                 let app_page = widgets::app_page(&ctx, &app_id.to_string());
                 ui.nav_stack.push(&app_page);
             }

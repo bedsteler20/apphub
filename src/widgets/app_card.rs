@@ -1,11 +1,6 @@
-use gtk::glib::Variant;
-use gtk::prelude::*;
-use gtk::Widget;
-use macros::GtkWidget;
+use crate::prelude::*;
 
-use crate::blueprint;
-use crate::flathub;
-use crate::widgets;
+
 #[derive(GtkWidget)]
 struct Template {
     pub root: gtk::Button,

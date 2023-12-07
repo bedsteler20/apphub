@@ -1,9 +1,4 @@
-use macros::GtkWidget;
-
-use crate::{blueprint, utils::Context};
-
-use adw::prelude::*;
-use {crate::flathub, crate::widgets, gtk::Widget};
+use crate::prelude::*;
 
 #[derive(GtkWidget, Clone)]
 struct Template {

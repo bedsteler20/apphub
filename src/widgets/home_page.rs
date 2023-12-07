@@ -1,11 +1,4 @@
-use adw::prelude::*;
-use gtk::glib::{self, clone};
-use macros::GtkWidget;
-
-use crate::utils::{Context, RUNTIME};
-use crate::widgets;
-use crate::{blueprint, flathub};
-
+use crate::prelude::*;
 #[derive(GtkWidget, Clone)]
 struct Template {
     pub root: gtk::ScrolledWindow,
@@ -41,18 +34,18 @@ pub fn home_page(ctx: &Context) -> adw::NavigationPage {
     let lazy = widgets::lazy(clone!(@strong ui => move |bin| {
         let (sender, receiver) = async_channel::bounded::<DataTagged>(3);
 
-        RUNTIME.spawn(clone!(@strong sender => async move {
+        runtime.spawn(clone!(@strong sender => async move {
 
             let response = flathub::query(flathub::Query::RecentlyAdded, 1, 12).await;
-            sender.send(DataTagged::RecentlyAdded(response)).await.expect("The channel needs to be open.");
+            sender.send(DataTagged::RecentlyAdded(response)).await.expect(&tr!("The channel needs to be open."));
         }));
-        RUNTIME.spawn(clone!(@strong sender => async move {
+        runtime.spawn(clone!(@strong sender => async move {
             let response = flathub::query(flathub::Query::RecentlyUpdated, 1, 12).await;
-            sender.send(DataTagged::RecentlyUpdated(response)).await.expect("The channel needs to be open.");
+            sender.send(DataTagged::RecentlyUpdated(response)).await.expect(&tr!("The channel needs to be open."));
         }));
-        RUNTIME.spawn(clone!(@strong sender => async move {
+        runtime.spawn(clone!(@strong sender => async move {
             let response = flathub::query(flathub::Query::Popular, 1, 12).await;
-            sender.send(DataTagged::Popular(response)).await.expect("The channel needs to be open.");
+            sender.send(DataTagged::Popular(response)).await.expect(&tr!("The channel needs to be open."));
         }));
 
         glib::spawn_future_local(clone!(@strong bin, @strong ctx => async move {
@@ -71,15 +64,15 @@ pub fn home_page(ctx: &Context) -> adw::NavigationPage {
                     },
                     // TODO: Add error Widget
                     DataTagged::RecentlyAdded(Err(_)) => {
-                        println!("Could not make a `GET` request.");
+                        println!("{}", tr!("Could not make a `GET` request."));
                         break;
                     },
                     DataTagged::RecentlyUpdated(Err(_)) => {
-                        println!("Could not make a `GET` request.");
+                        println!("{}", tr!("Could not make a `GET` request."));
                         break;
                     },
                     DataTagged::Popular(Err(_)) => {
-                        println!("Could not make a `GET` request.");
+                        println!("{}", tr!("Could not make a `GET` request."));
                         break;
                     },
                 }
@@ -94,7 +87,7 @@ pub fn home_page(ctx: &Context) -> adw::NavigationPage {
     }));
 
     return adw::NavigationPage::builder()
-        .title("Home")
+        .title(tr!("Explore"))
         .child(&lazy)
         .build();
 }

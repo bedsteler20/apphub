@@ -1,9 +1,15 @@
-use gtk::glib::once_cell::sync::Lazy;
+use crate::prelude::*;
+
 use tokio::runtime::Runtime;
 
 pub const APP_ID: &str = "dev.bedsteler20.AppHub";
-pub static RUNTIME: Lazy<Runtime> =
-    Lazy::new(|| Runtime::new().expect("Setting up tokio runtime needs to succeed."));
+pub const RESOURCE_PATH: &str = "/dev/bedsteler20/Apphub";
+pub const BASE_URL: &str = "https://flathub.org/api/v2";
+
+#[allow(non_upper_case_globals)]
+pub static runtime: OnceCell<Runtime> = OnceCell::new(|| {
+    Runtime::new().expect(tr!("Setting up tokio runtime needs to succeed.").as_str())
+});
 
 #[macro_export]
 macro_rules! blueprint {
@@ -18,22 +24,18 @@ macro_rules! blueprint {
 pub struct Context {
     pub window: adw::ApplicationWindow,
     pub app: adw::Application,
-    pub transactions: crate::flatpak::TransactionChanel,
-}
-
-pub fn resource_path(path: &str) -> String {
-    return format!("/dev/bedsteler20/Apphub/{}", path);
+    pub transaction_store: Rc<store::TransactionStore>,
 }
 
 pub fn open_url(url: String) {
-    RUNTIME.spawn(async move {
+    runtime.spawn(async move {
         if let Ok(url) = reqwest::Url::parse(&url) {
             if let Err(err) = ashpd::desktop::open_uri::OpenFileRequest::default()
                 .ask(false)
                 .send_uri(&url)
                 .await
             {
-                println!("Failed to open the url: {}", err);
+                println!("{}: {}", tr!("Failed to open the url"), err);
             }
         }
     });

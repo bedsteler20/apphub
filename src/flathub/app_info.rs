@@ -1,4 +1,4 @@
-use serde::Deserialize;
+use crate::prelude::*;
 
 #[derive(Deserialize, Debug)]
 pub struct AppInfo {

@@ -1,5 +1,4 @@
-// cspell:ignore filesystems
-use serde::Deserialize;
+use crate::prelude::*;
 
 #[derive(Deserialize, Debug)]
 pub struct AppSummary {

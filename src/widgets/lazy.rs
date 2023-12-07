@@ -1,4 +1,4 @@
-use adw::prelude::*;
+use crate::prelude::*;
 
 pub fn lazy<T: FnOnce(&adw::Bin)>(f: T) -> adw::Bin {
     let bin = adw::Bin::new();

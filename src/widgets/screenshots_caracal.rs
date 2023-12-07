@@ -1,10 +1,4 @@
-use adw::prelude::*;
-use gtk::{glib::IsA, Widget};
-
-use macros::GtkWidget;
-
-use crate::{blueprint, flathub, widgets};
-
+use crate::prelude::*;
 #[derive(GtkWidget, Clone)]
 #[allow(unused)]
 struct Template {

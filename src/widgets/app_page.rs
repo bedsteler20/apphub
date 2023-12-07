@@ -1,15 +1,4 @@
-use std::rc::Rc;
-
-use crate::blueprint;
-use crate::flathub;
-use crate::flatpak;
-use crate::utils::Context;
-use crate::utils::RUNTIME;
-use crate::widgets;
-use adw::prelude::*;
-use gtk::glib;
-use gtk::glib::clone;
-use macros::GtkWidget;
+use crate::prelude::*;
 
 #[derive(GtkWidget, Clone)]
 #[allow(unused)]
@@ -44,87 +33,6 @@ pub fn app_page(ctx: &Context, app_id: &String) -> adw::NavigationPage {
             ui.open_btn.set_visible(false);
         }
 
-        // ======== Bind State ========
-        let transact_handle = Rc::new(ctx.transactions.subscribe(Box::new(clone!(@strong ui, @strong app_id => move |state| {
-            if state.app_id().clone() != app_id {
-                return;
-            }
-            match state {
-                flatpak::TransactionState::Done { type_, .. } => {
-                    match type_ {
-                        flatpak::TransactionType::Install => {
-                            ui.install_btn.set_visible(false);
-                            ui.uninstall_btn.set_visible(true);
-                            ui.open_btn.set_visible(true);
-                        },
-                        flatpak::TransactionType::Uninstall => {
-                            ui.install_btn.set_visible(true);
-                            ui.uninstall_btn.set_visible(false);
-                            ui.open_btn.set_visible(false);
-                        },
-                        _ => {},
-                    }
-                },
-                flatpak::TransactionState::Progress { .. } => {},
-                flatpak::TransactionState::Start {type_, .. } => {
-                    match type_ {
-                        flatpak::TransactionType::Install => {
-                            ui.install_btn.set_visible(false);
-                            ui.uninstall_btn.set_visible(true);
-                            ui.open_btn.set_visible(true);
-                        },
-                        flatpak::TransactionType::Uninstall => {
-                            ui.install_btn.set_visible(true);
-                            ui.uninstall_btn.set_visible(false);
-                            ui.open_btn.set_visible(false);
-                        },
-                        _ => {},
-                    }
-                },
-                flatpak::TransactionState::Cancel {  type_, .. } => {
-                    match type_ {
-                        flatpak::TransactionType::Install => {
-                            ui.install_btn.set_visible(true);
-                            ui.uninstall_btn.set_visible(false);
-                            ui.open_btn.set_visible(false);
-                        },
-                        flatpak::TransactionType::Uninstall => {
-                            ui.install_btn.set_visible(false);
-                            ui.uninstall_btn.set_visible(true);
-                            ui.open_btn.set_visible(true);
-                        },
-                        _ => {},
-                    }
-                },
-                flatpak::TransactionState::Error {type_, error, .. } => {
-                    println!("Error: {}", error);
-                    match type_ {
-                        flatpak::TransactionType::Install => {
-                            ui.install_btn.set_visible(true);
-                            ui.uninstall_btn.set_visible(false);
-                            ui.open_btn.set_visible(false);
-                        },
-                        flatpak::TransactionType::Uninstall => {
-                            ui.install_btn.set_visible(false);
-                            ui.uninstall_btn.set_visible(true);
-                            ui.open_btn.set_visible(true);
-                        },
-                        _ => {},
-                    }
-                },
-            }
-        }))));
-
-        ui.install_btn.connect_clicked(clone!(@strong app_id, @strong ctx => move |_| {
-            ctx.transactions.emit(flatpak::TransactionState::Start {
-                app_id: app_id.clone(),
-                type_: flatpak::TransactionType::Install,
-            });
-        }));
-
-        ui.root.connect_destroy(clone!(@strong ctx => move |_| {
-            ctx.transactions.unsubscribe(transact_handle.as_ref().to_owned());
-        }));
 
 
         // ======== Display Data ========
@@ -165,10 +73,10 @@ pub fn app_page(ctx: &Context, app_id: &String) -> adw::NavigationPage {
     let lazy = widgets::lazy(clone!(@strong ui => move |bin| {
         let (sender, receiver) = async_channel::bounded(1);
 
-        RUNTIME.spawn(clone!(@strong sender, @strong app_id => async move {
+        runtime.spawn(clone!(@strong sender, @strong app_id => async move {
             let app_info = flathub::app_info(&app_id).await;
             let app_summary = flathub::app_summary(&app_id).await;
-            sender.send((app_info, app_summary)).await.expect("The channel needs to be open.");
+            sender.send((app_info, app_summary)).await.expect(&tr!("The channel needs to be open."));
         }));
 
         glib::spawn_future_local(clone!(@strong bin => async move {
@@ -176,10 +84,10 @@ pub fn app_page(ctx: &Context, app_id: &String) -> adw::NavigationPage {
                 let (app_info, app_summary) = response;
                 if app_info.is_err() || app_summary.is_err() {
                     if let Err(err) = app_info {
-                        println!("Error reading app_info: {}", err);
+                        println!("{}: {}", tr!("Error reading app_info"), err);
                     }
                     if let Err(err) = app_summary {
-                        println!("Error reading app_summary: {}", err);
+                        println!("{}: {}", tr!("Error reading app_summary"), err);
                     }
                     sender.close();
                     receiver.close();
@@ -196,8 +104,7 @@ pub fn app_page(ctx: &Context, app_id: &String) -> adw::NavigationPage {
     }));
 
     return adw::NavigationPage::builder()
-        .title("App")
-        .tag("app_page")
+        .title(tr!("App"))
         .child(&lazy)
         .build();
 }

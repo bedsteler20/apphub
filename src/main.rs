@@ -1,15 +1,11 @@
-mod flatpak;
-mod flathub;
-mod utils;
-mod widgets;
+pub mod flathub;
+pub mod flatpak;
+pub mod prelude;
+pub mod store;
+pub mod utils;
+pub mod widgets;
 
-use adw::prelude::*;
-use gtk::gdk;
-use gtk::gio;
-use gtk::glib;
-use utils::resource_path;
-
-use crate::utils::APP_ID;
+use crate::prelude::*;
 
 fn main() {
     let app = adw::Application::new(Some(APP_ID), Default::default());
@@ -19,10 +15,10 @@ fn main() {
 
 #[allow(deprecated)]
 fn setup_resources() {
-    gio::resources_register_include!("compiled.gresource").expect("Failed to register resources");
-    let display = gdk::Display::default().expect("Cannot get display");
+    gio::resources_register_include!("compiled.gresource").expect(&tr!("Failed to register resources"));
+    let display = gdk::Display::default().expect(&tr!("Cannot get display"));
     let icon_theme = gtk::IconTheme::for_display(&display);
-    icon_theme.add_resource_path(&resource_path("icons"));
+    icon_theme.add_resource_path(&format!("{}/icons", RESOURCE_PATH));
     let provider = gtk::CssProvider::new();
     provider.load_from_bytes(&glib::Bytes::from_static(include_bytes!("styles.css")));
     gtk::StyleContext::add_provider_for_display(

@@ -1,6 +1,6 @@
-use crate::flathub::{AppInfo, AppSummary, Query, QueryInfo};
+use crate::prelude::*;
+use flathub::{AppInfo, AppSummary, Query, QueryInfo};
 
-static BASE_URL: &str = "https://flathub.org/api/v2";
 
 fn get_client() -> Result<reqwest::Client, reqwest::Error> {
     return reqwest::Client::builder().build();

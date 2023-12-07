@@ -1,12 +1,6 @@
+use crate::prelude::*;
+use utils::open_url;
 use bytesize::ByteSize;
-use gtk::{
-    glib::{clone, IsA},
-    prelude::*,
-    Widget,
-};
-use macros::GtkWidget;
-
-use crate::{blueprint, flathub, utils::open_url};
 
 #[derive(GtkWidget)]
 struct Template {
