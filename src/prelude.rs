@@ -1,9 +1,14 @@
 // ======= External Preludes =======
 pub use adw::prelude::*;
+#[allow(unused_imports)]
 pub use gtk::gdk::prelude::*;
+#[allow(unused_imports)]
 pub use gtk::gdk_pixbuf::prelude::*;
+#[allow(unused_imports)]
 pub use gtk::gio::prelude::*;
+#[allow(unused_imports)]
 pub use gtk::glib::prelude::*;
+#[allow(unused_imports)]
 pub use gtk::prelude::*;
 pub use libflatpak::prelude::*;
 
@@ -15,6 +20,8 @@ pub use gtk::gio;
 pub use gtk::glib;
 
 // ======= Common GLib Types =======
+pub use glib::IsA;
+pub use glib::SignalHandlerId;
 pub use gtk::gio::Cancellable;
 pub use gtk::glib::translate::FromGlib;
 pub use gtk::glib::translate::ToGlibPtr;
@@ -25,7 +32,6 @@ pub use gtk::glib::Variant;
 pub use gtk::glib::VariantTy;
 pub use gtk::glib::VariantType;
 pub use gtk::Widget;
-pub use glib::IsA;
 
 // ======= Common Standard Library Types =======
 pub use once_cell::sync::Lazy as OnceCell;
@@ -36,7 +42,7 @@ pub use std::cell::RefCell;
 pub use std::cell::RefMut;
 pub use std::rc::Rc;
 pub use std::sync::Arc;
-
+pub use  std::sync::mpsc;
 // ======= Macros =======
 pub use crate::blueprint;
 pub use gtk::glib::clone;

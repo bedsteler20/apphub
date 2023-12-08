@@ -1,7 +1,6 @@
 use crate::prelude::*;
 use flathub::{AppInfo, AppSummary, Query, QueryInfo};
 
-
 fn get_client() -> Result<reqwest::Client, reqwest::Error> {
     return reqwest::Client::builder().build();
 }

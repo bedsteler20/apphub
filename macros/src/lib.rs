@@ -5,7 +5,7 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::{self, Data, DeriveInput, Fields};
 
-#[proc_macro_derive(GtkWidget, attributes(str))]
+#[proc_macro_derive(GtkWidget, attributes(tmpl_ignore))]
 pub fn gtk_widget_macro_derive(input: TokenStream) -> TokenStream {
     let ast = syn::parse(input).unwrap();
     impl_gtk_widget_macro(&ast)
@@ -37,3 +37,4 @@ fn impl_gtk_widget_macro(ast: &DeriveInput) -> TokenStream {
     };
     gen.into()
 }
+

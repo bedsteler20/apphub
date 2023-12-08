@@ -1,15 +1,15 @@
 mod app_card;
 mod app_grid;
+mod app_links;
 mod app_page;
 mod home_page;
 mod image;
 mod lazy;
 mod screenshots_caracal;
 mod window;
-mod app_links;
-pub use app_links::app_links;
 pub use app_card::app_card;
 pub use app_grid::app_grid;
+pub use app_links::app_links;
 pub use app_page::app_page;
 pub use home_page::home_page;
 pub use image::image;

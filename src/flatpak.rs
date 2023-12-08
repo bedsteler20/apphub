@@ -1,4 +1,10 @@
-use crate::prelude::*;
+mod install;
+
+use crate::{prelude::*, utils::REF_BASE_URL};
+use glib::clone;
+use std::thread;
+
+pub use install::*;
 
 // ======== Data Structs ========
 pub enum InstallLocation {
@@ -16,7 +22,6 @@ impl Into<libflatpak::Installation> for InstallLocation {
         }
     }
 }
-
 #[derive(Debug, Clone)]
 pub struct InstalledAppInfo {
     pub app_id: String,

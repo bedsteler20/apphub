@@ -1,6 +1,5 @@
 use crate::prelude::*;
 
-
 static HOME_VIEW_TAG: &str = "home_view";
 
 static HOME_PAGE_TAG: &str = "home_page";
@@ -10,9 +9,9 @@ struct Template {
     pub root: adw::ApplicationWindow,
     pub nav_stack: adw::NavigationView,
     pub back_btn: gtk::Button,
-    pub view_switcher: adw::ViewSwitcher,
+    // pub view_switcher: adw::ViewSwitcher,
     pub view_stack: adw::ViewStack,
-    pub switcher_bar: adw::ViewSwitcherBar,
+    // pub switcher_bar: adw::ViewSwitcherBar,
 }
 
 pub fn window(app: &adw::Application) -> adw::ApplicationWindow {
@@ -39,7 +38,8 @@ pub fn window(app: &adw::Application) -> adw::ApplicationWindow {
     ui.nav_stack
         .connect_visible_page_notify(clone!(@strong ui => move |view| {
             let page = view.visible_page().unwrap();
-            if page.tag().unwrap().to_string() == HOME_PAGE_TAG {
+
+            if page.tag().unwrap_or_default().to_string() == HOME_PAGE_TAG {
                 ui.back_btn.set_visible(false);
             } else {
                 ui.back_btn.set_visible(true);

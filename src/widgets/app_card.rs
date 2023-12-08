@@ -1,6 +1,5 @@
 use crate::prelude::*;
 
-
 #[derive(GtkWidget)]
 struct Template {
     pub root: gtk::Button,

@@ -11,6 +11,7 @@
         "bytesize",
         "flatbus",
         "flathub",
+        "flatpakref",
         "gresource",
         "halign",
         "hexpand",

@@ -1,10 +1,10 @@
-use crate::prelude::*;
 use super::json_helpers::deserialize_bool;
+use crate::prelude::*;
 
 pub enum Query {
     Popular,
     RecentlyAdded,
-    RecentlyUpdated
+    RecentlyUpdated,
 }
 
 #[derive(Deserialize, Debug)]

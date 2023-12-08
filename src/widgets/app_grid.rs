@@ -5,7 +5,7 @@ struct Template {
     pub flow: gtk::FlowBox,
 }
 
-pub fn app_grid(ctx: &Context, query: &flathub::QueryInfo) -> impl IsA<Widget> {
+pub fn app_grid(_ctx: &Context, query: &flathub::QueryInfo) -> impl IsA<Widget> {
     let ui: Template = blueprint!(Template, "src/widgets/app_grid.blp");
     for app in &query.hits {
         let clamp = adw::Clamp::new();

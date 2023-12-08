@@ -1,3 +1,6 @@
+#![feature(async_closure)]
+#![feature(cell_leak)]
+
 pub mod flathub;
 pub mod flatpak;
 pub mod prelude;
@@ -15,7 +18,8 @@ fn main() {
 
 #[allow(deprecated)]
 fn setup_resources() {
-    gio::resources_register_include!("compiled.gresource").expect(&tr!("Failed to register resources"));
+    gio::resources_register_include!("compiled.gresource")
+        .expect(&tr!("Failed to register resources"));
     let display = gdk::Display::default().expect(&tr!("Cannot get display"));
     let icon_theme = gtk::IconTheme::for_display(&display);
     icon_theme.add_resource_path(&format!("{}/icons", RESOURCE_PATH));

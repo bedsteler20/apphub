@@ -1,16 +1,15 @@
 use crate::prelude::*;
 use utils::open_url;
-use bytesize::ByteSize;
 
 #[derive(GtkWidget)]
 struct Template {
     root: gtk::FlowBox,
-    install_size_label: gtk::Label,
-    install_size_card: gtk::Box,
-    download_size_label: gtk::Label,
-    download_size_card: gtk::Box,
-    arch_label: gtk::Label,
-    arch_card: gtk::Box,
+    // install_size_label: gtk::Label,
+    // install_size_card: gtk::Box,
+    // download_size_label: gtk::Label,
+    // download_size_card: gtk::Box,
+    // arch_label: gtk::Label,
+    // arch_card: gtk::Box,
     license_card: gtk::Box,
     license_label: gtk::Label,
     website_card: gtk::Button,
@@ -28,8 +27,8 @@ struct Template {
     manifest_card: gtk::Button,
     manifest_label: gtk::Label,
 }
-
-pub fn app_links(app_info: &flathub::AppInfo, summary: &flathub::AppSummary) -> impl IsA<Widget> {
+// TODO: Move opening links to a gio action
+pub fn app_links(app_info: &flathub::AppInfo) -> impl IsA<Widget> {
     let ui: Template = blueprint!(Template, "src/widgets/app_links.blp");
 
     if let Some(links) = app_info.urls.as_ref() {
@@ -96,16 +95,16 @@ pub fn app_links(app_info: &flathub::AppInfo, summary: &flathub::AppSummary) -> 
             open_url(link.clone());
         }));
 
-    ui.arch_label.set_text(&summary.arches.join(", "));
-    ui.root.append(&ui.arch_card);
+    // ui.arch_label.set_text(&summary.arches.join(", "));
+    // ui.root.append(&ui.arch_card);
 
-    ui.install_size_label
-        .set_text(ByteSize::b(summary.installed_size).to_string().as_str());
-    ui.root.append(&ui.install_size_card);
+    // ui.install_size_label
+    //     .set_text(ByteSize::b(summary.installed_size).to_string().as_str());
+    // ui.root.append(&ui.install_size_card);
 
-    ui.download_size_label
-        .set_text(ByteSize::b(summary.installed_size).to_string().as_str());
-    ui.root.append(&ui.download_size_card);
+    // ui.download_size_label
+    //     .set_text(ByteSize::b(summary.installed_size).to_string().as_str());
+    // ui.root.append(&ui.download_size_card);
 
     return ui.root;
 }

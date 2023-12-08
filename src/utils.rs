@@ -5,7 +5,7 @@ use tokio::runtime::Runtime;
 pub const APP_ID: &str = "dev.bedsteler20.AppHub";
 pub const RESOURCE_PATH: &str = "/dev/bedsteler20/Apphub";
 pub const BASE_URL: &str = "https://flathub.org/api/v2";
-
+pub const REF_BASE_URL: &str = "https://dl.flathub.org/repo/appstream/";
 #[allow(non_upper_case_globals)]
 pub static runtime: OnceCell<Runtime> = OnceCell::new(|| {
     Runtime::new().expect(tr!("Setting up tokio runtime needs to succeed.").as_str())
@@ -17,6 +17,13 @@ macro_rules! blueprint {
         $struct_name::new(gtk::Builder::from_string(
             gtk::gtk4_macros::include_blueprint!($ui_file),
         ))
+    };
+}
+
+#[macro_export]
+macro_rules! blp_builder {
+    ($file:expr) => {
+        gtk::Builder::from_string(gtk::gtk4_macros::include_blueprint!($file))
     };
 }
 
