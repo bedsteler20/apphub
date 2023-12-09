@@ -7,9 +7,7 @@ struct Template {
     pub icon: gtk::Image,
     pub name_label: gtk::Label,
     pub dev_label: gtk::Label,
-    pub install_btn: gtk::Button,
-    pub uninstall_btn: gtk::Button,
-    pub open_btn: gtk::Button,
+    pub install_btn_container: adw::Bin,
     pub caracal_container: adw::Clamp,
     pub summary_label: gtk::Label,
     pub description_label: gtk::Label,
@@ -19,63 +17,44 @@ struct Template {
 pub fn app_page(ctx: &Context, app_id: &String) -> adw::NavigationPage {
     let ui: Template = blueprint!(Template, "src/widgets/app_page.blp");
 
-    let build_ui = clone!(@strong ui, @strong ctx => move |app_info: flathub::AppInfo| {
-        let app_id = app_info.id.clone();
+    let build_ui = {
+        let ui = ui.clone();
+        let ctx = ctx.clone();
+        let app_id = app_id.clone();
+        move |app_info: flathub::AppInfo| {
 
-        // ======== Setup State ========
-        if backend::is_app_installed(&app_info.id).unwrap_or(false) {
-            ui.install_btn.set_visible(false);
-            ui.uninstall_btn.set_visible(true);
-            ui.open_btn.set_visible(true);
-        } else {
-            ui.install_btn.set_visible(true);
-            ui.uninstall_btn.set_visible(false);
-            ui.open_btn.set_visible(false);
+           ui.install_btn_container.set_child(Some(&widgets::install_button(&ctx, &app_id)));
+
+            // ======== Display Data ========
+            ui.name_label.set_text(&app_info.name);
+            ui.app_links.set_child(Some(&widgets::app_links(&app_info)));
+
+            if let Some(summery) = app_info.summary.as_ref() {
+                ui.summary_label.set_text(summery);
+            }
+
+            if let Some(description) = app_info.description.as_ref() {
+                let description = description.replace("\n", "<br/>");
+                let description = description.replace("<p>", "").replace("</p>", "\n");
+                let description = description.replace("<ul>", "\n").replace("</ul>", "");
+                let description = description.replace("<li>", " - ").replace("</li>", "\n");
+                ui.description_label.set_markup(&description.to_string());
+            }
+
+            if let Some(developer) = app_info.developer_name.as_ref() {
+                ui.dev_label.set_text(developer);
+            }
+
+            if let Some(screenshots) = app_info.screenshots.as_ref() {
+                let caracal = widgets::screenshots_caracal(screenshots);
+                ui.caracal_container.set_child(Some(&caracal));
+            }
+
+            if let Some(icon) = app_info.icon.as_ref() {
+                widgets::image(icon, &ui.icon);
+            }
         }
-
-
-        // ======== Display Data ========
-        ui.name_label.set_text(&app_info.name);
-        ui.app_links.set_child(Some(&widgets::app_links(&app_info)));
-
-        ui.open_btn.connect_clicked(clone!(@strong app_id => move |_| {
-            backend::open_app(&app_id);
-        }));
-
-        ui.install_btn.connect_clicked(clone!(@strong app_id, @strong ctx => move |_| {
-        }));
-
-        ui.uninstall_btn.connect_clicked(clone!(@strong app_id, @strong ctx => move |_| {
-            // TODO: Start uninstall
-        }));
-
-        if let Some(summery) = app_info.summary.as_ref() {
-            ui.summary_label.set_text(summery);
-        }
-
-        if let Some(description) = app_info.description.as_ref() {
-            let description = description.replace("\n", "<br/>");
-            let description = description.replace("<p>", "").replace("</p>", "\n");
-            let description = description.replace("<ul>", "\n").replace("</ul>", "");
-            let description = description.replace("<li>", " - ").replace("</li>", "\n");
-            ui.description_label.set_markup(&description.to_string());
-        }
-
-        if let Some(developer) = app_info.developer_name.as_ref() {
-            ui.dev_label.set_text(developer);
-        }
-
-        if let Some(screenshots) = app_info.screenshots.as_ref() {
-            let caracal = widgets::screenshots_caracal(screenshots);
-            ui.caracal_container.set_child(Some(&caracal));
-        }
-
-
-        if let Some(icon) = app_info.icon.as_ref() {
-            widgets::image(icon, &ui.icon);
-        }
-
-    });
+    };
 
     let lazy = widgets::lazy(clone!(@strong ui => move |bin| {
         let (sender, receiver) = async_channel::bounded(1);

@@ -43,54 +43,8 @@ ScrolledWindow root {
                     }
                 }
 
-                Box  {
+                Adw.Bin install_btn_container {
                     valign: center;
-                    orientation: horizontal;
-                    halign: end;
-
-                    Button install_btn {
-                        margin-end: 10;
-                        margin-start: 10;
-                        margin-top: 10;
-                        margin-bottom: 10;
-                        halign: end;
-                        label: "Install";
-
-                        styles [
-                            "suggested-action",
-                            "pill"
-                        ]
-                    }
-
-                    Button open_btn {
-                        visible: false;
-                        margin-end: 10;
-                        margin-start: 10;
-                        margin-top: 10;
-                        margin-bottom: 10;
-                        halign: end;
-                        label: "Open";
-
-                        styles [
-                            "suggested-action",
-                            "pill"
-                        ]
-                    }
-
-                    Button uninstall_btn {
-                        visible: false;
-                        margin-end: 10;
-                        margin-top: 10;
-                        margin-bottom: 10;
-                        halign: end;
-                        width-request: 42;
-                        icon-name: "edit-delete-symbolic";
-
-                        styles [
-                            "destructive-action",
-                            "circular"
-                        ]
-                    }
                 }
             }
         }

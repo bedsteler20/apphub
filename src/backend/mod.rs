@@ -4,15 +4,22 @@ mod installation;
 mod transaction;
 mod run_transaction;
 mod source_id_collection;
+mod app_info;
+mod update;
 
 pub use apps::is_app_installed;
 pub use apps::list_installed_apps;
 pub use apps::open_app;
-pub use apps::InstalledAppInfo;
-
+pub use app_info::InstalledAppInfo;
+pub use app_info::GInstalledAppInfo;
+pub use apps::get_installed_app;
+pub use run_transaction::run_install;
+pub use run_transaction::run_uninstall;
+pub use run_transaction::run_update;
 pub use installation::InstallLocation;
 pub use transaction::ApphubTransaction;
 pub use transaction::TRANSACTION_ACTION_INSTALL;
 pub use transaction::TRANSACTION_ACTION_NONE;
 pub use transaction::TRANSACTION_ACTION_UNINSTALL;
 pub use transaction::TRANSACTION_ACTION_UPDATE;
+pub use update::apps_with_updates;

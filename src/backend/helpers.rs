@@ -1,26 +1,6 @@
-use super::installation::InstallLocation;
 use crate::prelude::*;
 
 const REF_BASE_URL: &str = "https://dl.flathub.org/repo/appstream/";
-
-pub fn get_installed_refs() -> Result<Vec<(InstallLocation, libflatpak::InstalledRef)>, glib::Error>
-{
-    let cancel = gio::Cancellable::new();
-    let sys_install = libflatpak::Installation::new_system(Some(&cancel))?;
-    let user_install = libflatpak::Installation::new_user(Some(&cancel))?;
-
-    let mut refs: Vec<(InstallLocation, libflatpak::InstalledRef)> = Vec::new();
-    let sys_refs = sys_install.list_installed_refs(Some(&cancel))?;
-    for r in sys_refs {
-        refs.push((InstallLocation::System, r));
-    }
-    let user_refs = user_install.list_installed_refs(Some(&cancel))?;
-    for r in user_refs {
-        refs.push((InstallLocation::User, r));
-    }
-
-    return Ok(refs);
-}
 
 pub fn get_icon_path(
     install: &libflatpak::Installation,
@@ -60,7 +40,7 @@ pub fn get_progress(
         .fold(0, |acc, x| acc + x.installed_size() + x.download_size());
 
     let weight = (prev_ops_size as f64 + bytes_transferred) / total as f64;
-    return weight;
+   return weight;
 }
 
 pub fn get_flatpak_ref(app_id: &str) -> reqwest::Result<glib::Bytes> {

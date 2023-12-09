@@ -14,5 +14,6 @@ pub fn app_grid(_ctx: &Context, query: &flathub::QueryInfo) -> impl IsA<Widget> 
         clamp.set_child(Some(&widgets::app_card(app)));
         ui.flow.append(&clamp);
     }
+
     return ui.flow;
 }

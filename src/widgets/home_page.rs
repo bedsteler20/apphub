@@ -5,9 +5,6 @@ struct Template {
     pub recently_added_box: gtk::Box,
     pub recently_updated_box: gtk::Box,
     pub popular_box: gtk::Box,
-    // pub recently_added_btn: gtk::Button,
-    // pub recently_updated_btn: gtk::Button,
-    // pub popular_btn: gtk::Button,
 }
 
 enum DataTagged {
@@ -18,18 +15,6 @@ enum DataTagged {
 
 pub fn home_page(ctx: &Context) -> adw::NavigationPage {
     let ui: Template = blueprint!(Template, "src/widgets/home_page.blp");
-
-    // ui.recently_added_btn
-    //     .set_action_name(Some("app.navigator.visit"));
-    // ui.recently_added_btn
-    //     .set_action_target_value(Some(&glib::Variant::from("/recently-added")));
-    // ui.recently_updated_btn
-    //     .set_action_name(Some("app.navigator.visit"));
-    // ui.recently_updated_btn
-    //     .set_action_target_value(Some(&glib::Variant::from("/recently-updated")));
-    // ui.popular_btn.set_action_name(Some("app.navigator.visit"));
-    // ui.popular_btn
-    //     .set_action_target_value(Some(&glib::Variant::from("/popular")));
 
     let lazy = widgets::lazy(clone!(@strong ui => move |bin| {
         let (sender, receiver) = async_channel::bounded::<DataTagged>(3);

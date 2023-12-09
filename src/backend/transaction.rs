@@ -4,7 +4,6 @@ use gtk::glib::subclass::{object::ObjectImpl, types::ObjectSubclass};
 
 use crate::prelude::*;
 use glib::subclass::prelude::*;
-use super::{installation::InstallLocation, run_transaction::run_transaction};
 pub const TRANSACTION_ACTION_NONE: i32 = 0;
 pub const TRANSACTION_ACTION_INSTALL: i32 = 1;
 pub const TRANSACTION_ACTION_UPDATE: i32 = 2;
@@ -44,29 +43,16 @@ glib::wrapper! {
 
 impl ApphubTransaction {
     pub fn new(app_id: &str, action: i32) -> ApphubTransaction {
-        glib::Object::builder()
-            .property("app_id", app_id)
+        dbg!("New transaction");
+        let br = glib::Object::builder()
+            .property("app-id", app_id)
             .property("progress", 0.0)
             .property("error", "")
             .property("action", action)
-            .property("has_error", false)
+            .property("has-error", false)
             .property("cancellable", Cancellable::new())
-            .build()
-    }
-
-    pub fn install(&self, install: InstallLocation) -> ApphubTransaction {
-        run_transaction(&self.app_id().unwrap(), install, TRANSACTION_ACTION_INSTALL)
-    }
-
-    pub fn uninstall(&self, install: InstallLocation) -> ApphubTransaction {
-        run_transaction(
-            &self.app_id().unwrap(),
-            install,
-            TRANSACTION_ACTION_UNINSTALL,
-        )
-    }
-
-    pub fn update(&self, install: InstallLocation) -> ApphubTransaction {
-        run_transaction(&self.app_id().unwrap(), install, TRANSACTION_ACTION_UPDATE)
+            .build();
+        dbg!("Transaction created");
+        br
     }
 }

@@ -20,11 +20,30 @@ macro_rules! blueprint {
     };
 }
 
-
 #[derive(Clone)]
 pub struct Context {
     pub window: adw::ApplicationWindow,
     pub app: adw::Application,
+    pub transactions: gio::ListStore,
+    pub app_updates: gio::ListStore,
+}
+
+impl Context {
+    pub fn add_transaction(&self, transaction: &backend::ApphubTransaction) {
+        let store = self.transactions.clone();
+        let index = self.transactions.n_items();
+        transaction.connect_progress_notify(move |t| {
+            if t.progress() >= 1.0 {
+                store.remove(index);
+            }
+        });
+        self.transactions.append(transaction);
+    }
+
+    pub fn check_for_updates(&self) {
+        let store = self.app_updates.clone();
+        backend::apps_with_updates(store);
+    }
 }
 
 pub fn open_url(url: String) {

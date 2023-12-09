@@ -16,3 +16,28 @@ impl InstallLocation {
         }
     }
 }
+
+impl Default for InstallLocation {
+    fn default() -> Self {
+        InstallLocation::System
+    }
+}
+
+impl From<i32> for InstallLocation {
+    fn from(i: i32) -> Self {
+        match i {
+            0 => InstallLocation::System,
+            1 => InstallLocation::User,
+            _ => InstallLocation::System,
+        }
+    }
+}
+
+impl From<InstallLocation> for i32 {
+    fn from(i: InstallLocation) -> Self {
+        match i {
+            InstallLocation::System => 0,
+            InstallLocation::User => 1,
+        }
+    }
+}

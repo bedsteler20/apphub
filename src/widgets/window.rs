@@ -20,7 +20,10 @@ pub fn window(app: &adw::Application) -> adw::ApplicationWindow {
     let ctx = Context {
         app: app.clone(),
         window: ui.root.clone(),
+        transactions: gio::ListStore::new::<backend::ApphubTransaction>(),
+        app_updates: gio::ListStore::new::<backend::GInstalledAppInfo>(),
     };
+    ctx.check_for_updates();
 
     let home_page = widgets::home_page(&ctx);
     home_page.set_tag(Some(HOME_PAGE_TAG));
