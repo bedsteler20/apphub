@@ -56,8 +56,7 @@ pub use crate::utils::RESOURCE_PATH;
 
 // ======= Re-Export Modules =======
 pub use crate::flathub;
-pub use crate::flatpak;
-pub use crate::store;
+pub use crate::backend;
 pub use crate::utils;
 pub use crate::utils::Context;
 pub use crate::widgets;

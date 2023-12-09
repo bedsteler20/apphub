@@ -20,7 +20,6 @@ pub fn window(app: &adw::Application) -> adw::ApplicationWindow {
     let ctx = Context {
         app: app.clone(),
         window: ui.root.clone(),
-        transaction_store: Rc::new(store::TransactionStore::new()),
     };
 
     let home_page = widgets::home_page(&ctx);

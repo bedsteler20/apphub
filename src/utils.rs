@@ -20,18 +20,11 @@ macro_rules! blueprint {
     };
 }
 
-#[macro_export]
-macro_rules! blp_builder {
-    ($file:expr) => {
-        gtk::Builder::from_string(gtk::gtk4_macros::include_blueprint!($file))
-    };
-}
 
 #[derive(Clone)]
 pub struct Context {
     pub window: adw::ApplicationWindow,
     pub app: adw::Application,
-    pub transaction_store: Rc<store::TransactionStore>,
 }
 
 pub fn open_url(url: String) {

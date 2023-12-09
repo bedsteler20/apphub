@@ -1,10 +1,6 @@
-#![feature(async_closure)]
-#![feature(cell_leak)]
-
 pub mod flathub;
-pub mod flatpak;
+pub mod backend;
 pub mod prelude;
-pub mod store;
 pub mod utils;
 pub mod widgets;
 

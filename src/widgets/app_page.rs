@@ -1,4 +1,4 @@
-use crate::{disconnect_handel, prelude::*};
+use crate::prelude::*;
 
 #[derive(GtkWidget, Clone)]
 #[allow(unused)]
@@ -23,7 +23,7 @@ pub fn app_page(ctx: &Context, app_id: &String) -> adw::NavigationPage {
         let app_id = app_info.id.clone();
 
         // ======== Setup State ========
-        if flatpak::is_app_installed(&app_info.id).unwrap_or(false) {
+        if backend::is_app_installed(&app_info.id).unwrap_or(false) {
             ui.install_btn.set_visible(false);
             ui.uninstall_btn.set_visible(true);
             ui.open_btn.set_visible(true);
@@ -33,32 +33,16 @@ pub fn app_page(ctx: &Context, app_id: &String) -> adw::NavigationPage {
             ui.open_btn.set_visible(false);
         }
 
-        if let Some(state) = ctx.transaction_store.get(&app_id) {
-            match state.state {
-                store::TransactionState::Install => {
-                    if state.stage == store::TransactionStage::Progress {
-                        // TODO: Show progress
-                    }
-                },
-                store::TransactionState::Uninstall => {
-                    if state.stage == store::TransactionStage::Progress {
-                        // TODO: Show progress
-                    }
-                },
-                _ => {},
-            };
-        }
 
         // ======== Display Data ========
         ui.name_label.set_text(&app_info.name);
         ui.app_links.set_child(Some(&widgets::app_links(&app_info)));
 
         ui.open_btn.connect_clicked(clone!(@strong app_id => move |_| {
-            flatpak::open_app(&app_id);
+            backend::open_app(&app_id);
         }));
 
         ui.install_btn.connect_clicked(clone!(@strong app_id, @strong ctx => move |_| {
-            flatpak::install_app(&ctx, flatpak::InstallLocation::User, &app_id)
         }));
 
         ui.uninstall_btn.connect_clicked(clone!(@strong app_id, @strong ctx => move |_| {
@@ -90,83 +74,6 @@ pub fn app_page(ctx: &Context, app_id: &String) -> adw::NavigationPage {
         if let Some(icon) = app_info.icon.as_ref() {
             widgets::image(icon, &ui.icon);
         }
-
-
-        // ======== Bind State ========
-        let handle = ctx.transaction_store.subscribe(&app_id, Rc::new(clone!(@strong ui => move |transact| {
-            match transact.state {
-                store::TransactionState::Install => {
-                    if transact.canaled {
-                        ui.install_btn.set_visible(true);
-                        ui.uninstall_btn.set_visible(false);
-                        ui.open_btn.set_visible(false);
-                        return;
-                    }
-
-                    if transact.error.is_some() {
-                        ui.install_btn.set_visible(true);
-                        ui.uninstall_btn.set_visible(false);
-                        ui.open_btn.set_visible(false);
-                        return;
-                    }
-
-                    match transact.stage {
-                        store::TransactionStage::Start => {
-                            ui.install_btn.set_visible(false);
-                            ui.uninstall_btn.set_visible(false);
-                            ui.open_btn.set_visible(false);
-                        },
-                        store::TransactionStage::Progress => {
-                            println!("Progress: {}", transact.progress);
-                        },
-                        store::TransactionStage::End => {
-                            ui.install_btn.set_visible(false);
-                            ui.uninstall_btn.set_visible(true);
-                            ui.open_btn.set_visible(true);
-                        },
-                    };
-                },
-                store::TransactionState::Uninstall => {
-                    if transact.canaled {
-                        ui.install_btn.set_visible(false);
-                        ui.uninstall_btn.set_visible(true);
-                        ui.open_btn.set_visible(true);
-                        return;
-                    }
-
-                    if transact.error.is_some() {
-                        ui.install_btn.set_visible(false);
-                        ui.uninstall_btn.set_visible(true);
-                        ui.open_btn.set_visible(true);
-                        return;
-                    }
-
-                    match transact.stage {
-                        store::TransactionStage::Start => {
-                            ui.install_btn.set_visible(false);
-                            ui.uninstall_btn.set_visible(false);
-                            ui.open_btn.set_visible(false);
-                        },
-                        store::TransactionStage::Progress => {
-                            println!("Progress: {}", transact.progress);
-                        },
-                        store::TransactionStage::End => {
-                            ui.install_btn.set_visible(true);
-                            ui.uninstall_btn.set_visible(false);
-                            ui.open_btn.set_visible(false);
-                        },
-                    };
-                },
-                _ => {},
-            };
-        })));
-
-
-
-        disconnect_handel!(ui.root, handle, |s| {
-            ctx.transaction_store.unsubscribe(s);
-        });
-
 
     });
 
