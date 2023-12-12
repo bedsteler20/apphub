@@ -92,12 +92,6 @@ pub fn run_install(app_id: &str, install: InstallLocation) -> ApphubTransaction 
         }
     }));
 
-    transaction.cancellable().clone().connect_cancelled_local({
-        let mut src_ids = src_ids.clone();
-        move |_| {
-            src_ids.remove();
-        }
-    });
 
     return transaction;
 }

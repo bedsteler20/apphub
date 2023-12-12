@@ -1,0 +1,96 @@
+using Gtk 4.0;
+using Adw 1;
+
+Box welcome {
+    orientation: vertical;
+    valign: center;
+    halign: center;
+
+Button root {
+    width-request: 400;
+    hexpand: true;
+    vexpand: false;
+    halign: center;
+
+    styles [
+        "card",
+    ]
+
+    Box {
+        margin-bottom: 10;
+        margin-end: 10;
+        margin-start: 10;
+        margin-top: 10;
+        orientation: horizontal;
+
+        styles [
+            "header",
+        ]
+
+        Image image {
+            pixel-size: 48;
+            valign: center;
+            margin-end: 10;
+            file: "/home/bedsteler20/.local/share/flatpak/appstream/flathub/x86_64/active/icons/64x64/org.gnome.Builder.png";
+
+            styles [
+                "icon-dropshadow",
+            ]
+        }
+
+        Box {
+            orientation: vertical;
+            valign: center;
+            hexpand: true;
+
+            styles [
+                "title",
+            ]
+
+            Label name_label {
+                wrap: true;
+                xalign: 0.0;
+                yalign: 0.5;
+                ellipsize: end;
+                lines: 3;
+                wrap-mode: word_char;
+                label: "Builder";
+
+                styles [
+                    "title-4",
+                ]
+            }
+        }
+
+        Button notes_btn {
+                    width-request: 48;
+
+            icon-name: "text-x-generic-symbolic";
+                        margin-end: 10;
+
+        }
+
+        Button update_btn {
+                    width-request: 48;
+
+            icon-name: "arrow3-down-symbolic";
+
+            styles [
+                "suggested-action"
+            ]
+        }
+
+        Gtk.Spinner spinner {
+            height-request: 48;
+            hexpand-set: true;
+            spinning: true; 
+            valign: center;
+            margin-end: 10;
+            margin-start: 10;
+            visible: false;
+        }
+    }
+}
+
+
+}

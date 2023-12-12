@@ -5,7 +5,7 @@ use crate::prelude::*;
 use super::{app_info::GInstalledAppInfo, apps::process_ref, InstallLocation, InstalledAppInfo};
 
 pub fn apps_with_updates(list_store: gio::ListStore) {
-    for i in 0..(list_store.n_items() - 1) {
+    for i in 0..(list_store.n_items()) {
         list_store.remove(i);
     }
     let (sender, receiver) =
