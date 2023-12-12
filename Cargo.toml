@@ -5,4 +5,5 @@ members = [
 	"portal",
 	"portal_client",
 	"dbus_types"
-]
+, "shared"]
+resolver = "2"
