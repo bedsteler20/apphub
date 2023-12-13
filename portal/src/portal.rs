@@ -1,7 +1,9 @@
 use libflatpak::{gio::Cancellable, prelude::*};
+use shared::RUNTIME;
 use tokio::sync::Mutex;
 use zbus::{dbus_interface, fdo, SignalContext};
-use shared::RUNTIME;
+
+use crate::helpers::{get_flatpak_ref, TransactionState, track_transaction};
 
 pub struct ApphubPortal {
     store: Mutex<Vec<dbus_types::Transaction>>,
@@ -94,39 +96,71 @@ impl ApphubPortal {
         transaction_id: u32,
         #[zbus(signal_context)] ctx: SignalContext<'_>,
     ) -> fdo::Result<()> {
-        enum Msg {
-            Progress(f64),
-            Error(String),
-            Done,
+        let store = self.store.lock().await;
+        let transaction = (*store)
+            .iter()
+            .find(|t| t.id == transaction_id)
+            .unwrap()
+            .clone();
+        if transaction.transaction_type != dbus_types::TransactionType::Install {
+            return Err(fdo::Error::Failed(
+                "Transaction is not an install transaction".into(),
+            ));
         }
 
-        let (sender, receiver) = std::sync::mpsc::channel::<Msg>();
+        let (sender, receiver) = std::sync::mpsc::channel::<TransactionState>();
 
         RUNTIME.spawn(async move {
-            
+            let cancellable = Cancellable::NONE;
+            let install: libflatpak::Installation = transaction.install_location.into();
+            let app_id = transaction.app_id;
+            let transaction = libflatpak::Transaction::for_installation(&install, cancellable);
+            if let Err(e) = transaction {
+                sender.send(TransactionState::Error(e.to_string())).unwrap();
+                return;
+            }
+            let transaction = transaction.unwrap();
+
+            let ref_file = get_flatpak_ref(&app_id);
+            if let Err(e) = ref_file {
+                sender.send(TransactionState::Error(e.to_string())).unwrap();
+                return;
+            }
+            let ref_file = ref_file.unwrap();
+            if let Err(e) = transaction.add_install_flatpakref(&ref_file) {
+                sender.send(TransactionState::Error(e.to_string())).unwrap();
+                return;
+            }
+            track_transaction(&sender, &transaction);
+            let res = transaction.run(cancellable);
+            if let Err(e) = res {
+                sender.send(TransactionState::Error(e.to_string())).unwrap();
+                return;
+            } else {
+                sender.send(TransactionState::Done).unwrap();
+            }
         });
 
         loop {
             let msg = receiver.recv().unwrap();
             match msg {
-                Msg::Progress(progress) => {
+                TransactionState::Progress(progress) => {
                     let mut store = self.store.lock().await;
                     let transaction = store.iter_mut().find(|t| t.id == transaction_id).unwrap();
-                    transaction.progress = progress;
-
+                    (*transaction).progress = progress;
                     Self::progress_changed(&ctx, transaction_id, progress)
                         .await
                         .unwrap();
                 }
-                Msg::Error(error) => {
+                TransactionState::Error(error) => {
                     let mut store = self.store.lock().await;
                     let transaction = store.iter_mut().find(|t| t.id == transaction_id).unwrap();
-                    transaction.error = error;
+                    (*transaction).error = error;
                 }
-                Msg::Done => {
+                TransactionState::Done => {
                     let mut store = self.store.lock().await;
+                    (*store).retain(|t| t.id != transaction_id);
                     Self::transaction_done(&ctx, transaction_id).await.unwrap();
-                    store.retain(|t| t.id != transaction_id);
                     break;
                 }
             }
@@ -134,6 +168,172 @@ impl ApphubPortal {
 
         Ok(())
     }
+
+    async fn uninstall(
+        &self,
+        transaction_id: u32,
+        #[zbus(signal_context)] ctx: SignalContext<'_>,
+    ) -> fdo::Result<()> {
+        let store = self.store.lock().await;
+        let transaction = (*store)
+            .iter()
+            .find(|t| t.id == transaction_id)
+            .unwrap()
+            .clone();
+        if transaction.transaction_type != dbus_types::TransactionType::Uninstall {
+            return Err(fdo::Error::Failed(
+                "Transaction is not an uninstall transaction".into(),
+            ));
+        }
+        let info = self.get_app_info(&transaction.app_id).await?;
+
+        let (sender, receiver) = std::sync::mpsc::channel::<TransactionState>();
+
+        RUNTIME.spawn(async move {
+            let cancellable = Cancellable::NONE;
+            let install: libflatpak::Installation = transaction.install_location.into();
+            let transaction = libflatpak::Transaction::for_installation(&install, cancellable);
+            if let Err(e) = transaction {
+                sender.send(TransactionState::Error(e.to_string())).unwrap();
+                return;
+            }
+            let transaction = transaction.unwrap();
+
+            if let Err(e) = transaction.add_uninstall(&info.flatpak_ref) {
+                sender.send(TransactionState::Error(e.to_string())).unwrap();
+                return;
+            }
+            track_transaction(&sender, &transaction);
+            let res = transaction.run(cancellable);
+            if let Err(e) = res {
+                sender.send(TransactionState::Error(e.to_string())).unwrap();
+                return;
+            } else {
+                sender.send(TransactionState::Done).unwrap();
+            }
+        });
+
+        loop {
+            let msg = receiver.recv().unwrap();
+            match msg {
+                TransactionState::Progress(progress) => {
+                    let mut store = self.store.lock().await;
+                    let transaction = store.iter_mut().find(|t| t.id == transaction_id).unwrap();
+                    (*transaction).progress = progress;
+                    Self::progress_changed(&ctx, transaction_id, progress)
+                        .await
+                        .unwrap();
+                }
+                TransactionState::Error(error) => {
+                    let mut store = self.store.lock().await;
+                    let transaction = store.iter_mut().find(|t| t.id == transaction_id).unwrap();
+                    (*transaction).error = error;
+                }
+                TransactionState::Done => {
+                    let mut store = self.store.lock().await;
+                    (*store).retain(|t| t.id != transaction_id);
+                    Self::transaction_done(&ctx, transaction_id).await.unwrap();
+                    break;
+                }
+            }
+        }
+
+        Ok(())
+    }
+
+    
+    async fn update(
+        &self,
+        transaction_id: u32,
+        #[zbus(signal_context)] ctx: SignalContext<'_>,
+    ) -> fdo::Result<()> {
+        let store = self.store.lock().await;
+        let transaction = (*store)
+            .iter()
+            .find(|t| t.id == transaction_id)
+            .unwrap()
+            .clone();
+        if transaction.transaction_type != dbus_types::TransactionType::Update {
+            return Err(fdo::Error::Failed(
+                "Transaction is not an update transaction".into(),
+            ));
+        }
+        let info = self.get_app_info(&transaction.app_id).await?;
+        let (sender, receiver) = std::sync::mpsc::channel::<TransactionState>();
+
+        RUNTIME.spawn(async move {
+            let cancellable = Cancellable::NONE;
+            let install: libflatpak::Installation = transaction.install_location.into();
+            let transaction = libflatpak::Transaction::for_installation(&install, cancellable);
+            if let Err(e) = transaction {
+                sender.send(TransactionState::Error(e.to_string())).unwrap();
+                return;
+            }
+            let transaction = transaction.unwrap();
+
+            if let Err(e) = transaction.add_update(&info.flatpak_ref, &[], None) {
+                sender.send(TransactionState::Error(e.to_string())).unwrap();
+                return;
+            }
+            track_transaction(&sender, &transaction);
+            let res = transaction.run(cancellable);
+            if let Err(e) = res {
+                sender.send(TransactionState::Error(e.to_string())).unwrap();
+                return;
+            } else {
+                sender.send(TransactionState::Done).unwrap();
+            }
+        });
+
+        loop {
+            let msg = receiver.recv().unwrap();
+            match msg {
+                TransactionState::Progress(progress) => {
+                    let mut store = self.store.lock().await;
+                    let transaction = store.iter_mut().find(|t| t.id == transaction_id).unwrap();
+                    (*transaction).progress = progress;
+                    Self::progress_changed(&ctx, transaction_id, progress)
+                        .await
+                        .unwrap();
+                }
+                TransactionState::Error(error) => {
+                    let mut store = self.store.lock().await;
+                    let transaction = store.iter_mut().find(|t| t.id == transaction_id).unwrap();
+                    (*transaction).error = error;
+                }
+                TransactionState::Done => {
+                    let mut store = self.store.lock().await;
+                    (*store).retain(|t| t.id != transaction_id);
+                    Self::transaction_done(&ctx, transaction_id).await.unwrap();
+                    break;
+                }
+            }
+        }
+
+        Ok(())
+    }
+
+    
+    async fn apps_with_updates(&self) -> fdo::Result<Vec<dbus_types::AppInfo>>  {
+        let mut apps = Vec::new();
+        
+        let u_install = libflatpak::Installation::new_user(Cancellable::NONE)
+            .map_err(|e| fdo::Error::Failed(e.to_string()))?;
+        let s_install = libflatpak::Installation::new_system(Cancellable::NONE)
+            .map_err(|e| fdo::Error::Failed(e.to_string()))?;
+
+        for i in vec![u_install, s_install] {
+            let refs = i
+                .list_installed_refs(Cancellable::NONE)
+                .map_err(|e| fdo::Error::Failed(e.to_string()))?;
+            for r in refs {
+                apps.push(r.into());
+            }
+        }
+
+        return Ok(apps);
+    }
+
 
     #[dbus_interface(signal)]
     async fn progress_changed(

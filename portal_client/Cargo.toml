@@ -7,7 +7,9 @@ edition = "2021"
 
 [dependencies]
 dbus_types = { version = "0.1.0", path = "../dbus_types" }
+futures = "0.3.29"
 gio = "0.18.4"
 glib = "0.18.4"
 shared = { version = "0.1.0", path = "../shared" }
+tokio = { version = "1.35.0", features = ["full"] }
 zbus = { version = "3.14.1", features = ["tokio"] }

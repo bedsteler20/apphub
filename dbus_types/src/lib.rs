@@ -52,7 +52,7 @@ impl Transaction {
     }
 }
 
-#[derive(Clone, Debug, serde::Serialize, Deserialize, zvariant::Type)]
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, Deserialize, zvariant::Type)]
 pub enum TransactionType {
     Install,
     Uninstall,
