@@ -1,3 +1,5 @@
+use crate::{InstallLocation, TransactionType};
+
 mod imp {
     use std::cell::{Cell, RefCell};
 
@@ -18,10 +20,10 @@ mod imp {
         id: Cell<u32>,
         #[property(get, set)]
         done: Cell<bool>,
-        #[property(get, set, builder(super::ApphubInstallLocation::default()))]
-        install_location: Cell<super::ApphubInstallLocation>,
-        #[property(get, set, builder(super::ApphubTransactionType::default()))]
-        transaction_type: Cell<super::ApphubTransactionType>,
+        #[property(get, set, builder(super::InstallLocation::default()))]
+        install_location: Cell<super::InstallLocation>,
+        #[property(get, set, builder(super::TransactionType::default()))]
+        transaction_type: Cell<super::TransactionType>,
     }
 
     #[glib::object_subclass]
@@ -53,48 +55,12 @@ impl ApphubTransaction {
             .property("error", err)
             .property(
                 "install-location",
-                Into::<ApphubInstallLocation>::into(transaction.install_location),
+                Into::<InstallLocation>::into(transaction.install_location),
             )
             .property(
                 "transaction-type",
-                Into::<ApphubTransactionType>::into(transaction.transaction_type),
+                Into::<TransactionType>::into(transaction.transaction_type),
             )
             .build()
-    }
-}
-
-#[derive(Debug, Default, Copy, Clone, PartialEq, Eq, glib::Enum)]
-#[enum_type(name = "ApphubInstallLocation")]
-pub enum ApphubInstallLocation {
-    #[default]
-    System,
-    User,
-}
-
-impl From<dbus_types::InstallLocation> for ApphubInstallLocation {
-    fn from(value: dbus_types::InstallLocation) -> Self {
-        match value {
-            dbus_types::InstallLocation::System => ApphubInstallLocation::System,
-            dbus_types::InstallLocation::User => ApphubInstallLocation::User,
-        }
-    }
-}
-
-#[derive(Debug, Default, Copy, Clone, PartialEq, Eq, glib::Enum)]
-#[enum_type(name = "ApphubTransactionType")]
-pub enum ApphubTransactionType {
-    #[default]
-    Install,
-    Update,
-    Uninstall,
-}
-
-impl From<dbus_types::TransactionType> for ApphubTransactionType {
-    fn from(value: dbus_types::TransactionType) -> Self {
-        match value {
-            dbus_types::TransactionType::Install => ApphubTransactionType::Install,
-            dbus_types::TransactionType::Uninstall => ApphubTransactionType::Uninstall,
-            dbus_types::TransactionType::Update => ApphubTransactionType::Update,
-        }
     }
 }

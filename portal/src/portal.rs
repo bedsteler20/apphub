@@ -3,7 +3,7 @@ use shared::RUNTIME;
 use tokio::sync::Mutex;
 use zbus::{dbus_interface, fdo, SignalContext};
 
-use crate::helpers::{get_flatpak_ref, TransactionState, track_transaction};
+use crate::helpers::{get_flatpak_ref, track_transaction, TransactionState};
 
 pub struct ApphubPortal {
     store: Mutex<Vec<dbus_types::Transaction>>,
@@ -241,7 +241,6 @@ impl ApphubPortal {
         Ok(())
     }
 
-    
     async fn update(
         &self,
         transaction_id: u32,
@@ -313,10 +312,9 @@ impl ApphubPortal {
         Ok(())
     }
 
-    
-    async fn apps_with_updates(&self) -> fdo::Result<Vec<dbus_types::AppInfo>>  {
+    async fn apps_with_updates(&self) -> fdo::Result<Vec<dbus_types::AppInfo>> {
         let mut apps = Vec::new();
-        
+
         let u_install = libflatpak::Installation::new_user(Cancellable::NONE)
             .map_err(|e| fdo::Error::Failed(e.to_string()))?;
         let s_install = libflatpak::Installation::new_system(Cancellable::NONE)
@@ -333,7 +331,6 @@ impl ApphubPortal {
 
         return Ok(apps);
     }
-
 
     #[dbus_interface(signal)]
     async fn progress_changed(

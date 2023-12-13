@@ -1,6 +1,6 @@
 use std::sync::mpsc::Sender;
 
-use crate::{ApphubPortalProxy, ApphubPortalProxyBlocking, ApphubTransaction};
+use crate::{ApphubPortalProxy, ApphubPortalProxyBlocking, ApphubTransaction, InstallLocation};
 use futures::StreamExt;
 use gio::prelude::*;
 use shared::RUNTIME;
@@ -13,9 +13,7 @@ enum InMsg {
 }
 
 enum OutMsg {
-    Install(u32),
-    Uninstall(u32),
-    Update(u32),
+    Install(String, InstallLocation),
 }
 
 pub struct Client {
@@ -38,6 +36,7 @@ impl Client {
             let proxy = ApphubPortalProxy::new(&connection)
                 .await
                 .expect("Failed to connect to apphub portal");
+
             // Pulling for each signal needs to be done in a separate task
             // otherwise the first task will block the second one
             let progress_changed_task = {
@@ -52,7 +51,7 @@ impl Client {
                     }
                 }
             };
-            
+
             let transaction_added_task = {
                 let in_sender = in_sender.clone();
                 let mut proxy = proxy.receive_transaction_added().await.unwrap();
@@ -64,7 +63,9 @@ impl Client {
                             println!("Got transaction added");
                             let args = v.args().unwrap();
                             let transaction = args.transaction;
-                            in_sender.send(InMsg::TransactionAdded(transaction)).unwrap();
+                            in_sender
+                                .send(InMsg::TransactionAdded(transaction))
+                                .unwrap();
                         } else {
                             println!("No more transactions");
                         }
@@ -98,11 +99,33 @@ impl Client {
                 }
             };
 
+            let output_task = {
+                async move {
+                    while let Ok(msg) = out_receiver.recv() {
+                        match msg {
+                            OutMsg::Install(app_id, location) => {
+                                let id = proxy
+                                    .create_transaction(
+                                        &app_id,
+                                        location.into(),
+                                        dbus_types::TransactionType::Install,
+                                    )
+                                    .await
+                                    .expect("Failed to create transaction");
+                                let tsk = proxy.install(id);
+                                
+                            }
+                        };
+                    }
+                }
+            };
+
             tokio::join!(
                 progress_changed_task,
                 transaction_added_task,
                 transaction_error_task,
                 transaction_done_task,
+                output_task
             );
         });
 
@@ -145,7 +168,6 @@ impl Client {
             transactions,
         }
     }
-
 }
 
 fn find_transaction(ls: &gio::ListStore, id: u32) -> Option<(u32, ApphubTransaction)> {
