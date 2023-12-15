@@ -71,6 +71,8 @@ dependencies = [
  "gtk4",
  "libadwaita",
  "libflatpak",
+ "serde",
+ "serde_json",
  "surf",
 ]
 

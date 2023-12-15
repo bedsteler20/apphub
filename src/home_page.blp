@@ -1,0 +1,112 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $ApphubHomePage: Adw.Bin {
+    child: Gtk.ScrolledWindow root {
+        vexpand: true;
+        hscrollbar-policy: never;
+        propagate-natural-height: true;
+        has-frame: true;
+
+        Box {
+            orientation: vertical;
+            halign: center;
+            // homogeneous: true;
+            Box recently_added_box {
+                orientation: vertical;
+                halign: center;
+                margin-bottom: 20;
+                margin-top: 20;
+                // homogeneous: true;
+                Box {
+                    orientation: horizontal;
+                    hexpand: true;
+                    margin-bottom: 20;
+                    margin-top: 20;
+
+                    Label {
+                        halign: start;
+                        label: _("Recently Added Apps");
+                        hexpand: true;
+
+                        styles [
+                            "title-2"
+                        ]
+                    }
+
+                    Button recently_added_btn {
+                        label: "More";
+                        halign: end;
+
+                        styles [
+                            "suggested-action"
+                        ]
+                    }
+                }
+            }
+
+            Box recently_updated_box {
+                orientation: vertical;
+                halign: center;
+                margin-bottom: 20;
+
+                Box {
+                    orientation: horizontal;
+                    hexpand: true;
+                    margin-bottom: 20;
+
+                    Label {
+                        halign: start;
+                        label: _("Recently Updated Apps");
+                        hexpand: true;
+
+                        styles [
+                            "title-2"
+                        ]
+                    }
+
+                    Button recently_updated_btn {
+                        label: "More";
+                        halign: end;
+
+                        styles [
+                            "suggested-action"
+                        ]
+                    }
+                }
+            }
+
+            Box popular_box {
+                orientation: vertical;
+                halign: center;
+                margin-bottom: 20;
+                margin-top: 20;
+
+                Box {
+                    orientation: horizontal;
+                    hexpand: true;
+                    margin-bottom: 20;
+
+                    Label {
+                        halign: start;
+                        label: _("Popular Apps");
+                        hexpand: true;
+
+                        styles [
+                            "title-2"
+                        ]
+                    }
+
+                    Button popular_btn {
+                        label: "More";
+                        halign: end;
+
+                        styles [
+                            "suggested-action"
+                        ]
+                    }
+                }
+            }
+        }
+    };
+}
