@@ -51,3 +51,9 @@ glib::wrapper! {
     @implements gtk::Accessible, gtk::Buildable,
                 gtk::ConstraintTarget;
 }
+
+impl ApphubAppPage {
+    pub fn new(app_id: &str) -> Self {
+        glib::Object::builder().build()
+    }
+}

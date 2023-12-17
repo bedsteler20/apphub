@@ -1,4 +1,3 @@
-
 mod imp {
     use adw::subclass::prelude::*;
     use glib::subclass::InitializingObject;
@@ -43,10 +42,15 @@ mod imp {
     impl BinImpl for ApphubHomePage {}
 }
 
-
 glib::wrapper! {
     pub struct ApphubHomePage(ObjectSubclass<imp::ApphubHomePage>)
     @extends adw::Bin, gtk::Widget,
     @implements gtk::Accessible, gtk::Buildable,
                 gtk::ConstraintTarget;
+}
+
+impl ApphubHomePage {
+    pub fn new() -> Self {
+        glib::Object::builder().build()
+    }
 }

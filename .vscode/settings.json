@@ -5,6 +5,7 @@
         "flathub",
         "flatpakref",
         "klass",
-        "libflatpak"
+        "libflatpak",
+        "pixbuf"
     ]
 }

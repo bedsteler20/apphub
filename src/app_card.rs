@@ -1,3 +1,7 @@
+use glib::{subclass::types::ObjectSubclassIsExt, Variant};
+use gtk::prelude::*;
+use crate::{flathub_client::AppHit, image::load_image};
+
 
 mod imp {
     use adw::subclass::prelude::*;
@@ -44,4 +48,27 @@ glib::wrapper! {
     @extends gtk::Button, gtk::Widget,
     @implements gtk::Accessible, gtk::Buildable, 
                 gtk::ConstraintTarget, gtk::Actionable;
+}
+
+impl ApphubAppCard {
+    pub fn new() -> Self {
+        glib::Object::builder().build()
+    }
+
+    pub fn load_from_hit(&self, app: AppHit) {
+        let ui = self.imp();
+        ui.name_label.set_text(&app.name);
+        ui.description_label.set_text(&app.summary);
+    
+        ui.image.set_from_icon_name(Some("image-missing"));
+        self.set_action_name(Some("app.navigator.visit"));
+        self
+            .set_action_target_value(Some(&Variant::from(format!("/app/{}", &app.app_id))));
+        if let Some(icon) = app.icon.as_ref() {
+            load_image(icon, &ui.image);
+        }
+        // BUG: After navigation to a new page the button is staying focused
+        // preventing the user from scrolling with the mouse wheel.
+        self.set_focus_on_click(false);
+    }
 }

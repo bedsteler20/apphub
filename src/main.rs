@@ -13,8 +13,7 @@ mod app_page;
 mod home_page;
 mod install_btn;
 mod screenshots_caracal;
-mod context;
-
+mod image;
 use crate::prelude::*;
 
 fn main() -> glib::ExitCode {

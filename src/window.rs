@@ -1,7 +1,17 @@
+use adw::prelude::*;
+
 mod imp {
+    use adw::prelude::*;
     use adw::subclass::prelude::*;
     use glib::subclass::InitializingObject;
     use gtk::CompositeTemplate;
+
+    use crate::app_page::ApphubAppPage;
+    use crate::home_page::ApphubHomePage;
+
+    static HOME_VIEW_TAG: &str = "home_view";
+
+    static HOME_PAGE_TAG: &str = "home_page";
 
     #[derive(CompositeTemplate, Default)]
     #[template(file = "src/window.blp")]
@@ -35,9 +45,82 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for ApphubWindow {}
+    impl ObjectImpl for ApphubWindow {
+        fn constructed(&self) {
+            self.parent_constructed();
+
+            // Setup UI
+            let home_page = adw::NavigationPage::builder()
+                .title("Explore")
+                .child(&ApphubHomePage::new())
+                .tag(HOME_PAGE_TAG)
+                .build();
+
+            self.view_stack.add_titled_with_icon(
+                &self.nav_stack.get(),
+                Some(HOME_VIEW_TAG),
+                "Explore",
+                "compass-symbolic",
+            );
+
+            self.nav_stack.push(&home_page);
+
+            // Connect signals
+
+            self.nav_stack.connect_visible_page_notify({
+                let btn = self.back_btn.get();
+                move |nav_stack| {
+                    let page = nav_stack.visible_page().unwrap();
+                    if page.tag().unwrap_or_default().to_string() == HOME_PAGE_TAG {
+                        btn.set_visible(false);
+                    } else {
+                        btn.set_visible(true);
+                    }
+                }
+            });
+
+            // Setup actions
+            let visit_action = gio::SimpleAction::new(
+                "navigator.visit",
+                Some(&glib::VariantType::new("s").unwrap()),
+            );
+            let back_action = gio::SimpleAction::new("navigator.back", None);
+
+            back_action.connect_activate({
+                let nav_stack = self.nav_stack.get();
+                move |_, _| {
+                    nav_stack.pop();
+                }
+            });
+
+            visit_action.connect_activate({
+                let nav_stack = self.nav_stack.get();
+                move |_, parameter| {
+                    let url = parameter.unwrap().get::<String>().unwrap();
+                    let parts = url.split('/').collect::<Vec<&str>>();
+                    match parts[1] {
+                        "app" => {
+                            let app_id = parts[2];
+                            let app_page = ApphubAppPage::new(app_id);
+                            let app_page = adw::NavigationPage::builder().child(&app_page).build();
+                            nav_stack.push(&app_page);
+                        }
+                        _ => {
+                            nav_stack.pop_to_page(&home_page);
+                        }
+                    }
+                }
+            });
+
+            self.obj().add_action(&visit_action);
+            self.obj().add_action(&back_action);
+
+        }
+    }
     impl ApplicationWindowImpl for ApphubWindow {}
-    impl AdwApplicationWindowImpl for ApphubWindow {}
+    impl AdwApplicationWindowImpl for ApphubWindow {
+
+    }
     impl WindowImpl for ApphubWindow {}
     impl WidgetImpl for ApphubWindow {}
 }
@@ -53,8 +136,8 @@ glib::wrapper! {
 
 impl ApphubWindow {
     pub fn new(app: &adw::Application) -> Self {
-        glib::Object::builder()
-            .property("application", app)
-            .build()
+        let this: Self = glib::Object::builder().build();
+        this.set_application(Some(app));
+        this
     }
 }
