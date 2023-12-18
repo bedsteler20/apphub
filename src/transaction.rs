@@ -1,12 +1,9 @@
-use std::{sync::Arc, thread};
+use std::thread;
 
 use crate::prelude::*;
 
 mod imp {
-    use std::{
-        cell::{Cell, RefCell},
-        future::Future,
-    };
+    use std::cell::{Cell, RefCell};
 
     use glib::subclass::{object::ObjectImpl, types::ObjectSubclass};
 

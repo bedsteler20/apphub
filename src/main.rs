@@ -14,6 +14,8 @@ mod home_page;
 mod install_btn;
 mod screenshots_caracal;
 mod image;
+mod data_loader;
+mod context;
 use crate::prelude::*;
 
 fn main() -> glib::ExitCode {

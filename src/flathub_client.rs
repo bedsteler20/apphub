@@ -1,19 +1,19 @@
 use serde::de;
 use serde::Deserialize;
 use surf::Client as SurfClient;
-use surf::{Config, Result};
+use surf::Result;
 
 pub struct Client {
     client: SurfClient,
+    base_url: String,
 }
 
 impl Client {
     pub fn new() -> Self {
-        let client: SurfClient = Config::new()
-            .set_base_url("https://flathub.org/api/v2".parse().unwrap())
-            .try_into()
-            .unwrap();
-        Self { client }
+        Self {
+            client: SurfClient::new(),
+            base_url: "https://flathub.org/api/v2".to_string(),
+        }
     }
 
     pub async fn query(&self, options: Query, page: i32, per_page: i32) -> Result<QueryInfo> {
@@ -23,15 +23,17 @@ impl Client {
             Query::RecentlyUpdated => "collection/recently-updated",
         };
         self.client
-            .get(path)
-            .query(&format!("page={page}&per_page={per_page}"))?
+            .get(format!(
+                "{}/{}?page={}&per_page={}",
+                self.base_url, path, page, per_page
+            ))
             .recv_json()
             .await
     }
 
     pub async fn app_info(&self, app_id: &str) -> Result<AppInfo> {
         self.client
-            .get(format!("appstream/{}", app_id))
+            .get(format!("{}/appstream/{}", self.base_url, app_id))
             .recv_json()
             .await
     }
@@ -87,12 +89,10 @@ pub struct AppInfo {
     pub screenshots: Option<Vec<Screenshot>>,
     pub urls: Option<AppUrls>,
     pub project_license: Option<String>,
-    pub metadata: Option<AppInfoMeta>,
     pub categories: Option<Vec<String>>,
     pub keywords: Option<Vec<String>>,
     pub kudos: Option<Vec<String>>,
     pub mimetypes: Option<Vec<String>>,
-    pub provides: Option<Vec<String>>,
     pub is_free_license: Option<bool>,
     pub project_group: Option<String>,
     #[serde(rename = "type")]
@@ -133,25 +133,6 @@ pub struct AppUrls {
     pub homepage: Option<String>,
     pub translate: Option<String>,
     pub vcs_browser: Option<String>,
-}
-
-#[derive(Deserialize, Debug)]
-pub struct AppInfoMeta {
-    #[serde(
-        rename = "flathub::verification::verified",
-        deserialize_with = "deserialize_bool"
-    )]
-    pub verified: bool,
-    #[serde(rename = "flathub::verification::timestamp")]
-    pub verified_timestamp: Option<i64>,
-    #[serde(rename = "flathub::verification::method")]
-    pub verified_method: Option<String>,
-    #[serde(rename = "flathub::verification::website")]
-    pub verified_website: Option<String>,
-    #[serde(rename = "flathub::verification::login_is_organization")]
-    pub verified_login_is_organization: Option<bool>,
-    #[serde(rename = "flathub::build::build_log_url")]
-    pub build_log_url: Option<String>,
 }
 
 #[derive(Deserialize, Debug)]

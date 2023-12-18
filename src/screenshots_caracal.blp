@@ -1,10 +1,10 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $ApphubScreenshotCaracal: Box {
+template $ApphubScreenshotCaracal: Adw.Bin {
     height-request: 351;
 
-    Box content {
+    child: Box content {
         orientation: vertical;
         height-request: 351;
 
@@ -22,5 +22,5 @@ template $ApphubScreenshotCaracal: Box {
         Adw.CarouselIndicatorDots carousel_indicator {
             carousel: carousel;
         }
-    }
+    };
 }

@@ -28,6 +28,8 @@ mod imp {
         pub switcher_bar: TemplateChild<adw::ViewSwitcherBar>,
         #[template_child]
         pub nav_stack: TemplateChild<adw::NavigationView>,
+
+        
     }
 
     #[glib::object_subclass]
@@ -65,8 +67,15 @@ mod imp {
 
             self.nav_stack.push(&home_page);
 
-            // Connect signals
 
+
+            // Connect signals
+            self.back_btn.connect_clicked({
+                let nav_stack = self.nav_stack.get();
+                move |_| {
+                    nav_stack.pop();
+                }
+            });
             self.nav_stack.connect_visible_page_notify({
                 let btn = self.back_btn.get();
                 move |nav_stack| {
@@ -84,14 +93,7 @@ mod imp {
                 "navigator.visit",
                 Some(&glib::VariantType::new("s").unwrap()),
             );
-            let back_action = gio::SimpleAction::new("navigator.back", None);
 
-            back_action.connect_activate({
-                let nav_stack = self.nav_stack.get();
-                move |_, _| {
-                    nav_stack.pop();
-                }
-            });
 
             visit_action.connect_activate({
                 let nav_stack = self.nav_stack.get();
@@ -113,7 +115,6 @@ mod imp {
             });
 
             self.obj().add_action(&visit_action);
-            self.obj().add_action(&back_action);
 
         }
     }

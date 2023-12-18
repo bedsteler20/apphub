@@ -1,7 +1,6 @@
+use crate::{flathub_client::AppHit, image::load_image};
 use glib::{subclass::types::ObjectSubclassIsExt, Variant};
 use gtk::prelude::*;
-use crate::{flathub_client::AppHit, image::load_image};
-
 
 mod imp {
     use adw::subclass::prelude::*;
@@ -46,7 +45,7 @@ mod imp {
 glib::wrapper! {
     pub struct ApphubAppCard(ObjectSubclass<imp::ApphubAppCard>)
     @extends gtk::Button, gtk::Widget,
-    @implements gtk::Accessible, gtk::Buildable, 
+    @implements gtk::Accessible, gtk::Buildable,
                 gtk::ConstraintTarget, gtk::Actionable;
 }
 
@@ -59,11 +58,10 @@ impl ApphubAppCard {
         let ui = self.imp();
         ui.name_label.set_text(&app.name);
         ui.description_label.set_text(&app.summary);
-    
+
         ui.image.set_from_icon_name(Some("image-missing"));
-        self.set_action_name(Some("app.navigator.visit"));
-        self
-            .set_action_target_value(Some(&Variant::from(format!("/app/{}", &app.app_id))));
+        self.set_action_name(Some("win.navigator.visit"));
+        self.set_action_target_value(Some(&Variant::from(format!("/app/{}", &app.app_id))));
         if let Some(icon) = app.icon.as_ref() {
             load_image(icon, &ui.image);
         }

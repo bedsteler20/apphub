@@ -4,8 +4,11 @@
         "Buildable",
         "flathub",
         "flatpakref",
+        "hexpand",
         "klass",
         "libflatpak",
-        "pixbuf"
+        "pixbuf",
+        "qtype",
+        "vexpand"
     ]
 }

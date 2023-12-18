@@ -2,16 +2,29 @@ using Gtk 4.0;
 using Adw 1;
 
 template $ApphubHomePage: Adw.Bin {
-    child: Gtk.ScrolledWindow root {
-        vexpand: true;
-        hscrollbar-policy: never;
-        propagate-natural-height: true;
-        has-frame: true;
+    child: Gtk.Box {
+        halign: center;
+        // TODO: make bigger
+        Gtk.Spinner {
+            spinning: true;
+        }
+    };
+}
+
+Gtk.ScrolledWindow root {
+    vexpand: true;
+    hscrollbar-policy: never;
+    propagate-natural-height: true;
+    has-frame: true;
+
+    Adw.Clamp {
+        maximum-size: 1200;
+        orientation: horizontal;
 
         Box {
             orientation: vertical;
             halign: center;
-            // homogeneous: true;
+
             Box recently_added_box {
                 orientation: vertical;
                 halign: center;
@@ -108,5 +121,5 @@ template $ApphubHomePage: Adw.Bin {
                 }
             }
         }
-    };
+    }
 }

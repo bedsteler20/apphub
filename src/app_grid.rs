@@ -1,3 +1,7 @@
+use glib::subclass::types::ObjectSubclassIsExt;
+
+use crate::{flathub_client::AppHit, app_card::ApphubAppCard};
+
 mod imp {
     use adw::subclass::prelude::*;
     use glib::subclass::InitializingObject;
@@ -35,4 +39,24 @@ glib::wrapper! {
     @extends adw::Bin, gtk::Widget,
     @implements gtk::Accessible, gtk::Buildable,
                 gtk::ConstraintTarget;
+}
+
+impl ApphubAppGrid {
+    pub fn new() -> Self {
+        glib::Object::builder().build()
+    }
+
+   pub fn load_data(&self, apps: Vec<AppHit>) {
+        for app in apps {
+            let card = ApphubAppCard::new();
+            card.load_from_hit(app);
+            self.imp().flow.append(&card);
+        }
+    }
+}
+
+impl Default for ApphubAppGrid {
+    fn default() -> Self {
+        Self::new()
+    }
 }
