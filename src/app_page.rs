@@ -1,6 +1,5 @@
-use crate::screenshots_caracal::ApphubScreenshotCaracal;
-use crate::{flathub_client::AppInfo, image::load_image};
 use crate::prelude::*;
+use crate::{flathub_client::AppInfo, image::load_image};
 use glib::subclass::types::{ObjectSubclassExt, ObjectSubclassIsExt};
 
 mod imp {
@@ -26,8 +25,6 @@ mod imp {
         #[template_child]
         pub install_btn_container: TemplateChild<adw::Bin>,
         #[template_child]
-        pub caracal_container: TemplateChild<adw::Clamp>,
-        #[template_child]
         pub summary_label: TemplateChild<gtk::Label>,
         #[template_child]
         pub description_label: TemplateChild<gtk::Label>,
@@ -35,6 +32,10 @@ mod imp {
         pub app_links: TemplateChild<adw::Bin>,
         #[template_child]
         pub root: TemplateChild<gtk::ScrolledWindow>,
+        #[template_child]
+        pub carousel_indicator: TemplateChild<adw::CarouselIndicatorDots>,
+        #[template_child]
+        pub carousel: TemplateChild<adw::Carousel>,
         #[property(get, set)]
         pub app_id: RefCell<String>,
     }
@@ -79,9 +80,9 @@ mod imp {
 
 glib::wrapper! {
     pub struct ApphubAppPage(ObjectSubclass<imp::ApphubAppPage>)
-    @extends adw::Bin, gtk::Widget,
-    @implements gtk::Accessible, gtk::Buildable,
-                gtk::ConstraintTarget;
+        @extends adw::Bin, gtk::Widget,
+        @implements gtk::Accessible, gtk::Buildable,
+                    gtk::ConstraintTarget;
 }
 
 impl ApphubAppPage {
@@ -116,12 +117,20 @@ impl ApphubAppPage {
         }
 
         if let Some(screenshots) = data.screenshots {
-            let caracal = ApphubScreenshotCaracal::new();
-            imp.caracal_container.set_child(Some(&caracal));
-            caracal.load_data(screenshots);
+            for screenshot in screenshots {
+                if let Some(url) = screenshot.sizes._624x351 {
+                    // TODO: use gtk::Picture instead of gtk::Image
+                    let pic = gtk::Image::new();
+                    // pic.set_content_fit(gtk::ContentFit::Fill);
+                    load_image(&url, &pic);
+                    pic.set_vexpand(true);
+                    pic.set_hexpand(true);
+                    pic.set_margin_top(15);
+                    pic.set_margin_bottom(15);
+                    imp.carousel.append(&pic);
+                }
+            }
         }
-
-
 
         // Replace the loading spinner with the page
         imp.obj().set_child(Some(&imp.root.get()));

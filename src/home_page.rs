@@ -5,8 +5,9 @@ mod imp {
     use gtk::prelude::*;
     use gtk::CompositeTemplate;
 
+    use crate::app_card::ApphubAppCard;
     use crate::data_loader::get_home_page_data;
-    use crate::app_grid::ApphubAppGrid;
+    use crate::flathub_client::AppHit;
 
     #[derive(CompositeTemplate, Default)]
     #[template(file = "src/home_page.blp")]
@@ -14,21 +15,17 @@ mod imp {
         #[template_child]
         pub root: TemplateChild<gtk::ScrolledWindow>,
         #[template_child]
-        pub recently_added_box: TemplateChild<gtk::Box>,
+        pub recently_added_box: TemplateChild<gtk::FlowBox>,
         #[template_child]
-        pub recently_updated_box: TemplateChild<gtk::Box>,
+        pub recently_updated_box: TemplateChild<gtk::FlowBox>,
         #[template_child]
-        pub popular_box: TemplateChild<gtk::Box>,
+        pub popular_box: TemplateChild<gtk::FlowBox>,
         #[template_child]
         pub popular_btn: TemplateChild<gtk::Button>,
         #[template_child]
         pub recently_added_btn: TemplateChild<gtk::Button>,
         #[template_child]
         pub recently_updated_btn: TemplateChild<gtk::Button>,
-
-        pub popular_grid: ApphubAppGrid,
-        pub recently_added_grid: ApphubAppGrid,
-        pub recently_updated_grid: ApphubAppGrid,
     }
 
     #[glib::object_subclass]
@@ -48,27 +45,32 @@ mod imp {
 
     impl ObjectImpl for ApphubHomePage {
         fn constructed(&self) {
-            self.popular_box.append(&self.popular_grid);
-            self.recently_added_box.append(&self.recently_added_grid);
-            self.recently_updated_box
-                .append(&self.recently_updated_grid);
+            fn load_grid(grid: &gtk::FlowBox, data: Vec<AppHit>) {
+                for app in data {
+                    let app_widget = ApphubAppCard::new();
+                    app_widget.load_from_hit(app);
+                    grid.append(&app_widget);
+                }
+            }
+
             get_home_page_data({
-                let popular_grid = self.popular_grid.clone();
-                let recently_added_grid = self.recently_added_grid.clone();
-                let recently_updated_grid = self.recently_updated_grid.clone();
+                let popular_grid = self.popular_box.clone();
+                let recently_added_grid = self.recently_added_box.clone();
+                let recently_updated_grid = self.recently_updated_box.clone();
                 let root = self.root.clone();
                 let obj = self.obj().clone();
                 move |result| {
                     if let Ok(data) = result {
-                        popular_grid.load_data(data.popular);
-                        recently_added_grid.load_data(data.recently_added);
-                        recently_updated_grid.load_data(data.recently_updated);
+                        load_grid(&popular_grid, data.popular);
+                        load_grid(&recently_added_grid, data.recently_added);
+                        load_grid(&recently_updated_grid, data.recently_updated);
                         obj.set_child(Some(&root));
                     }
                 }
             });
         }
     }
+
     impl WidgetImpl for ApphubHomePage {}
     impl BinImpl for ApphubHomePage {}
 }

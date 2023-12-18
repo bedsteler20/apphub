@@ -25,7 +25,7 @@ Gtk.ScrolledWindow root {
             orientation: vertical;
             halign: center;
 
-            Box recently_added_box {
+            Box {
                 orientation: vertical;
                 halign: center;
                 margin-bottom: 20;
@@ -56,9 +56,22 @@ Gtk.ScrolledWindow root {
                         ]
                     }
                 }
+
+                Gtk.FlowBox recently_added_box {
+                    homogeneous: true;
+                    column-spacing: 5;
+                    row-spacing: 5;
+                    // TODO: Use brakepoints
+                    max-children-per-line: 3;
+                    min-children-per-line: 3;
+                    selection-mode: none;
+                    hexpand: true;
+                    halign: center;
+                    focus-on-click: false;
+                }
             }
 
-            Box recently_updated_box {
+            Box {
                 orientation: vertical;
                 halign: center;
                 margin-bottom: 20;
@@ -87,9 +100,22 @@ Gtk.ScrolledWindow root {
                         ]
                     }
                 }
+
+                Gtk.FlowBox recently_updated_box {
+                    homogeneous: true;
+                    column-spacing: 5;
+                    row-spacing: 5;
+                    // TODO: Use brakepoints
+                    max-children-per-line: 3;
+                    min-children-per-line: 3;
+                    selection-mode: none;
+                    hexpand: true;
+                    halign: center;
+                    focus-on-click: false;
+                }
             }
 
-            Box popular_box {
+            Box {
                 orientation: vertical;
                 halign: center;
                 margin-bottom: 20;
@@ -118,6 +144,19 @@ Gtk.ScrolledWindow root {
                             "suggested-action"
                         ]
                     }
+                }
+
+                Gtk.FlowBox popular_box {
+                    homogeneous: true;
+                    column-spacing: 5;
+                    row-spacing: 5;
+                    // TODO: Use brakepoints
+                    max-children-per-line: 3;
+                    min-children-per-line: 3;
+                    selection-mode: none;
+                    hexpand: true;
+                    halign: center;
+                    focus-on-click: false;
                 }
             }
         }
