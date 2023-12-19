@@ -2,15 +2,14 @@ mod imp {
     use adw::prelude::BinExt;
     use adw::subclass::prelude::*;
     use glib::subclass::InitializingObject;
-    use gtk::prelude::*;
     use gtk::CompositeTemplate;
 
-    use crate::app_card::ApphubAppCard;
+    use crate::widgets::ApphubAppCard;
     use crate::data_loader::get_home_page_data;
     use crate::flathub_client::AppHit;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(file = "src/home_page.blp")]
+    #[template(file = "src/views/home_page.blp")]
     pub struct ApphubHomePage {
         #[template_child]
         pub root: TemplateChild<gtk::ScrolledWindow>,

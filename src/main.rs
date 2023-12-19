@@ -1,27 +1,25 @@
+mod context;
+mod data_loader;
+mod error;
+mod flathub_client;
 mod install_location;
 mod prelude;
 mod transaction;
-mod transaction_type;
-mod error;
 mod transaction_state;
-mod flathub_client;
-mod window;
-mod app_card;
-mod app_links;
-mod app_page;
-mod home_page;
-mod install_btn;
-mod image;
-mod data_loader;
-mod context;
-use crate::prelude::*;
+mod transaction_type;
+
+// ====================
+mod application;
+mod models;
+mod utils;
+mod views;
+mod widgets;
+// ====================
+
+use application::ApphubApplication;
+
 
 fn main() -> glib::ExitCode {
-    let app = adw::Application::new(Some("com.github.bed.apphub"), Default::default());
-    app.connect_activate(|app| {
-        let window = window::ApphubWindow::new(&app);
-        window.present();
-    });
-
+    let app = ApphubApplication::new();
     app.run()
 }

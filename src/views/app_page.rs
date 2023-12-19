@@ -1,5 +1,5 @@
 use crate::prelude::*;
-use crate::{flathub_client::AppInfo, image::load_image};
+use crate::{flathub_client::AppInfo};
 use glib::subclass::types::{ObjectSubclassExt, ObjectSubclassIsExt};
 
 mod imp {
@@ -13,7 +13,7 @@ mod imp {
     use crate::data_loader::get_app_page_data;
 
     #[derive(CompositeTemplate, Default, glib::Properties)]
-    #[template(file = "src/app_page.blp")]
+    #[template(file = "src/views/app_page.blp")]
     #[properties(wrapper_type = super::ApphubAppPage)]
     pub struct ApphubAppPage {
         #[template_child]
@@ -113,7 +113,7 @@ impl ApphubAppPage {
         }
 
         if let Some(icon) = data.icon {
-            load_image(&icon, &imp.icon);
+            crate::widgets::load_image(&icon, &imp.icon);
         }
 
         if let Some(screenshots) = data.screenshots {
@@ -122,7 +122,7 @@ impl ApphubAppPage {
                     // TODO: use gtk::Picture instead of gtk::Image
                     let pic = gtk::Image::new();
                     // pic.set_content_fit(gtk::ContentFit::Fill);
-                    load_image(&url, &pic);
+                    crate::widgets::load_image(&url, &pic);
                     pic.set_vexpand(true);
                     pic.set_hexpand(true);
                     pic.set_margin_top(15);

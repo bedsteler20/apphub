@@ -1,4 +1,4 @@
-use crate::{flathub_client::AppHit, image::load_image};
+use crate::flathub_client::AppHit;
 use glib::{subclass::types::ObjectSubclassIsExt, Variant};
 use gtk::prelude::*;
 
@@ -8,7 +8,7 @@ mod imp {
     use gtk::CompositeTemplate;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(file = "src/app_card.blp")]
+    #[template(file = "src/widgets/app_card.blp")]
     pub struct ApphubAppCard {
         #[template_child]
         pub name_label: TemplateChild<gtk::Label>,
@@ -63,7 +63,7 @@ impl ApphubAppCard {
         self.set_action_name(Some("win.navigator.visit"));
         self.set_action_target_value(Some(&Variant::from(format!("/app/{}", &app.app_id))));
         if let Some(icon) = app.icon.as_ref() {
-            load_image(icon, &ui.image);
+            crate::widgets::load_image(icon, &ui.image);
         }
         // BUG: After navigation to a new page the button is staying focused
         // preventing the user from scrolling with the mouse wheel.

@@ -10,5 +10,10 @@
         "pixbuf",
         "qtype",
         "vexpand"
-    ]
+    ],
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "Cargo.toml": "Cargo.lock",
+        "*.rs": "${basename}.blp"
+    }
 }

@@ -5,7 +5,7 @@ mod imp {
     use gtk::CompositeTemplate;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(file = "src/app_links.blp")]
+    #[template(file = "src/widgets/app_links.blp")]
     pub struct ApphubAppLinks {
         #[template_child]
         pub flow: TemplateChild<gtk::FlowBox>,

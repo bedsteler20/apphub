@@ -4,7 +4,7 @@ mod imp {
     use gtk::CompositeTemplate;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(file = "src/install_btn.blp")]
+    #[template(file = "src/widgets/install_btn.blp")]
     pub struct ApphubInstallBtn {
         #[template_child]
         pub install_btn: TemplateChild<gtk::Button>,

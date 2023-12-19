@@ -1,20 +1,22 @@
 use adw::prelude::*;
 
+use crate::application::ApphubApplication;
+
 mod imp {
     use adw::prelude::*;
     use adw::subclass::prelude::*;
     use glib::subclass::InitializingObject;
     use gtk::CompositeTemplate;
 
-    use crate::app_page::ApphubAppPage;
-    use crate::home_page::ApphubHomePage;
+    use crate::views::ApphubAppPage;
+    use crate::views::ApphubHomePage;
 
     static HOME_VIEW_TAG: &str = "home_view";
 
     static HOME_PAGE_TAG: &str = "home_page";
 
     #[derive(CompositeTemplate, Default)]
-    #[template(file = "src/window.blp")]
+    #[template(file = "src/views/window.blp")]
     pub struct ApphubWindow {
         #[template_child]
         pub header_bar: TemplateChild<adw::HeaderBar>,
@@ -136,7 +138,7 @@ glib::wrapper! {
 }
 
 impl ApphubWindow {
-    pub fn new(app: &adw::Application) -> Self {
+    pub fn new(app: &ApphubApplication) -> Self {
         let this: Self = glib::Object::builder().build();
         this.set_application(Some(app));
         this
