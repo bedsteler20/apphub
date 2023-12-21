@@ -1,13 +1,14 @@
+use adw::subclass::prelude::*;
+use glib::subclass::InitializingObject;
+use gtk::CompositeTemplate;
+
+use crate::widgets::ApphubAppCard;
+use flathub_rs::AppHit;
+
 mod imp {
-    use adw::prelude::BinExt;
-    use adw::subclass::prelude::*;
-    use glib::subclass::InitializingObject;
-    use gtk::CompositeTemplate;
+    use crate::utils::call_me_maybe;
 
-    use crate::widgets::ApphubAppCard;
-    use crate::data_loader::get_home_page_data;
-    use crate::flathub_client::AppHit;
-
+    use super::*;
     #[derive(CompositeTemplate, Default)]
     #[template(file = "src/views/home_page.blp")]
     pub struct ApphubHomePage {
@@ -25,6 +26,8 @@ mod imp {
         pub recently_added_btn: TemplateChild<gtk::Button>,
         #[template_child]
         pub recently_updated_btn: TemplateChild<gtk::Button>,
+        #[template_child]
+        pub stack: TemplateChild<gtk::Stack>,
     }
 
     #[glib::object_subclass]
@@ -44,26 +47,25 @@ mod imp {
 
     impl ObjectImpl for ApphubHomePage {
         fn constructed(&self) {
-            fn load_grid(grid: &gtk::FlowBox, data: Vec<AppHit>) {
+            fn load_grid(grid: &gtk::FlowBox, data: &Vec<AppHit>) {
                 for app in data {
                     let app_widget = ApphubAppCard::new();
                     app_widget.load_from_hit(app);
                     grid.append(&app_widget);
                 }
             }
-
-            get_home_page_data({
-                let popular_grid = self.popular_box.clone();
-                let recently_added_grid = self.recently_added_box.clone();
-                let recently_updated_grid = self.recently_updated_box.clone();
+            call_me_maybe(async { flathub_rs::home_page(12).await }, {
+                let recently_added_box = self.recently_added_box.clone();
+                let recently_updated_box = self.recently_updated_box.clone();
+                let popular_box = self.popular_box.clone();
+                let stack = self.stack.clone();
                 let root = self.root.clone();
-                let obj = self.obj().clone();
-                move |result| {
-                    if let Ok(data) = result {
-                        load_grid(&popular_grid, data.popular);
-                        load_grid(&recently_added_grid, data.recently_added);
-                        load_grid(&recently_updated_grid, data.recently_updated);
-                        obj.set_child(Some(&root));
+                move |data| {
+                    if let Ok(data) = data {
+                        load_grid(&recently_added_box, &data.new_apps);
+                        load_grid(&recently_updated_box, &data.updated_apps);
+                        load_grid(&popular_box, &data.popular_apps);
+                        stack.set_visible_child(&root);
                     }
                 }
             });

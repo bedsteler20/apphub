@@ -9,6 +9,7 @@
         "libflatpak",
         "pixbuf",
         "qtype",
+        "reqwest",
         "vexpand"
     ],
     "explorer.fileNesting.enabled": true,

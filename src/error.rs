@@ -1,6 +1,6 @@
 
 
-pub type Result<T> = core::result::Result<T, Error>;
+//pub type Result<T> = core::result::Result<T, Error>;
 
 
 
@@ -8,7 +8,6 @@ pub enum Error {
     FlatpakError(libflatpak::Error),
     GlibError(String, String),
     IoError(std::io::Error),
-    Surf(surf::Error),
     Other(String),
 }
 
@@ -19,7 +18,6 @@ impl std::fmt::Debug for Error {
         match self {
            Error::FlatpakError(e) => write!(f, "FlatpakError: {:?}", e),
            Error::IoError(e) => write!(f, "IoError: {:?}", e),
-           Error::Surf(e) => write!(f, "SurfError: {:?}", e),
            Error::Other(e) => write!(f, "OtherError: {:?}", e),
            Error::GlibError(domain, msg) => write!(f, "GlibError:\n\tDomain: {}\n\tMessage: {}",domain, msg ),
         }
@@ -32,11 +30,6 @@ impl From<libflatpak::Error> for Error {
     }
 }
 
-impl From<surf::Error> for Error {
-    fn from(e: surf::Error) -> Self {
-        Error::Surf(e)
-    }
-}
 
 impl From<glib::Error> for Error {
     fn from(e: glib::Error) -> Self {
@@ -67,7 +60,6 @@ impl ToString for Error {
         match self {
             Error::FlatpakError(e) => format!("FlatpakError: {:?}", e),
             Error::IoError(e) => format!("IoError: {:?}", e),
-            Error::Surf(e) => format!("SurfError: {:?}", e),
             Error::Other(e) => format!("OtherError: {:?}", e),
             Error::GlibError(domain, msg) => format!("GlibError:\n\tDomain: {}\n\tMessage: {}",domain, msg ),
         }

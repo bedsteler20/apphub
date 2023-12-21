@@ -1,4 +1,4 @@
-use crate::flathub_client::AppHit;
+use flathub_rs::AppHit;
 use glib::{subclass::types::ObjectSubclassIsExt, Variant};
 use gtk::prelude::*;
 
@@ -54,7 +54,7 @@ impl ApphubAppCard {
         glib::Object::builder().build()
     }
 
-    pub fn load_from_hit(&self, app: AppHit) {
+    pub fn load_from_hit(&self, app: &AppHit) {
         let ui = self.imp();
         ui.name_label.set_text(&app.name);
         ui.description_label.set_text(&app.summary);
@@ -62,9 +62,7 @@ impl ApphubAppCard {
         ui.image.set_from_icon_name(Some("image-missing"));
         self.set_action_name(Some("win.navigator.visit"));
         self.set_action_target_value(Some(&Variant::from(format!("/app/{}", &app.app_id))));
-        if let Some(icon) = app.icon.as_ref() {
-            crate::widgets::load_image(icon, &ui.image);
-        }
+        crate::widgets::load_image(&app.icon, &ui.image);
         // BUG: After navigation to a new page the button is staying focused
         // preventing the user from scrolling with the mouse wheel.
         self.set_focus_on_click(false);

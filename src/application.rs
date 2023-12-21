@@ -4,6 +4,7 @@ use glib::once_cell::sync::OnceCell;
 use gtk::gio;
 use gtk::glib;
 
+use crate::utils::xdg_open;
 use crate::views::ApphubWindow;
 
 mod imp {
@@ -11,8 +12,9 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default)]
-    pub(crate) struct ApphubApplication {
+    pub struct ApphubApplication {
         pub(super) window: OnceCell<glib::WeakRef<ApphubWindow>>,
+        pub(super) context: glib::WeakRef<crate::models::Context>,
     }
 
     #[glib::object_subclass]
@@ -27,6 +29,11 @@ mod imp {
         fn activate(&self) {
             self.parent_activate();
             let app = &self.obj();
+
+            if self.context.upgrade().is_none() {
+                let context = crate::models::Context::new(app);
+                self.context.set(Some(&context));
+            }
 
             if let Some(window) = self.window.get() {
                 let window = window.upgrade().unwrap();
@@ -55,7 +62,7 @@ mod imp {
 }
 
 glib::wrapper! {
-    pub(crate) struct ApphubApplication(ObjectSubclass<imp::ApphubApplication>)
+    pub struct ApphubApplication(ObjectSubclass<imp::ApphubApplication>)
         @extends gio::Application, gtk::Application, adw::Application,
         @implements gio::ActionMap, gio::ActionGroup;
 }
@@ -82,6 +89,19 @@ impl ApphubApplication {
         }
     }
 
+    pub fn context(&self) -> crate::models::Context {
+        let imp = self.imp();
+
+        match imp.context.upgrade() {
+            Some(context) => context,
+            None => {
+                let context = crate::models::Context::new(self);
+                imp.context.set(Some(&context));
+                context
+            }
+        }
+    }
+
     fn setup_actions(&self) {
         self.add_action_entries([
             // Quit
@@ -96,6 +116,17 @@ impl ApphubApplication {
                 .activate(|app: &Self, _, _| {
                     app.show_about_dialog();
                 })
+                .build(),
+            // Open URL
+            gio::ActionEntry::builder("open-url")
+                .activate(|_, _, opts| {
+                    if let Some(opts) = opts {
+                        if let Some(url) = opts.get::<String>() {
+                            xdg_open(url.as_str());
+                        }
+                    }
+                })
+                .parameter_type(Some(&glib::VariantType::new("s").unwrap()))
                 .build(),
         ]);
     }

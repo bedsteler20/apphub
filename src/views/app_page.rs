@@ -1,17 +1,19 @@
-use crate::prelude::*;
-use crate::{flathub_client::AppInfo};
 use glib::subclass::types::{ObjectSubclassExt, ObjectSubclassIsExt};
+use gtk::prelude::*;
+
+use std::cell::RefCell;
+
+use adw::prelude::*;
+use adw::subclass::prelude::*;
+use glib::subclass::InitializingObject;
+use gtk::CompositeTemplate;
+use crate::{
+    utils::call_me_maybe,
+    widgets::{ApphubAppLinks, ApphubInstallBtn},
+};
 
 mod imp {
-    use std::cell::RefCell;
-
-    use adw::subclass::prelude::*;
-    use glib::prelude::*;
-    use glib::subclass::InitializingObject;
-    use gtk::CompositeTemplate;
-
-    use crate::data_loader::get_app_page_data;
-
+    use super::*;
     #[derive(CompositeTemplate, Default, glib::Properties)]
     #[template(file = "src/views/app_page.blp")]
     #[properties(wrapper_type = super::ApphubAppPage)]
@@ -23,13 +25,13 @@ mod imp {
         #[template_child]
         pub dev_label: TemplateChild<gtk::Label>,
         #[template_child]
-        pub install_btn_container: TemplateChild<adw::Bin>,
+        pub install_btn: TemplateChild<ApphubInstallBtn>,
         #[template_child]
         pub summary_label: TemplateChild<gtk::Label>,
         #[template_child]
         pub description_label: TemplateChild<gtk::Label>,
         #[template_child]
-        pub app_links: TemplateChild<adw::Bin>,
+        pub app_links: TemplateChild<ApphubAppLinks>,
         #[template_child]
         pub root: TemplateChild<gtk::ScrolledWindow>,
         #[template_child]
@@ -61,7 +63,7 @@ mod imp {
             self.parent_constructed();
             self.obj().connect_app_id_notify(|this| {
                 let app_id = this.app_id();
-                get_app_page_data(&app_id, {
+                call_me_maybe(async move { flathub_rs::appstream(&app_id).await }, {
                     let this = this.clone();
                     move |data| {
                         if let Ok(data) = data {
@@ -90,35 +92,35 @@ impl ApphubAppPage {
         glib::Object::builder().property("app-id", app_id).build()
     }
 
-    pub fn load_data(&self, data: AppInfo) {
+    pub fn load_data(&self, data: flathub_rs::Appstream) {
         let imp = self.imp();
         imp.name_label.set_text(&data.name);
-        if let Some(developer_name) = data.developer_name {
+        if let Some(ref developer_name) = data.developer_name {
             imp.dev_label.set_text(&developer_name);
         } else {
             imp.dev_label.set_text("Unknown developer");
         }
 
-        if let Some(summary) = data.summary {
+        if let Some(ref summary) = data.summary {
             imp.summary_label.set_text(&summary);
         } else {
             imp.summary_label.set_text("No summary available");
         }
 
-        if let Some(description) = data.description {
+        if let Some(ref description) = data.description {
             imp.description_label
                 .set_text(&format_description(description));
         } else {
             imp.description_label.set_text("No description available");
         }
 
-        if let Some(icon) = data.icon {
+        if let Some(ref icon) = data.icon {
             crate::widgets::load_image(&icon, &imp.icon);
         }
 
-        if let Some(screenshots) = data.screenshots {
+        if let Some(ref screenshots) = data.screenshots {
             for screenshot in screenshots {
-                if let Some(url) = screenshot.sizes._624x351 {
+                if let Some(ref url) = screenshot.sizes._624x351 {
                     // TODO: use gtk::Picture instead of gtk::Image
                     let pic = gtk::Image::new();
                     // pic.set_content_fit(gtk::ContentFit::Fill);
@@ -132,12 +134,13 @@ impl ApphubAppPage {
             }
         }
 
+        imp.app_links.load_data(&data);
         // Replace the loading spinner with the page
         imp.obj().set_child(Some(&imp.root.get()));
     }
 }
 
-fn format_description(description: String) -> String {
+fn format_description(description: &String) -> String {
     description
         .replace("\n", "<br/>")
         .replace("<p>", "")

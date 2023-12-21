@@ -30,8 +30,6 @@ mod imp {
         pub switcher_bar: TemplateChild<adw::ViewSwitcherBar>,
         #[template_child]
         pub nav_stack: TemplateChild<adw::NavigationView>,
-
-        
     }
 
     #[glib::object_subclass]
