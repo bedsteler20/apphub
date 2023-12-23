@@ -29,3 +29,13 @@ impl Into<libflatpak::Installation> for &InstallLocation {
         }
     }
 }
+
+
+impl ToString for InstallLocation {
+    fn to_string(&self) -> String {
+        match self {
+            InstallLocation::System => "system".to_string(),
+            InstallLocation::User => "user".to_string(),
+        }
+    }
+}

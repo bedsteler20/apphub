@@ -1,9 +1,13 @@
 mod context;
 mod install_location;
-mod transaction;
 mod installed_app;
-mod installed_app_store;
+mod updates_list;
+mod transaction;
+mod transaction_list;
 pub use context::Context;
 pub use install_location::InstallLocation;
+pub use installed_app::InstalledApp;
+pub use updates_list::UpdatesList;
 pub use transaction::ApphubTransaction;
 pub use transaction::TransactionType;
+pub use installed_app::InstalledAppSendable;

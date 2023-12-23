@@ -4,10 +4,13 @@ using Adw 1;
 template $ApphubInstallBtn: Gtk.Box {
     orientation: horizontal;
     spacing: 8;
+    height-request: 40;
+    valign: center;
 
     Button install_btn {
         visible: true;
         label: "Install";
+        clicked => $on_install_btn_clicked() swapped;
 
         styles [
             "suggested-action"
@@ -17,6 +20,7 @@ template $ApphubInstallBtn: Gtk.Box {
     Button update_btn {
         visible: false;
         label: "Update";
+        clicked => $on_update_btn_clicked() swapped;
 
         styles [
             "suggested-action"
@@ -26,6 +30,7 @@ template $ApphubInstallBtn: Gtk.Box {
     Button open_btn {
         visible: false;
         label: "Open";
+        clicked => $on_open_btn_clicked() swapped;
 
         styles [
             "suggested-action"
@@ -53,10 +58,12 @@ template $ApphubInstallBtn: Gtk.Box {
     Button uninstall_btn {
         visible: false;
         icon-name: "edit-delete-symbolic";
+        clicked => $on_uninstall_btn_clicked() swapped;
     }
 
     Button cancel_btn {
         visible: false;
         icon-name: "window-close-symbolic";
+        clicked => $on_cancel_btn_clicked() swapped;
     }
 }

@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "appdata",
         "Apphub",
         "Buildable",
         "flathub",
@@ -8,6 +9,7 @@
         "indexmap",
         "klass",
         "libflatpak",
+        "paintable",
         "pixbuf",
         "qtype",
         "reqwest",

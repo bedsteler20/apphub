@@ -31,6 +31,8 @@ mod imp {
         is_done: Cell<bool>,
         #[property(get, set)]
         remote: RefCell<String>,
+        #[property(get, set)]
+        id: Cell<u32>,
     }
 
     #[glib::object_subclass]
@@ -48,38 +50,7 @@ glib::wrapper! {
 }
 
 impl ApphubTransaction {
-    pub fn new_install(
-        app_id: String,
-        location: InstallLocation,
-        remote: String,
-        app_ref: String,
-    ) -> Self {
-        Self::new(app_id, location, remote, app_ref, TransactionType::Install)
-    }
-    pub fn new_update(
-        app_id: String,
-        location: InstallLocation,
-        remote: String,
-        app_ref: String,
-    ) -> Self {
-        Self::new(app_id, location, remote, app_ref, TransactionType::Update)
-    }
-    pub fn new_uninstall(
-        app_id: String,
-        location: InstallLocation,
-        remote: String,
-        app_ref: String,
-    ) -> Self {
-        Self::new(
-            app_id,
-            location,
-            remote,
-            app_ref,
-            TransactionType::Uninstall,
-        )
-    }
-
-    fn new(
+    pub fn new(
         app_id: String,
         location: InstallLocation,
         remote: String,
@@ -96,6 +67,7 @@ impl ApphubTransaction {
             .property("error", None::<String>)
             .property("is-done", false)
             .property("cancellable", Cancellable::new())
+            .property("id", glib::random_int())
             .build()
     }
 

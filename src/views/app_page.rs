@@ -63,6 +63,7 @@ mod imp {
             self.parent_constructed();
             self.obj().connect_app_id_notify(|this| {
                 let app_id = this.app_id();
+                this.imp().install_btn.set_app_id(app_id.clone());
                 call_me_maybe(async move { flathub_rs::appstream(&app_id).await }, {
                     let this = this.clone();
                     move |data| {
@@ -95,6 +96,7 @@ impl ApphubAppPage {
     pub fn load_data(&self, data: flathub_rs::Appstream) {
         let imp = self.imp();
         imp.name_label.set_text(&data.name);
+        imp.install_btn.set_bundle(data.bundle.value.clone());
         if let Some(ref developer_name) = data.developer_name {
             imp.dev_label.set_text(&developer_name);
         } else {
@@ -122,13 +124,11 @@ impl ApphubAppPage {
             for screenshot in screenshots {
                 if let Some(ref url) = screenshot.sizes._624x351 {
                     // TODO: use gtk::Picture instead of gtk::Image
-                    let pic = gtk::Image::new();
-                    // pic.set_content_fit(gtk::ContentFit::Fill);
-                    crate::widgets::load_image(&url, &pic);
-                    pic.set_vexpand(true);
-                    pic.set_hexpand(true);
-                    pic.set_margin_top(15);
+                    let pic = gtk::Picture::new();
+                    crate::widgets::load_picture(&url, &pic);
+                    pic.set_content_fit(gtk::ContentFit::Fill);
                     pic.set_margin_bottom(15);
+                    pic.set_margin_top(15);
                     imp.carousel.append(&pic);
                 }
             }

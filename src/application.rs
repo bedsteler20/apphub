@@ -14,7 +14,7 @@ mod imp {
     #[derive(Debug, Default)]
     pub struct ApphubApplication {
         pub(super) window: OnceCell<glib::WeakRef<ApphubWindow>>,
-        pub(super) context: glib::WeakRef<crate::models::Context>,
+        pub(super) context: OnceCell<crate::models::Context>,
     }
 
     #[glib::object_subclass]
@@ -30,23 +30,23 @@ mod imp {
             self.parent_activate();
             let app = &self.obj();
 
-            if self.context.upgrade().is_none() {
+
+            if self.context.get().is_none() {
                 let context = crate::models::Context::new(app);
-                self.context.set(Some(&context));
+                self.context.set(context).unwrap();
             }
 
             if let Some(window) = self.window.get() {
                 let window = window.upgrade().unwrap();
                 window.present();
-                return;
+            } else {
+                let window = ApphubWindow::new(app);
+                self.window
+                    .set(window.downgrade())
+                    .expect("Window already set.");
+
+                app.main_window().present();
             }
-
-            let window = ApphubWindow::new(app);
-            self.window
-                .set(window.downgrade())
-                .expect("Window already set.");
-
-            app.main_window().present();
         }
 
         fn startup(&self) {
@@ -92,11 +92,11 @@ impl ApphubApplication {
     pub fn context(&self) -> crate::models::Context {
         let imp = self.imp();
 
-        match imp.context.upgrade() {
-            Some(context) => context,
+        match imp.context.get() {
+            Some(context) => context.clone(),
             None => {
                 let context = crate::models::Context::new(self);
-                imp.context.set(Some(&context));
+                imp.context.set(context.clone()).unwrap();
                 context
             }
         }
