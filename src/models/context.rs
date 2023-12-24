@@ -2,12 +2,12 @@ use glib::{subclass::prelude::*, Cast};
 
 use crate::{
     application::ApphubApplication,
-    models::{transaction_list::TransactionList, UpdatesList},
+    models::{transaction_list::TransactionList, InstalledAppsList, UpdatesList},
     views::ApphubWindow,
 };
-mod imp {
+use once_cell::sync::OnceCell;
 
-    use once_cell::sync::OnceCell;
+mod imp {
 
     use super::*;
 
@@ -15,12 +15,13 @@ mod imp {
     pub struct Context {
         pub(super) transactions: OnceCell<TransactionList>,
         pub(super) application: OnceCell<ApphubApplication>,
-        pub(super) updates_list: OnceCell<UpdatesList>,
+        pub(super) updates: OnceCell<UpdatesList>,
+        pub(super) installed_apps: OnceCell<InstalledAppsList>,
     }
 
     #[glib::object_subclass]
     impl ObjectSubclass for Context {
-        const NAME: &'static str = "Context";
+        const NAME: &'static str = "ApphubContext";
         type Type = super::Context;
     }
 
@@ -28,9 +29,21 @@ mod imp {
         fn constructed(&self) {
             self.parent_constructed();
 
-            self.transactions.set(TransactionList::new()).unwrap();
-            self.updates_list.set(UpdatesList::new()).unwrap();
-            println!("Context constructed");
+            let transactions = TransactionList::new();
+            let updates_list = UpdatesList::new();
+            let installed_apps = InstalledAppsList::new();
+
+            installed_apps.bind_transaction_list(&transactions);
+
+            self.transactions
+                .set(transactions)
+                .expect("Failed to initialize transactions in Context");
+            self.updates
+                .set(updates_list)
+                .expect("Failed to initialize updates_list in Context");
+            self.installed_apps
+                .set(installed_apps)
+                .expect("Failed to initialize installed_apps_list in Context");
         }
     }
 }
@@ -50,7 +63,8 @@ impl Context {
         self.imp()
             .transactions
             .get()
-            .expect("transactions not initialized in Context").clone()
+            .expect("transactions not initialized in Context")
+            .clone()
     }
 
     pub fn application(&self) -> crate::application::ApphubApplication {
@@ -69,11 +83,19 @@ impl Context {
             .main_window()
     }
 
-    pub fn updates_list(&self) -> UpdatesList {
+    pub fn updates(&self) -> UpdatesList {
         self.imp()
-            .updates_list
+            .updates
             .get()
             .expect("updates_list not initialized in Context")
+            .clone()
+    }
+
+    pub fn installed_apps(&self) -> InstalledAppsList {
+        self.imp()
+            .installed_apps
+            .get()
+            .expect("installed_apps_list not initialized in Context")
             .clone()
     }
 }

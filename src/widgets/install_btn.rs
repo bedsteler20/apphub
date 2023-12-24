@@ -12,9 +12,9 @@ use adw::subclass::prelude::*;
 use glib::subclass::InitializingObject;
 use gtk::prelude::*;
 use gtk::CompositeTemplate;
+use crate::utils::flatpak_utils::get_installed_app;
 
 mod imp {
-    use crate::utils::flatpak_utils::get_installed_app;
 
     use super::*;
 
@@ -84,7 +84,7 @@ mod imp {
 
         #[template_callback]
         fn on_update_btn_clicked(&self, _btn: &gtk::Button) {
-            if let Some(app) = Context::default().updates_list().get(&self.obj().app_id()) {
+            if let Some(app) = Context::default().updates().get(&self.obj().app_id()) {
                 let context = Context::default();
                 let transaction = context.transactions().add_update(app);
                 self.obj().bind_transaction(&transaction);
@@ -177,7 +177,7 @@ impl ApphubInstallBtn {
         if context.transactions().has_transaction(&app_id) {
             let transaction = context.transactions().get_transaction(&app_id).unwrap();
             self.bind_transaction(&transaction);
-        } else if context.updates_list().has_update(&app_id) {
+        } else if context.updates().has_update(&app_id) {
             self.set_state(InstallBtnState::Update);
         } else if is_app_installed(&app_id) {
             self.set_state(InstallBtnState::Uninstall);

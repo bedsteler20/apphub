@@ -10,6 +10,7 @@ mod imp {
 
     use crate::views::ApphubAppPage;
     use crate::views::ApphubHomePage;
+    use crate::views::InstalledAppsPage;
 
     static HOME_VIEW_TAG: &str = "home_view";
 
@@ -57,12 +58,23 @@ mod imp {
                 .child(&ApphubHomePage::new())
                 .tag(HOME_PAGE_TAG)
                 .build();
+            let installed_apps_page = adw::NavigationPage::builder()
+                .title("Installed")
+                .child(&InstalledAppsPage::new())
+                .build();
 
             self.view_stack.add_titled_with_icon(
                 &self.nav_stack.get(),
                 Some(HOME_VIEW_TAG),
                 "Explore",
                 "compass-symbolic",
+            );
+
+            self.view_stack.add_titled_with_icon(
+                &installed_apps_page,
+                None,
+                "Installed",
+                "folder-symbolic",
             );
 
             self.nav_stack.push(&home_page);

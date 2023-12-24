@@ -1,0 +1,27 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $ApphubInstalledAppsPage: Adw.Bin {
+    child: ScrolledWindow {
+        hscrollbar-policy: never;
+
+        child: Box {
+            orientation: vertical;
+
+            ListBox apps_list_box {
+                selection-mode: none;
+                halign: center;
+                width-request: 575;
+                styles ["boxed-list"]
+            }
+     
+
+            ListBox runtime_list_box {
+                selection-mode: none;
+                halign: center;
+                width-request: 575;
+                styles ["boxed-list"]
+            }
+        };
+    };
+}

@@ -7,9 +7,6 @@ mod widgets;
 
 use application::ApphubApplication;
 use glib::StaticTypeExt;
-use models::{ApphubTransaction, InstallLocation, TransactionType, Context};
-use views::{ApphubAppPage, ApphubHomePage, ApphubWindow};
-use widgets::{ApphubAppCard, ApphubAppLinks, ApphubInstallBtn};
 
 fn main() -> glib::ExitCode {
     register_types();
@@ -18,15 +15,29 @@ fn main() -> glib::ExitCode {
 }
 
 fn register_types() {
+    // widgets
+    widgets::ApphubAppCard::ensure_type();
+    widgets::ApphubAppLinks::ensure_type();
+    widgets::ApphubInstallBtn::ensure_type();
+
+    // views
+    views::ApphubAppPage::ensure_type();
+    views::ApphubHomePage::ensure_type();
+    views::ApphubWindow::ensure_type();
+
+    // enums
+    models::TransactionType::ensure_type();
+    models::InstallLocation::ensure_type();
+
+    // models
+    models::ApphubTransaction::ensure_type();
+    
+    // stores
+    models::UpdatesList::ensure_type();
+    models::InstalledAppsList::ensure_type();
+    models::TransactionList::ensure_type();
+
+    // application/state
+    models::Context::ensure_type();
     ApphubApplication::ensure_type();
-    ApphubAppCard::ensure_type();
-    ApphubAppLinks::ensure_type();
-    ApphubAppPage::ensure_type();
-    ApphubInstallBtn::ensure_type();
-    ApphubHomePage::ensure_type();
-    ApphubTransaction::ensure_type();
-    ApphubWindow::ensure_type();
-    TransactionType::ensure_type();
-    InstallLocation::ensure_type();
-    Context::ensure_type();
 }

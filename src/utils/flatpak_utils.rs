@@ -90,3 +90,28 @@ pub fn get_installed_app(app_id: &str) -> Option<InstalledApp> {
     }
     return None;
 }
+
+pub fn get_installed_apps() -> Vec<InstalledApp> {
+    let sys_install = libflatpak::Installation::new_system(Cancellable::NONE).unwrap();
+    let user_install = libflatpak::Installation::new_user(Cancellable::NONE).unwrap();
+    let user_apps = match user_install.list_installed_refs(Cancellable::NONE) {
+        Ok(apps) => apps,
+        Err(_) => {
+            return vec![];
+        }
+    };
+    let sys_apps = match sys_install.list_installed_refs(Cancellable::NONE) {
+        Ok(apps) => apps,
+        Err(_) => {
+            return vec![];
+        }
+    };
+    let mut apps = vec![];
+    for app in user_apps {
+        apps.push(InstalledApp::from_flatpak(&app, &user_install));
+    }
+    for app in sys_apps {
+        apps.push(InstalledApp::from_flatpak(&app, &sys_install));
+    }
+    return apps;
+}
