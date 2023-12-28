@@ -5,7 +5,7 @@ mod imp {
 
     use gtk::Widget;
 
-    use crate::models::{Context, InstalledApp};
+    use crate::{models::{Context, InstalledApp}, widgets::ApphubAppCard};
 
     use super::*;
 
@@ -37,10 +37,8 @@ mod imp {
     #[gtk::template_callbacks]
     impl InstalledAppsPage {
         fn build_row(object: &glib::Object) -> Widget {
-            let label = gtk::Label::new(None);
-            let installed_app = object.downcast_ref::<InstalledApp>().unwrap();
-            label.set_text(&installed_app.name());
-            return label.upcast();
+            let ui = ApphubAppCard::new();
+            return ui.upcast();
         }
     }
 
@@ -50,26 +48,52 @@ mod imp {
             let context = Context::default();
             let list_model = context.installed_apps();
 
-            // ListBox has a builtin filter function but the callback it needs dose not have 
+            // ListBox has a builtin filter function but the callback it needs dose not have
             // a parameter for the item this looks to be a issue with the rust bindings
             // so we use a custom filter instead
-            let apps_model = gtk::FilterListModel::builder()
-                .filter(&gtk::CustomFilter::new(|item| {
-                    let app = item.downcast_ref::<InstalledApp>().unwrap();
-                    app.ref_path().starts_with("app")
+            let apps_model = gtk::SortListModel::builder()
+                .sorter(&gtk::CustomSorter::new(|a, b| {
+                    let a = a.downcast_ref::<InstalledApp>().unwrap();
+                    let b = b.downcast_ref::<InstalledApp>().unwrap();
+                    match a.name().cmp(&b.name()) {
+                        std::cmp::Ordering::Equal => gtk::Ordering::Equal,
+                        std::cmp::Ordering::Less => gtk::Ordering::Smaller,
+                        std::cmp::Ordering::Greater => gtk::Ordering::Larger,
+                    }
                 }))
-                .model(&list_model)
+                .model(
+                    &gtk::FilterListModel::builder()
+                        .filter(&gtk::CustomFilter::new(|item| {
+                            let app = item.downcast_ref::<InstalledApp>().unwrap();
+                            app.ref_path().starts_with("app")
+                        }))
+                        .model(&list_model)
+                        .build(),
+                )
                 .build();
-            let runtime_model = gtk::FilterListModel::builder()
-                .filter(&gtk::CustomFilter::new(|item| {
-                    let app = item.downcast_ref::<InstalledApp>().unwrap();
-                    app.ref_path().starts_with("runtime")
-                        || app.app_id().ends_with(".Locale")
-                        || app.app_id().ends_with(".Devel")
+
+            let runtime_model = gtk::SortListModel::builder()
+                .sorter(&gtk::CustomSorter::new(|a, b| {
+                    let a = a.downcast_ref::<InstalledApp>().unwrap();
+                    let b = b.downcast_ref::<InstalledApp>().unwrap();
+                    match a.name().cmp(&b.name()) {
+                        std::cmp::Ordering::Equal => gtk::Ordering::Equal,
+                        std::cmp::Ordering::Less => gtk::Ordering::Smaller,
+                        std::cmp::Ordering::Greater => gtk::Ordering::Larger,
+                    }
                 }))
-                .model(&list_model)
+                .model(
+                    &gtk::FilterListModel::builder()
+                        .filter(&gtk::CustomFilter::new(|item| {
+                            let app = item.downcast_ref::<InstalledApp>().unwrap();
+                            app.ref_path().starts_with("runtime")
+                                && !app.app_id().ends_with(".Locale")
+                                && !app.app_id().ends_with(".Devel")
+                        }))
+                        .model(&list_model)
+                        .build(),
+                )
                 .build();
-            
 
             self.apps_list_box
                 .bind_model(Some(&apps_model), Self::build_row);

@@ -3,14 +3,14 @@ use gtk::prelude::*;
 
 use std::cell::RefCell;
 
-use adw::prelude::*;
-use adw::subclass::prelude::*;
-use glib::subclass::InitializingObject;
-use gtk::CompositeTemplate;
 use crate::{
     utils::call_me_maybe,
     widgets::{ApphubAppLinks, ApphubInstallBtn},
 };
+use adw::prelude::*;
+use adw::subclass::prelude::*;
+use glib::subclass::InitializingObject;
+use gtk::CompositeTemplate;
 
 mod imp {
     use super::*;

@@ -10,6 +10,7 @@
         "indexmap",
         "klass",
         "libflatpak",
+        "Orientable",
         "paintable",
         "pixbuf",
         "qtype",

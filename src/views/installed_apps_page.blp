@@ -7,20 +7,69 @@ template $ApphubInstalledAppsPage: Adw.Bin {
 
         child: Box {
             orientation: vertical;
+            spacing: 20;
+            margin-bottom: 20;
 
-            ListBox apps_list_box {
-                selection-mode: none;
+            Box {
                 halign: center;
                 width-request: 575;
-                styles ["boxed-list"]
+                orientation: vertical;
+
+                Label {
+                    halign: start;
+                    label: "Installed Apps";
+                    margin-start: 12;
+                    margin-top: 12;
+                    margin-bottom: 12;
+                    margin-end: 12;
+                    use-markup: true;
+                    xalign: 0;
+                    yalign: 0.5;
+                    wrap: true;
+                    wrap-mode: word;
+                    selectable: false;
+                    styles ["title-3"]
+                }
+
+                ListBox apps_list_box {
+                    selection-mode: none;
+                    halign: fill;
+                    hexpand: true;
+                    styles [
+                        "boxed-list"
+                    ]
+                }
             }
-     
 
-            ListBox runtime_list_box {
-                selection-mode: none;
+            Box {
                 halign: center;
                 width-request: 575;
-                styles ["boxed-list"]
+                orientation: vertical;
+
+                Label {
+                    halign: start;
+                    label: "Runtimes, SDKs, and Extensions";
+                    margin-start: 12;
+                    margin-top: 12;
+                    margin-bottom: 12;
+                    margin-end: 12;
+                    use-markup: true;
+                    xalign: 0;
+                    yalign: 0.5;
+                    wrap: true;
+                    wrap-mode: word;
+                    selectable: false;
+                    styles ["title-3"]
+                }
+
+                ListBox runtime_list_box {
+                    selection-mode: none;
+                    hexpand: true;
+                    halign: fill;
+                    styles [
+                        "boxed-list"
+                    ]
+                }
             }
         };
     };

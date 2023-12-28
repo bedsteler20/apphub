@@ -19,6 +19,7 @@ fn register_types() {
     widgets::ApphubAppCard::ensure_type();
     widgets::ApphubAppLinks::ensure_type();
     widgets::ApphubInstallBtn::ensure_type();
+    widgets::AppCard::ensure_type();
 
     // views
     views::ApphubAppPage::ensure_type();
