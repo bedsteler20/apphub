@@ -15,7 +15,7 @@ mod imp {
     #[derive(Debug, Default)]
     pub struct ApphubApplication {
         pub(super) window: OnceCell<glib::WeakRef<ApphubWindow>>,
-        pub(super) context: OnceCell<crate::models::Context>,
+        pub(super) context: OnceCell<crate::state::Context>,
     }
 
     #[glib::object_subclass]
@@ -32,7 +32,7 @@ mod imp {
             let app = &self.obj();
 
             if self.context.get().is_none() {
-                let context = crate::models::Context::new(app);
+                let context = crate::state::Context::new(app);
                 self.context.set(context).unwrap();
             }
 
@@ -90,13 +90,13 @@ impl ApphubApplication {
         }
     }
 
-    pub fn context(&self) -> crate::models::Context {
+    pub fn context(&self) -> crate::state::Context {
         let imp = self.imp();
 
         match imp.context.get() {
             Some(context) => context.clone(),
             None => {
-                let context = crate::models::Context::new(self);
+                let context = crate::state::Context::new(self);
                 imp.context.set(context.clone()).unwrap();
                 context
             }

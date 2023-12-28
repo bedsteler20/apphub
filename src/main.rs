@@ -4,6 +4,7 @@ mod models;
 mod utils;
 mod views;
 mod widgets;
+mod state;
 
 use application::ApphubApplication;
 use glib::StaticTypeExt;
@@ -33,12 +34,12 @@ fn register_types() {
     // models
     models::ApphubTransaction::ensure_type();
     
-    // stores
-    models::UpdatesList::ensure_type();
-    models::InstalledAppsList::ensure_type();
-    models::TransactionList::ensure_type();
+    // state
+    state::UpdatesList::ensure_type();
+    state::InstalledAppsList::ensure_type();
+    state::TransactionList::ensure_type();
+    state::Context::ensure_type();
 
-    // application/state
-    models::Context::ensure_type();
+    // application
     ApphubApplication::ensure_type();
 }

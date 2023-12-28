@@ -2,7 +2,7 @@ use glib::{subclass::prelude::*, Cast};
 
 use crate::{
     application::ApphubApplication,
-    models::{transaction_list::TransactionList, InstalledAppsList, UpdatesList},
+    state::{TransactionList, InstalledAppsList, UpdatesList},
     views::ApphubWindow,
 };
 use once_cell::sync::OnceCell;

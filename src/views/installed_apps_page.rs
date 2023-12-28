@@ -6,7 +6,8 @@ mod imp {
     use gtk::Widget;
 
     use crate::{
-        models::{Context, InstalledApp},
+        models::InstalledApp,
+        state::Context,
         widgets::{AppCard, ApphubAppCard},
     };
 
@@ -59,8 +60,6 @@ mod imp {
             self.parent_constructed();
             let context = Context::default();
             let list_model = context.installed_apps();
-
-            
 
             // ListBox has a builtin filter function but the callback it needs dose not have
             // a parameter for the item this looks to be a issue with the rust bindings

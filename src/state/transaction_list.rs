@@ -3,7 +3,7 @@ use gio::prelude::*;
 use gio::subclass::prelude::*;
 use std::cell::RefCell;
 
-use super::{ApphubTransaction, InstallLocation, TransactionType};
+use crate::models::{ApphubTransaction, InstallLocation, TransactionType};
 
 mod imp {
     use super::*;

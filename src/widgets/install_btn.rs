@@ -1,16 +1,15 @@
-use gio::prelude::CancellableExtManual;
 use glib::{subclass::types::ObjectSubclassIsExt, ObjectExt};
 use gtk::prelude::WidgetExt;
 
 use crate::{
-    models::{ApphubTransaction, Context, TransactionType},
+    state::Context,
+    models::{ApphubTransaction, TransactionType},
     utils::flatpak_utils::is_app_installed,
 };
 use std::cell::RefCell;
 
 use adw::subclass::prelude::*;
 use glib::subclass::InitializingObject;
-use gtk::prelude::*;
 use gtk::CompositeTemplate;
 use crate::utils::flatpak_utils::get_installed_app;
 

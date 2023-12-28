@@ -2,7 +2,7 @@ use gio::prelude::*;
 use gio::subclass::prelude::*;
 use std::cell::RefCell;
 
-use crate::models::TransactionList;
+use crate::state::TransactionList;
 use crate::utils::flatpak_utils;
 mod imp {
     use crate::models::InstalledApp;
