@@ -42,6 +42,9 @@ mod imp {
     impl InstalledAppsPage {
         fn build_row(object: &glib::Object) -> Widget {
             let data = object.downcast_ref::<InstalledApp>().unwrap();
+            let is_dup = Context::default()
+                .installed_apps()
+                .is_duplicate(&data.app_id());
             let ui = AppCard::new();
             if let Some(icon) = data.icon() {
                 ui.set_icon_file(icon);
@@ -50,7 +53,9 @@ mod imp {
             if let Some(summery) = data.summary() {
                 ui.set_description(summery);
             }
-            ui.set_install_location(data.install_location());
+            if is_dup {
+                ui.set_install_location(data.install_location());
+            }
             return ui.upcast();
         }
     }

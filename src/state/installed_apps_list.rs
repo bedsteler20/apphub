@@ -74,4 +74,9 @@ impl InstalledAppsList {
         list.extend(installed_apps);
         self.items_changed(0, list.len() as u32, list.len() as u32);
     }
+
+    pub fn is_duplicate(&self, app_id: &str) -> bool {
+        let list = self.imp().list.borrow();
+        list.iter().filter(|x| x.app_id() == app_id).count() > 1
+    }
 }
