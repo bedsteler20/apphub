@@ -1,7 +1,9 @@
-use gtk::CompositeTemplate;
 use glib::subclass::InitializingObject;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
+use gtk::CompositeTemplate;
+
+use crate::models::InstallLocation;
 
 use super::load_image;
 
@@ -18,11 +20,13 @@ mod imp {
         pub name_label: TemplateChild<gtk::Label>,
         #[template_child]
         pub description_label: TemplateChild<gtk::Label>,
+        #[template_child]
+        pub install_location_label: TemplateChild<gtk::Label>,
     }
 
     #[glib::object_subclass]
     impl ObjectSubclass for AppCard {
-        const NAME: &'static str = "ApphubAppCard2";
+        const NAME: &'static str = "ApphubAppCard";
         type Type = super::AppCard;
         type ParentType = gtk::Box;
 
@@ -66,5 +70,19 @@ impl AppCard {
 
     pub fn set_description(&self, description: String) {
         self.imp().description_label.set_text(&description);
+    }
+
+    pub fn set_install_location(&self, location: InstallLocation) {
+        self.imp().install_location_label.set_visible(true);
+        match location {
+            InstallLocation::System => {
+                self.imp().install_location_label.set_text("System");
+                self.imp().install_location_label.add_css_class("system-install-label");
+            }
+            InstallLocation::User => {
+                self.imp().install_location_label.set_text("User");
+                self.imp().install_location_label.add_css_class("user-install-label");
+            }
+        }
     }
 }

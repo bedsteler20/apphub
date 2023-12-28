@@ -5,7 +5,10 @@ mod imp {
 
     use gtk::Widget;
 
-    use crate::{models::{Context, InstalledApp}, widgets::ApphubAppCard};
+    use crate::{
+        models::{Context, InstalledApp},
+        widgets::{AppCard, ApphubAppCard},
+    };
 
     use super::*;
 
@@ -37,7 +40,16 @@ mod imp {
     #[gtk::template_callbacks]
     impl InstalledAppsPage {
         fn build_row(object: &glib::Object) -> Widget {
-            let ui = ApphubAppCard::new();
+            let data = object.downcast_ref::<InstalledApp>().unwrap();
+            let ui = AppCard::new();
+            if let Some(icon) = data.icon() {
+                ui.set_icon_file(icon);
+            }
+            ui.set_name(data.name());
+            if let Some(summery) = data.summary() {
+                ui.set_description(summery);
+            }
+            ui.set_install_location(data.install_location());
             return ui.upcast();
         }
     }
@@ -47,6 +59,8 @@ mod imp {
             self.parent_constructed();
             let context = Context::default();
             let list_model = context.installed_apps();
+
+            
 
             // ListBox has a builtin filter function but the callback it needs dose not have
             // a parameter for the item this looks to be a issue with the rust bindings
