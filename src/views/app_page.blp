@@ -12,6 +12,8 @@ template $ApphubAppPage: Adw.Bin {
 }
 
 ScrolledWindow root {
+    hscrollbar-policy: never;
+
     Box {
         orientation: vertical;
         margin-top: 10;
@@ -57,7 +59,7 @@ ScrolledWindow root {
             }
         }
 
-        Adw.Clamp  {
+        Adw.Clamp {
             margin-top: 28;
             maximum-size: 860;
 

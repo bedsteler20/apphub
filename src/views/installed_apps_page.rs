@@ -5,11 +5,7 @@ mod imp {
 
     use gtk::Widget;
 
-    use crate::{
-        models::InstalledApp,
-        state::Context,
-        widgets::{AppCard, ApphubAppCard},
-    };
+    use crate::{models::InstalledApp, state::Context, widgets::AppCard};
 
     use super::*;
 

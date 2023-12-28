@@ -2,13 +2,15 @@ using Gtk 4.0;
 using Adw 1;
 
 template $ApphubWindow : Adw.ApplicationWindow {
-    default-height: 800;
-    default-width: 1000;
-    width-request: 1000;
-    height-request: 800;
+
+    default-height: 500;
+    height-request: 400;
+
+    default-width: 800;
+    width-request: 462;
 
     Adw.Breakpoint {
-        condition ("max-width: 550sp")
+        condition ("max-width: 700sp")
 
         setters {
             switcher_bar.reveal: true;

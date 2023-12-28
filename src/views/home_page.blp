@@ -18,147 +18,133 @@ template $ApphubHomePage: Adw.Bin {
             propagate-natural-height: true;
             has-frame: true;
 
-            Adw.Clamp {
-                maximum-size: 1200;
-                orientation: horizontal;
+            Box {
+                orientation: vertical;
+                halign: center;
+                margin-start: 30;
+                margin-end: 30;
+                spacing: 30;
 
                 Box {
                     orientation: vertical;
-                    halign: center;
 
                     Box {
-                        orientation: vertical;
-                        halign: center;
-                        margin-bottom: 20;
-                        margin-top: 20;
-                        // homogeneous: true;
-                        Box {
-                            orientation: horizontal;
+                        orientation: horizontal;
+
+                        Label {
+                            label: "Recently Added";
+                            halign: start;
                             hexpand: true;
-                            margin-bottom: 20;
-                            margin-top: 20;
+                            valign: center;
+                            margin-start: 12;
+                            margin-end: 12;
+                            margin-top: 12;
+                            margin-bottom: 12;
 
-                            Label {
-                                halign: start;
-                                label: _("Recently Added Apps");
-                                hexpand: true;
-
-                                styles [
-                                    "title-2"
-                                ]
-                            }
-
-                            Button recently_added_btn {
-                                label: "More";
-                                halign: end;
-
-                                styles [
-                                    "suggested-action"
-                                ]
-                            }
+                            styles [
+                                "title-3"
+                            ]
                         }
 
-                        Gtk.FlowBox recently_added_box {
-                            homogeneous: true;
-                            column-spacing: 5;
-                            row-spacing: 5;
-                            // TODO: Use brakepoints
-                            max-children-per-line: 3;
-                            min-children-per-line: 3;
-                            selection-mode: none;
-                            hexpand: true;
-                            halign: center;
-                            focus-on-click: false;
+                        Button {
+                            label: "More";
+                            valign: center;
+
+                            styles [
+                                "suggested-action"
+                            ]
                         }
                     }
 
+                    Gtk.FlowBox recently_added_box {
+                        row-spacing: 8;
+                        column-spacing: 8;
+                        max-children-per-line: 3;
+                        homogeneous: true;
+                        selection-mode: none;
+                        hexpand: false;
+                    }
+                }
+
+                Box {
+                    orientation: vertical;
+
                     Box {
-                        orientation: vertical;
-                        halign: center;
-                        margin-bottom: 20;
+                        orientation: horizontal;
 
-                        Box {
-                            orientation: horizontal;
+                        Label {
+                            label: "Updated Added";
+                            halign: start;
                             hexpand: true;
-                            margin-bottom: 20;
+                            valign: center;
+                            margin-start: 12;
+                            margin-end: 12;
+                            margin-top: 12;
+                            margin-bottom: 12;
 
-                            Label {
-                                halign: start;
-                                label: _("Recently Updated Apps");
-                                hexpand: true;
-
-                                styles [
-                                    "title-2"
-                                ]
-                            }
-
-                            Button recently_updated_btn {
-                                label: "More";
-                                halign: end;
-
-                                styles [
-                                    "suggested-action"
-                                ]
-                            }
+                            styles [
+                                "title-3"
+                            ]
                         }
 
-                        Gtk.FlowBox recently_updated_box {
-                            homogeneous: true;
-                            column-spacing: 5;
-                            row-spacing: 5;
-                            // TODO: Use brakepoints
-                            max-children-per-line: 3;
-                            min-children-per-line: 3;
-                            selection-mode: none;
-                            hexpand: true;
-                            halign: center;
-                            focus-on-click: false;
+                        Button {
+                            label: "More";
+                            valign: center;
+
+                            styles [
+                                "suggested-action"
+                            ]
                         }
                     }
 
+                    Gtk.FlowBox recently_updated_box {
+                        row-spacing: 8;
+                        column-spacing: 8;
+                        max-children-per-line: 3;
+                        homogeneous: true;
+                        selection-mode: none;
+                        hexpand: false;
+                    }
+                }
+
+                Box {
+                    orientation: vertical;
+
                     Box {
-                        orientation: vertical;
-                        halign: center;
-                        margin-bottom: 20;
-                        margin-top: 20;
+                        orientation: horizontal;
 
-                        Box {
-                            orientation: horizontal;
+                        Label {
+                            label: "Popular Apps";
+                            halign: start;
                             hexpand: true;
-                            margin-bottom: 20;
+                            valign: center;
+                            margin-start: 12;
+                            margin-end: 12;
+                            margin-top: 12;
+                            margin-bottom: 12;
 
-                            Label {
-                                halign: start;
-                                label: _("Popular Apps");
-                                hexpand: true;
-
-                                styles [
-                                    "title-2"
-                                ]
-                            }
-
-                            Button popular_btn {
-                                label: "More";
-                                halign: end;
-
-                                styles [
-                                    "suggested-action"
-                                ]
-                            }
+                            styles [
+                                "title-3"
+                            ]
                         }
 
-                        Gtk.FlowBox popular_box {
-                            homogeneous: true;
-                            column-spacing: 5;
-                            row-spacing: 5;
-                            // TODO: Use brakepoints
-                            max-children-per-line: 3;
-                            min-children-per-line: 3;
-                            selection-mode: none;
-                            hexpand: true;
-                            halign: center;
-                            focus-on-click: false;
+                        Button {
+                            label: "More";
+                            valign: center;
+
+                            styles [
+                                "suggested-action"
+                            ]
                         }
+                    }
+
+                    Gtk.FlowBox popular_box {
+                        row-spacing: 8;
+                        column-spacing: 8;
+                        max-children-per-line: 3;
+                        homogeneous: true;
+                        selection-mode: none;
+                        hexpand: false;
                     }
                 }
             }

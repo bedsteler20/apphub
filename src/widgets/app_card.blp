@@ -8,6 +8,7 @@ template $ApphubAppCard: Box {
     margin-start: 10;
     margin-end: 10;
     margin-top: 10;
+    hexpand: true;
 
     Image icon {
         pixel-size: 64;
@@ -27,6 +28,7 @@ template $ApphubAppCard: Box {
         Box {
             orientation: horizontal;
             spacing: 4;
+
             Label name_label {
                 wrap: true;
                 xalign: 0.0;
@@ -45,8 +47,8 @@ template $ApphubAppCard: Box {
         }
 
         Label description_label {
-            valign: start;
-            vexpand: true;
+            halign: fill;
+            hexpand: true;
             wrap: true;
             wrap-mode: word_char;
             ellipsize: end;

@@ -17,7 +17,6 @@ fn main() -> glib::ExitCode {
 
 fn register_types() {
     // widgets
-    widgets::ApphubAppCard::ensure_type();
     widgets::ApphubAppLinks::ensure_type();
     widgets::ApphubInstallBtn::ensure_type();
     widgets::AppCard::ensure_type();
