@@ -1,6 +1,6 @@
 use crate::models::InstalledApp;
-use crate::utils::Sendable;
 use crate::models::InstalledAppSendable;
+use crate::utils::Sendable;
 use gio::prelude::*;
 use gio::subclass::prelude::*;
 use gio::Cancellable;
@@ -41,7 +41,8 @@ mod imp {
 
         fn item(&self, position: u32) -> Option<glib::Object> {
             self.list
-                .borrow()
+                .try_borrow()
+                .ok()?
                 .get(position as usize)
                 .map(|v| v.clone().upcast())
         }
@@ -62,6 +63,14 @@ impl UpdatesList {
         let mut list = self.imp().list.borrow_mut();
         list.push(app);
         self.items_changed(list.len() as u32, 0, 1);
+    }
+
+    pub fn append(&self, apps: Vec<InstalledApp>) {
+        let mut list = self.imp().list.borrow_mut();
+        let len = list.len();
+        let a_len = apps.len();
+        list.extend(apps);
+        self.items_changed(len as u32, 0, a_len as u32);
     }
 
     pub fn remove(&self, app: InstalledApp) {
@@ -89,21 +98,26 @@ impl UpdatesList {
     #[allow(deprecated)]
     pub fn refresh(&self) {
         let (sender, receiver) = glib::MainContext::channel::<
-            Result<Option<InstalledAppSendable>, glib::Error>,
+            Result<Vec<InstalledAppSendable>, glib::Error>,
         >(glib::Priority::default());
 
         receiver.attach(Default::default(), {
             let this = self.clone();
-            move |val| match val {
-                Ok(Some(app)) => {
-                    this.push(InstalledApp::from_sendable(app));
-                    glib::ControlFlow::Continue
+            move |apps| {
+                match apps {
+                    Ok(apps) => {
+                        println!("Got {} apps", apps.len());
+                        let apps = apps
+                            .into_iter()
+                            .map(|x| InstalledApp::from_sendable(x))
+                            .collect::<Vec<InstalledApp>>();
+                        this.append(apps);
+                    }
+                    Err(e) => {
+                        eprintln!("Error: {}", e);
+                    }
                 }
-                Ok(None) => glib::ControlFlow::Break,
-                Err(e) => {
-                    eprintln!("Error: {:?}", e);
-                    glib::ControlFlow::Continue
-                }
+                glib::ControlFlow::Break
             }
         });
 
@@ -124,15 +138,16 @@ impl UpdatesList {
                     return;
                 }
             };
+            let mut apps = Vec::new();
             for app in user_apps {
                 let app = InstalledApp::from_flatpak(&app, &user_install).to_sendable();
-                sender.send(Ok(Some(app))).unwrap();
+                apps.push(app);
             }
             for app in sys_apps {
                 let app = InstalledApp::from_flatpak(&app, &sys_install).to_sendable();
-                sender.send(Ok(Some(app))).unwrap();
+                apps.push(app);
             }
-            sender.send(Ok(None)).unwrap();
+            sender.send(Ok(apps)).unwrap();
         });
     }
 }

@@ -11,6 +11,7 @@ mod imp {
     use crate::views::ApphubAppPage;
     use crate::views::ApphubHomePage;
     use crate::views::InstalledAppsPage;
+    use crate::views::UpdatesAppsPage;
 
     static HOME_VIEW_TAG: &str = "home_view";
 
@@ -63,6 +64,11 @@ mod imp {
                 .child(&InstalledAppsPage::new())
                 .build();
 
+            let updates_page = adw::NavigationPage::builder()
+                .title("Updates")
+                .child(&UpdatesAppsPage::new())
+                .build();
+
             self.view_stack.add_titled_with_icon(
                 &self.nav_stack.get(),
                 Some(HOME_VIEW_TAG),
@@ -75,6 +81,13 @@ mod imp {
                 None,
                 "Installed",
                 "folder-symbolic",
+            );
+
+            self.view_stack.add_titled_with_icon(
+                &updates_page,
+                None,
+                "Updates",
+                "system-software-update-symbolic",
             );
 
             self.nav_stack.push(&home_page);
