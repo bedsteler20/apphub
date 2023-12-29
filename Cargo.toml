@@ -1,9 +1,0 @@
-[workspace]
-members = [
-	"apphub",
-	"macros",
-	"portal",
-	"portal_client",
-	"dbus_types"
-, "shared"]
-resolver = "2"
