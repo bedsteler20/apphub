@@ -1,18 +1,35 @@
 mod application;
 mod error;
 mod models;
+mod state;
 mod utils;
 mod views;
 mod widgets;
-mod state;
 
 use application::ApphubApplication;
+use gio::prelude::ApplicationExt;
 use glib::StaticTypeExt;
+use gtk::gdk;
 
 fn main() -> glib::ExitCode {
     register_types();
     let app = ApphubApplication::new();
+    app.connect_activate(|_app| register_resource());
     app.run()
+}
+
+fn register_resource() {
+    gio::resources_register_include!("compiled.gresource").expect("Failed to register resources");
+    let display = gdk::Display::default().expect("Cannot get display");
+    let icon_theme = gtk::IconTheme::for_display(&display);
+    icon_theme.add_resource_path("/dev/bedsteler20/Apphub/icons");
+    let provider = gtk::CssProvider::new();
+    provider.load_from_string(include_str!("styles.less"));
+    gtk::style_context_add_provider_for_display(
+        &gdk::Display::default().expect("Could not connect to a display."),
+        &provider,
+        gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
+    )
 }
 
 fn register_types() {
@@ -32,7 +49,7 @@ fn register_types() {
 
     // models
     models::ApphubTransaction::ensure_type();
-    
+
     // state
     state::UpdatesList::ensure_type();
     state::InstalledAppsList::ensure_type();

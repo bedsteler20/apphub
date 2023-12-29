@@ -55,7 +55,6 @@ mod imp {
 
             gtk::Window::set_default_icon_name("dev.bedsteler20.Apphub");
             app.setup_actions();
-            app.load_css();
         }
     }
     impl GtkApplicationImpl for ApphubApplication {}
@@ -101,16 +100,6 @@ impl ApphubApplication {
                 context
             }
         }
-    }
-
-    fn load_css(&self) {
-        let provider = gtk::CssProvider::new();
-        provider.load_from_string(include_str!("styles.less"));
-        gtk::style_context_add_provider_for_display(
-            &gdk::Display::default().expect("Could not connect to a display."),
-            &provider,
-            gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
-        )
     }
 
     fn setup_actions(&self) {
