@@ -21,6 +21,7 @@ ScrolledWindow root {
 
         Adw.Clamp {
             maximum-size: 860;
+            visible: true;
 
             Box {
                 valign: start;
@@ -62,7 +63,7 @@ ScrolledWindow root {
         Adw.Clamp {
             margin-top: 28;
             maximum-size: 860;
-
+            
             Box {
                 orientation: vertical;
                 height-request: 351;
@@ -107,7 +108,8 @@ ScrolledWindow root {
                     wrap-mode: word;
                 }
 
-                $ApphubAppLinks app_links {}
+                $ApphubAppLinks app_links {
+                }
             }
         }
     }

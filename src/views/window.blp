@@ -1,11 +1,9 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $ApphubWindow : Adw.ApplicationWindow {
-
+template $ApphubWindow: Adw.ApplicationWindow {
     default-height: 500;
     height-request: 400;
-
     default-width: 800;
     width-request: 462;
 
@@ -44,7 +42,7 @@ template $ApphubWindow : Adw.ApplicationWindow {
             }
         }
 
-        content: Adw.ViewStack view_stack {};
+        content: Adw.NavigationView nav_stack {};
 
         [bottom]
         Adw.ViewSwitcherBar switcher_bar {
@@ -54,7 +52,40 @@ template $ApphubWindow : Adw.ApplicationWindow {
     };
 }
 
-Adw.NavigationView nav_stack {
+$ApphubHomePage home_page {}
+
+Adw.ViewStack view_stack {
+    Adw.ViewStackPage {
+        title: "Explore";
+        name: "home_page";
+        icon-name: "compass-symbolic";
+
+        child: Box {};
+    }
+
+    Adw.ViewStackPage {
+        title: "Find";
+        name: "search_page";
+        icon-name: "edit-find-symbolic";
+
+        child: Box {};
+    }
+
+    Adw.ViewStackPage {
+        title: "Installed";
+        name: "installed_page";
+        icon-name: "folder-symbolic";
+
+        child: Box {};
+    }
+
+    Adw.ViewStackPage {
+        title: "Updates";
+        name: "updates_page";
+        icon-name: "system-software-update-symbolic";
+
+        child: Box {};
+    }
 }
 
 menu primary_menu {

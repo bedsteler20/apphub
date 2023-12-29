@@ -5,15 +5,19 @@ template $ApphubUpdatesAppsPage: Adw.Bin {
     child: ScrolledWindow {
         hscrollbar-policy: never;
 
-        child: Box {
-            orientation: vertical;
-            spacing: 20;
-            margin-bottom: 20;
-            margin-start: 20;
-            margin-end: 20;
+        child: Adw.Clamp {
+            orientation: horizontal;
+            maximum-size: 575;
+
+            Box {
+                orientation: vertical;
+                spacing: 20;
+                margin-bottom: 20;
+                margin-start: 20;
+                margin-end: 20;
+
                 Box {
                     halign: center;
-                    width-request: 400;
                     orientation: vertical;
 
                     Label {
@@ -45,12 +49,9 @@ template $ApphubUpdatesAppsPage: Adw.Bin {
                         ]
                     }
                 }
-            
-
 
                 Box {
                     halign: center;
-                    width-request: 400;
                     orientation: vertical;
                     hexpand: false;
 
@@ -82,7 +83,7 @@ template $ApphubUpdatesAppsPage: Adw.Bin {
                             "boxed-list"
                         ]
                     }
-                
+                }
             }
         };
     };

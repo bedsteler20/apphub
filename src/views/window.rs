@@ -1,17 +1,18 @@
 use adw::prelude::*;
+use glib::subclass::types::ObjectSubclassIsExt;
 
 use crate::application::ApphubApplication;
+use adw::prelude::*;
+use adw::subclass::prelude::*;
+use glib::subclass::InitializingObject;
+use gtk::CompositeTemplate;
 
+use crate::views::ApphubAppPage;
+use crate::views::ApphubHomePage;
+use crate::views::InstalledAppsPage;
+use crate::views::UpdatesAppsPage;
 mod imp {
-    use adw::prelude::*;
-    use adw::subclass::prelude::*;
-    use glib::subclass::InitializingObject;
-    use gtk::CompositeTemplate;
-
-    use crate::views::ApphubAppPage;
-    use crate::views::ApphubHomePage;
-    use crate::views::InstalledAppsPage;
-    use crate::views::UpdatesAppsPage;
+    use super::*;
 
     static HOME_VIEW_TAG: &str = "home_view";
 
@@ -32,6 +33,8 @@ mod imp {
         pub switcher_bar: TemplateChild<adw::ViewSwitcherBar>,
         #[template_child]
         pub nav_stack: TemplateChild<adw::NavigationView>,
+        #[template_child]
+        pub home_page: TemplateChild<ApphubHomePage>,
     }
 
     #[glib::object_subclass]
@@ -56,45 +59,28 @@ mod imp {
             // Setup UI
             let home_page = adw::NavigationPage::builder()
                 .title("Explore")
-                .child(&ApphubHomePage::new())
+                .child(&self.home_page.get())
                 .tag(HOME_PAGE_TAG)
                 .build();
-            let installed_apps_page = adw::NavigationPage::builder()
-                .title("Installed")
-                .child(&InstalledAppsPage::new())
-                .build();
-
-            let updates_page = adw::NavigationPage::builder()
-                .title("Updates")
-                .child(&UpdatesAppsPage::new())
-                .build();
-
-            self.view_stack.add_titled_with_icon(
-                &self.nav_stack.get(),
-                Some(HOME_VIEW_TAG),
-                "Explore",
-                "compass-symbolic",
-            );
-
-            self.view_stack.add_titled_with_icon(
-                &installed_apps_page,
-                None,
-                "Installed",
-                "folder-symbolic",
-            );
-
-            self.view_stack.add_titled_with_icon(
-                &updates_page,
-                None,
-                "Updates",
-                "system-software-update-symbolic",
-            );
 
             self.nav_stack.push(&home_page);
 
-
-
             // Connect signals
+            self.view_stack.connect_visible_child_notify({
+                let obj = self.obj().clone();
+                move |view_stack| {
+                    let visible_child = view_stack.visible_child_name().unwrap();
+                    let tag = visible_child.as_str();
+                   println!("tag: {}", tag);
+                    match tag {
+                        "home_page" => obj.navigate_to("/home", true),
+                        "installed_page" => obj.navigate_to("/installed",true),
+                        "updates_page" => obj.navigate_to("/updates", true),
+                        _ => obj.navigate_to("/home", true),
+                    }
+                }
+            });
+
             self.back_btn.connect_clicked({
                 let nav_stack = self.nav_stack.get();
                 move |_| {
@@ -104,8 +90,10 @@ mod imp {
             self.nav_stack.connect_visible_page_notify({
                 let btn = self.back_btn.get();
                 move |nav_stack| {
-                    let page = nav_stack.visible_page().unwrap();
-                    if page.tag().unwrap_or_default().to_string() == HOME_PAGE_TAG {
+                    if nav_stack
+                        .previous_page(&nav_stack.visible_page().unwrap())
+                        .is_none()
+                    {
                         btn.set_visible(false);
                     } else {
                         btn.set_visible(true);
@@ -119,34 +107,19 @@ mod imp {
                 Some(&glib::VariantType::new("s").unwrap()),
             );
 
-
             visit_action.connect_activate({
-                let nav_stack = self.nav_stack.get();
+                let obj = self.obj().clone();
                 move |_, parameter| {
                     let url = parameter.unwrap().get::<String>().unwrap();
-                    let parts = url.split('/').collect::<Vec<&str>>();
-                    match parts[1] {
-                        "app" => {
-                            let app_id = parts[2];
-                            let app_page = ApphubAppPage::new(app_id);
-                            let app_page = adw::NavigationPage::builder().child(&app_page).build();
-                            nav_stack.push(&app_page);
-                        }
-                        _ => {
-                            nav_stack.pop_to_page(&home_page);
-                        }
-                    }
+                    obj.navigate_to(&url, false);
                 }
             });
 
             self.obj().add_action(&visit_action);
-
         }
     }
     impl ApplicationWindowImpl for ApphubWindow {}
-    impl AdwApplicationWindowImpl for ApphubWindow {
-
-    }
+    impl AdwApplicationWindowImpl for ApphubWindow {}
     impl WindowImpl for ApphubWindow {}
     impl WidgetImpl for ApphubWindow {}
 }
@@ -165,5 +138,54 @@ impl ApphubWindow {
         let this: Self = glib::Object::builder().build();
         this.set_application(Some(app));
         this
+    }
+
+    fn navigate_to(&self, url: &str, replace_all: bool) {
+        let parts = url.split('/').collect::<Vec<&str>>();
+        let nav_stack = self.imp().nav_stack.get();
+        let page = match parts[1] {
+            "home" => {
+                let home_page = self.imp().home_page.get();
+                let home_page = adw::NavigationPage::builder()
+                    .tag("home_page")
+                    .child(&home_page)
+                    .build();
+                home_page
+            }
+            "installed" => {
+                println!("Installed apps");
+                let installed_page = InstalledAppsPage::new();
+                let installed_page = adw::NavigationPage::builder()
+                    .child(&installed_page)
+                    .tag("installed_page")
+                    .build();
+                installed_page
+            }
+            "updates" => {
+                let updates_page = UpdatesAppsPage::new();
+                let updates_page = adw::NavigationPage::builder()
+                    .child(&updates_page)
+                    .tag("updates_page")
+                    .build();
+                updates_page
+            }
+            "app" => {
+                let app_id = parts[2];
+                let app_page = ApphubAppPage::new(app_id);
+                let app_page = adw::NavigationPage::builder().child(&app_page).build();
+                app_page
+            }
+            _ => {
+                let home_page = self.imp().home_page.get();
+                let home_page = adw::NavigationPage::builder().child(&home_page).build();
+                home_page
+            }
+        };
+
+        if replace_all {
+            nav_stack.replace(&[page]);
+        } else {
+            nav_stack.push(&page);
+        }
     }
 }

@@ -2,17 +2,20 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $ApphubAppLinks : Adw.Bin {
+template $ApphubAppLinks: Adw.Bin {
+    margin-bottom: 20;
+    margin-start: 20;
+    margin-end: 20;
+    margin-top: 20;
+
     child: FlowBox flow {
         homogeneous: true;
         column-spacing: 8;
         row-spacing: 8;
         selection-mode: none;
-        min-children-per-line: 2;
+        // min-children-per-line: 2;
     };
 }
-
-
 
 Box install_size_card {
     styles [
