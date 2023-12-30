@@ -11,5 +11,6 @@ pub use installed_apps_page::InstalledAppsPage;
 pub use updates_page::UpdatesAppsPage;
 pub use window::ApphubWindow;
 pub use error_page::ErrorPage;
+#[allow(unused_imports)]
 pub use pager_page::PagerPage;
 pub use pager_page::PagerNavigator;

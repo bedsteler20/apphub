@@ -2,14 +2,12 @@ use adw::subclass::prelude::*;
 use glib::subclass::InitializingObject;
 use gtk::CompositeTemplate;
 
-use crate::{utils::{call_me_maybe,  Findable}, widgets::AppCard};
-use flathub_rs::AppHit;
+use crate::utils::{call_me_maybe, Findable};
 use gtk::prelude::*;
-
 
 mod imp {
 
-    use crate::{views::ApphubWindow, utils::load_grid};
+    use crate::{utils::load_grid, views::ApphubWindow};
 
     use super::*;
     #[derive(CompositeTemplate, Default)]
@@ -51,14 +49,19 @@ mod imp {
     impl ObjectImpl for ApphubHomePage {
         fn constructed(&self) {
             self.parent_constructed();
-            self.popular_btn.set_action_name(Some("win.navigator.visit"));
-            self.recently_added_btn.set_action_name(Some("win.navigator.visit"));
-            self.recently_updated_btn.set_action_name(Some("win.navigator.visit"));
-            self.popular_btn.set_action_target(Some("/pager/popular/1".to_variant()));
-            self.recently_added_btn.set_action_target(Some("/pager/new-apps/1".to_variant()));
-            self.recently_updated_btn.set_action_target(Some("/pager/recently-updated/1".to_variant()));
+            self.popular_btn
+                .set_action_name(Some("win.navigator.visit"));
+            self.recently_added_btn
+                .set_action_name(Some("win.navigator.visit"));
+            self.recently_updated_btn
+                .set_action_name(Some("win.navigator.visit"));
+            self.popular_btn
+                .set_action_target(Some("/pager/popular/1".to_variant()));
+            self.recently_added_btn
+                .set_action_target(Some("/pager/new-apps/1".to_variant()));
+            self.recently_updated_btn
+                .set_action_target(Some("/pager/recently-updated/1".to_variant()));
 
-            
             call_me_maybe(async { flathub_rs::home_page(12).await }, {
                 let recently_added_box = self.recently_added_box.clone();
                 let recently_updated_box = self.recently_updated_box.clone();

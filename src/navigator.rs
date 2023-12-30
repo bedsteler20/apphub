@@ -18,12 +18,6 @@ pub trait Navigator {
     fn create_page(&self) -> adw::NavigationPage;
 }
 
-fn pfx_tag(pfx: &str, tag: adw::NavigationPage) -> adw::NavigationPage {
-    use adw::prelude::*;
-    tag.set_tag(Some(&format!("/{}{}", pfx, tag.tag().unwrap_or_default())));
-    tag
-}
-
 pub enum Page {
     Home,
     Installed,
@@ -49,9 +43,7 @@ impl Navigator for Page {
             Page::Installed => route == "/installed",
             Page::Updates => route == "/updates",
             Page::App(id) => route == format!("/app/{}", id),
-            Page::Pager(nav) => {
-                route.starts_with("/pager") && nav.matches(&route.replace("/pager", ""))
-            }
+            Page::Pager(nav) => nav.matches(&route),
         }
     }
 
@@ -81,7 +73,7 @@ impl Navigator for Page {
         } else if route.starts_with("/app/") {
             Page::App(route.replace("/app/", "").to_string())
         } else if route.starts_with("/pager/") {
-            Page::Pager(PagerNavigator::parse(&route.replace("/pager", "")))
+            Page::Pager(PagerNavigator::parse(&route))
         } else {
             panic!("No page matches route {}", route)
         }
@@ -105,7 +97,7 @@ impl Navigator for Page {
                 .tag(self.route())
                 .child(&views::ApphubAppPage::new(id))
                 .build(),
-            Page::Pager(navigator) => pfx_tag("pager", navigator.create_page()),
+            Page::Pager(navigator) => navigator.create_page(),
         }
     }
 }

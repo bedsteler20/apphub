@@ -70,7 +70,6 @@ impl TransactionList {
             let this = self.clone();
             move |transaction| {
                 if transaction.is_done() {
-                    println!("Transaction is done: {:?}", transaction.app_id());
                     this.remove(transaction);
                 }
             }

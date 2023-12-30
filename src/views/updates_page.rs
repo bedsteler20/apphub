@@ -6,7 +6,10 @@ mod imp {
 
     use gtk::Widget;
 
-    use crate::{models::InstalledApp, state::Context, widgets::AppCard};
+    use crate::{
+        models::InstalledApp, state::Context, utils::Findable, views::ApphubWindow,
+        widgets::AppCard,
+    };
 
     use super::*;
 
@@ -47,9 +50,6 @@ mod imp {
             if let Some(summery) = data.summary() {
                 ui.set_description(summery);
             }
-            // if is_dup {
-            // ui.set_install_location(data.install_location());
-            // }
             return ui.upcast();
         }
     }
@@ -106,6 +106,25 @@ mod imp {
                         .build(),
                 )
                 .build();
+
+            self.apps_list_box.connect_row_activated({
+                let apps = apps_model.clone();
+                move |_, row| {
+                    let item = apps.item(row.index() as u32).unwrap();
+                    let app = item.downcast_ref::<InstalledApp>().unwrap();
+                    ApphubWindow::find().navigate_to(&format!("/app/{}", app.app_id()));
+                }
+            });
+
+            self.runtime_list_box.connect_row_activated({
+                let apps = runtime_model.clone();
+                move |_, row| {
+                        let item = apps.item(row.index() as u32).unwrap();
+                        let app = item.downcast_ref::<InstalledApp>().unwrap();
+                        ApphubWindow::find().navigate_to(&format!("/app/{}", app.app_id()));
+                    
+                }
+            });
 
             self.apps_list_box
                 .bind_model(Some(&apps_model), Self::build_row);

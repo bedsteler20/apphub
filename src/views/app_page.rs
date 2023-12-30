@@ -72,7 +72,6 @@ mod imp {
                         if let Ok(data) = data {
                             this.load_data(data);
                         } else if let Err(err) = data {
-                            println!("Error Page");
                             ApphubWindow::find().show_error_page(err.into());
                         }
                     }

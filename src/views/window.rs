@@ -130,7 +130,7 @@ impl ApphubWindow {
         current.set_child(Some(&page));
     }
 
-    fn navigate_to(&self, url: &str) {
+    pub fn navigate_to(&self, url: &str) {
         let page = Page::parse(url);
         let nav_stack = self.imp().nav_stack.get();
         let nav_page = page.create_page();

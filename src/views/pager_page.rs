@@ -55,7 +55,6 @@ mod imp {
         }
     }
 
-
     impl ObjectImpl for PagerPage {}
     impl WidgetImpl for PagerPage {}
     impl BinImpl for PagerPage {}
@@ -85,26 +84,47 @@ impl PagerPage {
 
     fn load_data(&self, nav: PagerNavigator) {
         let this = self.clone();
-        
+        let path = nav
+            .route()
+            .split("/")
+            .collect::<Vec<&str>>()
+            .split_last()
+            .unwrap()
+            .1
+            .join("/");
 
         call_me_maybe(async move { Self::fetch_data(nav).await }, move |data| {
             if let Ok(data) = data {
                 load_grid(&this.imp().flow_box, &data.hits);
                 this.imp().stack.set_visible_child(&this.imp().root.get());
-                this.setup_dots(data.page, data.total_pages);
+                this.setup_dots(data.page, data.total_pages, &path);
             } else if let Err(err) = data {
                 ApphubWindow::find().show_error_page(err.into());
             }
         });
     }
 
-    fn setup_dots(&self, current_page: i32, max_pages: i32) {
+    fn setup_dots(&self, current_page: i32, max_pages: i32, path: &str) {
+        fn connect_btn(btn: &gtk::Button, path: &str) {
+            let path = path.to_string();
+            btn.connect_clicked(move |btn| {
+                let page = btn.label().unwrap().parse::<i32>().unwrap();
+                ApphubWindow::find().navigate_to(&format!("{}/{}", path, page));
+            });
+        }
         let imp = self.imp();
         imp.btn_3.set_label(&current_page.to_string());
         imp.btn_l.set_label(&max_pages.to_string());
         imp.btn_f.set_label("1");
         let mut i = current_page;
 
+        connect_btn(&imp.btn_1.get(), path);
+        connect_btn(&imp.btn_2.get(), path);
+        connect_btn(&imp.btn_3.get(), path);
+        connect_btn(&imp.btn_4.get(), path);
+        connect_btn(&imp.btn_5.get(), path);
+        connect_btn(&imp.btn_f.get(), path);
+        connect_btn(&imp.btn_l.get(), path);
         if current_page > 2 {
             i -= 1;
             imp.btn_2.set_visible(true);
@@ -171,37 +191,37 @@ pub enum PagerNavigator {
 impl Navigator for PagerNavigator {
     fn route(&self) -> String {
         match self {
-            PagerNavigator::Popular(p) => format!("/popular/{}", p),
-            PagerNavigator::RecentlyUpdated(p) => format!("/recently-updated/{}", p),
-            PagerNavigator::NewApps(p) => format!("/new-apps/{}", p),
+            PagerNavigator::Popular(p) => format!("/pager/popular/{}", p),
+            PagerNavigator::RecentlyUpdated(p) => format!("/pager/recently-updated/{}", p),
+            PagerNavigator::NewApps(p) => format!("/pager/new-apps/{}", p),
         }
     }
 
     fn matches(&self, route: &str) -> bool {
         match self {
-            PagerNavigator::Popular(p) => route == format!("/popular/{}", p),
-            PagerNavigator::RecentlyUpdated(p) => route == format!("/recently-updated/{}", p),
-            PagerNavigator::NewApps(p) => route == format!("/new-apps/{}", p),
+            PagerNavigator::Popular(p) => route == format!("/pager/popular/{}", p),
+            PagerNavigator::RecentlyUpdated(p) => route == format!("/pager/recently-updated/{}", p),
+            PagerNavigator::NewApps(p) => route == format!("/pager/new-apps/{}", p),
         }
     }
 
     fn parse(route: &str) -> Self {
         let parts: Vec<&str> = route.split("/").collect();
-        if parts.len() < 3 {
+        if parts.len() < 4 {
             panic!("Invalid route {}", route)
-        } else if parts.len() == 3 {
-            let page = parts[1];
-            let page_num = parts[2].parse::<i32>().unwrap();
+        } else if parts.len() == 4 {
+            let page = parts[2];
+            let page_num = parts[3].parse::<i32>().unwrap();
             match page {
                 "popular" => PagerNavigator::Popular(page_num),
                 "recently-updated" => PagerNavigator::RecentlyUpdated(page_num),
                 "new-apps" => PagerNavigator::NewApps(page_num),
                 _ => panic!("Invalid route {}", route),
             }
-        } else if parts.len() == 4 {
-            let page = parts[1];
-            let option = parts[2];
-            let page_num = parts[3].parse::<i32>().unwrap();
+        } else if parts.len() == 5 {
+            let page = parts[2];
+            let option = parts[3];
+            let page_num = parts[4].parse::<i32>().unwrap();
 
             println!("page: {}, option: {}, page_num: {}", page, option, page_num);
             panic!("Invalid route {}", route)
@@ -213,17 +233,14 @@ impl Navigator for PagerNavigator {
     fn create_page(&self) -> adw::NavigationPage {
         match self {
             PagerNavigator::NewApps(_) => adw::NavigationPage::builder()
-                .tag(self.route())
                 .title("New Apps")
                 .child(&PagerPage::new(self.clone()))
                 .build(),
             PagerNavigator::Popular(_) => adw::NavigationPage::builder()
-                .tag(self.route())
                 .title("Popular")
                 .child(&PagerPage::new(self.clone()))
                 .build(),
             PagerNavigator::RecentlyUpdated(_) => adw::NavigationPage::builder()
-                .tag(self.route())
                 .title("Recently Updated")
                 .child(&PagerPage::new(self.clone()))
                 .build(),

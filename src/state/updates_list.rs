@@ -106,7 +106,6 @@ impl UpdatesList {
             move |apps| {
                 match apps {
                     Ok(apps) => {
-                        println!("Got {} apps", apps.len());
                         let apps = apps
                             .into_iter()
                             .map(|x| InstalledApp::from_sendable(x))
