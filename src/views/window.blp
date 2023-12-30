@@ -42,7 +42,8 @@ template $ApphubWindow: Adw.ApplicationWindow {
             }
         }
 
-        content: Adw.NavigationView nav_stack {};
+        content: Adw.NavigationView nav_stack {
+        };
 
         [bottom]
         Adw.ViewSwitcherBar switcher_bar {
@@ -55,9 +56,10 @@ template $ApphubWindow: Adw.ApplicationWindow {
 $ApphubHomePage home_page {}
 
 Adw.ViewStack view_stack {
+
     Adw.ViewStackPage {
         title: "Explore";
-        name: "home_page";
+        name: "/home";
         icon-name: "compass-symbolic";
 
         child: Box {};
@@ -65,7 +67,7 @@ Adw.ViewStack view_stack {
 
     Adw.ViewStackPage {
         title: "Find";
-        name: "search_page";
+        name: "/find";
         icon-name: "edit-find-symbolic";
 
         child: Box {};
@@ -73,7 +75,7 @@ Adw.ViewStack view_stack {
 
     Adw.ViewStackPage {
         title: "Installed";
-        name: "installed_page";
+        name: "/installed";
         icon-name: "folder-symbolic";
 
         child: Box {};
@@ -81,7 +83,7 @@ Adw.ViewStack view_stack {
 
     Adw.ViewStackPage {
         title: "Updates";
-        name: "updates_page";
+        name: "/updates";
         icon-name: "update-symbolic";
 
         child: Box {};

@@ -2,7 +2,8 @@ use adw::prelude::*;
 use glib::subclass::types::ObjectSubclassIsExt;
 
 use crate::application::ApphubApplication;
-use adw::prelude::*;
+use crate::navigator::Page;
+use crate::utils::Findable;
 use adw::subclass::prelude::*;
 use glib::subclass::InitializingObject;
 use gtk::CompositeTemplate;
@@ -13,10 +14,6 @@ use crate::views::InstalledAppsPage;
 use crate::views::UpdatesAppsPage;
 mod imp {
     use super::*;
-
-    static HOME_VIEW_TAG: &str = "home_view";
-
-    static HOME_PAGE_TAG: &str = "home_page";
 
     #[derive(CompositeTemplate, Default)]
     #[template(file = "src/views/window.blp")]
@@ -60,7 +57,7 @@ mod imp {
             let home_page = adw::NavigationPage::builder()
                 .title("Explore")
                 .child(&self.home_page.get())
-                .tag(HOME_PAGE_TAG)
+                .tag("home_page")
                 .build();
 
             self.nav_stack.push(&home_page);
@@ -71,22 +68,10 @@ mod imp {
                 move |view_stack| {
                     let visible_child = view_stack.visible_child_name().unwrap();
                     let tag = visible_child.as_str();
-                   println!("tag: {}", tag);
-                    match tag {
-                        "home_page" => obj.navigate_to("/home", true),
-                        "installed_page" => obj.navigate_to("/installed",true),
-                        "updates_page" => obj.navigate_to("/updates", true),
-                        _ => obj.navigate_to("/home", true),
-                    }
+                    obj.navigate_to(tag);
                 }
             });
 
-            self.back_btn.connect_clicked({
-                let nav_stack = self.nav_stack.get();
-                move |_| {
-                    nav_stack.pop();
-                }
-            });
             self.nav_stack.connect_visible_page_notify({
                 let btn = self.back_btn.get();
                 move |nav_stack| {
@@ -101,6 +86,13 @@ mod imp {
                 }
             });
 
+            self.back_btn.connect_clicked({
+                let nav_stack = self.nav_stack.get();
+                move |_| {
+                    nav_stack.pop();
+                }
+            });
+            
             // Setup actions
             let visit_action = gio::SimpleAction::new(
                 "navigator.visit",
@@ -111,7 +103,7 @@ mod imp {
                 let obj = self.obj().clone();
                 move |_, parameter| {
                     let url = parameter.unwrap().get::<String>().unwrap();
-                    obj.navigate_to(&url, false);
+                    obj.navigate_to(&url);
                 }
             });
 
@@ -140,52 +132,29 @@ impl ApphubWindow {
         this
     }
 
-    fn navigate_to(&self, url: &str, replace_all: bool) {
-        let parts = url.split('/').collect::<Vec<&str>>();
-        let nav_stack = self.imp().nav_stack.get();
-        let page = match parts[1] {
-            "home" => {
-                let home_page = self.imp().home_page.get();
-                let home_page = adw::NavigationPage::builder()
-                    .tag("home_page")
-                    .child(&home_page)
-                    .build();
-                home_page
-            }
-            "installed" => {
-                println!("Installed apps");
-                let installed_page = InstalledAppsPage::new();
-                let installed_page = adw::NavigationPage::builder()
-                    .child(&installed_page)
-                    .tag("installed_page")
-                    .build();
-                installed_page
-            }
-            "updates" => {
-                let updates_page = UpdatesAppsPage::new();
-                let updates_page = adw::NavigationPage::builder()
-                    .child(&updates_page)
-                    .tag("updates_page")
-                    .build();
-                updates_page
-            }
-            "app" => {
-                let app_id = parts[2];
-                let app_page = ApphubAppPage::new(app_id);
-                let app_page = adw::NavigationPage::builder().child(&app_page).build();
-                app_page
-            }
-            _ => {
-                let home_page = self.imp().home_page.get();
-                let home_page = adw::NavigationPage::builder().child(&home_page).build();
-                home_page
-            }
-        };
+    pub fn show_error_page(&self, err: crate::error::Error) {
+        let page = crate::views::ErrorPage::new(err);
+        let page = adw::NavigationPage::builder()
+            .title("Error")
+            .child(&page)
+            .build();
+    }
 
-        if replace_all {
-            nav_stack.replace(&[page]);
+    fn navigate_to(&self, url: &str) {
+        let page = Page::parse(url);
+        let nav_stack = self.imp().nav_stack.get();
+        let nav_page = page.create_page();
+
+        if page.is_top_level() {
+            nav_stack.replace(&[nav_page]);
         } else {
-            nav_stack.push(&page);
+            nav_stack.push(&nav_page);
         }
+    }
+}
+
+impl Findable for ApphubWindow {
+    fn find() -> Self {
+        ApphubApplication::find().main_window()
     }
 }

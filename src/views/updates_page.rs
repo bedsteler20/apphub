@@ -1,6 +1,7 @@
 use adw::prelude::*;
 use adw::subclass::prelude::*;
 use gtk::CompositeTemplate;
+
 mod imp {
 
     use gtk::Widget;
@@ -38,7 +39,6 @@ mod imp {
     impl UpdatesAppsPage {
         fn build_row(object: &glib::Object) -> Widget {
             let data = object.downcast_ref::<InstalledApp>().unwrap();
-            ;
             let ui = AppCard::new();
             if let Some(icon) = data.icon() {
                 ui.set_icon_file(icon);
@@ -48,7 +48,7 @@ mod imp {
                 ui.set_description(summery);
             }
             // if is_dup {
-                // ui.set_install_location(data.install_location());
+            // ui.set_install_location(data.install_location());
             // }
             return ui.upcast();
         }

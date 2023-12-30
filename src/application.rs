@@ -1,10 +1,10 @@
 use adw::prelude::*;
 use adw::subclass::prelude::*;
 use glib::once_cell::sync::OnceCell;
-use gtk::gdk;
 use gtk::gio;
 use gtk::glib;
 
+use crate::utils::Findable;
 use crate::utils::xdg_open;
 use crate::views::ApphubWindow;
 
@@ -138,5 +138,15 @@ impl ApphubApplication {
     pub fn run(&self) -> glib::ExitCode {
         dbg!("Starting Application");
         ApplicationExtManual::run(self)
+    }
+}
+
+
+impl Findable for ApphubApplication {
+    fn find() -> Self {
+        gio::Application::default()
+            .expect("No default application set.")
+            .downcast::<Self>()
+            .expect("Default application is not an ApphubApplication.")
     }
 }

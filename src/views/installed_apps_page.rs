@@ -1,6 +1,7 @@
 use adw::prelude::*;
 use adw::subclass::prelude::*;
 use gtk::CompositeTemplate;
+
 mod imp {
 
     use gtk::Widget;
@@ -130,3 +131,4 @@ impl InstalledAppsPage {
         glib::Object::builder().build()
     }
 }
+

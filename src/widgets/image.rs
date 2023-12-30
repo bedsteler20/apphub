@@ -1,15 +1,17 @@
 use gtk::gdk_pixbuf;
 
 use crate::utils::call_me_maybe;
+use crate::utils::http;
 use adw::prelude::*;
-
 #[allow(deprecated)]
 pub fn load_image(url: &String, img: &gtk::Image) {
     call_me_maybe(
         {
             let url = url.clone();
             async move {
-                reqwest::get(url)
+                http()
+                    .get(url)
+                    .send()
                     .await
                     .expect("Unable to get image")
                     .bytes()
@@ -32,14 +34,14 @@ pub fn load_image(url: &String, img: &gtk::Image) {
     );
 }
 
-
-
 pub fn load_picture(url: &String, img: &gtk::Picture) {
     call_me_maybe(
         {
             let url = url.clone();
             async move {
-                reqwest::get(url)
+                http()
+                    .get(url)
+                    .send()
                     .await
                     .expect("Unable to get image")
                     .bytes()

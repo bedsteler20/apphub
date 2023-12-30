@@ -4,7 +4,7 @@ use gtk::prelude::*;
 use std::cell::RefCell;
 
 use crate::{
-    utils::call_me_maybe,
+    utils::{call_me_maybe},
     widgets::{ApphubAppLinks, ApphubInstallBtn},
 };
 use adw::prelude::*;
@@ -139,6 +139,8 @@ impl ApphubAppPage {
         imp.obj().set_child(Some(&imp.root.get()));
     }
 }
+
+
 
 fn format_description(description: &String) -> String {
     description

@@ -1,17 +1,23 @@
+#![feature(associated_type_defaults)]
+
 mod application;
+mod config;
 mod error;
 mod models;
 mod state;
 mod utils;
 mod views;
 mod widgets;
+mod navigator;
 
 use application::ApphubApplication;
 use gio::prelude::ApplicationExt;
 use glib::StaticTypeExt;
 use gtk::gdk;
+use utils::configure_http;
 
 fn main() -> glib::ExitCode {
+    configure_http();
     register_types();
     let app = ApphubApplication::new();
     app.connect_activate(|_app| register_resource());

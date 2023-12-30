@@ -1,10 +1,13 @@
 use adw::subclass::prelude::*;
 use glib::subclass::InitializingObject;
 use gtk::CompositeTemplate;
+use once_cell::sync::OnceCell;
 
-use crate::{utils::call_me_maybe, widgets::AppCard};
+use crate::{utils::{call_me_maybe,  Findable}, widgets::AppCard};
 use flathub_rs::AppHit;
 use gtk::prelude::*;
+
+use super::ApphubWindow;
 
 mod imp {
 
@@ -114,4 +117,12 @@ impl ApphubHomePage {
     pub fn new() -> Self {
         glib::Object::builder().build()
     }
+}
+
+
+impl Findable for ApphubHomePage {
+    fn find() -> Self {
+        crate::views::ApphubWindow::find().imp().home_page.get()
+    }
+
 }
