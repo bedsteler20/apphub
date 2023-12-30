@@ -2,16 +2,13 @@ use adw::prelude::*;
 use glib::subclass::types::ObjectSubclassIsExt;
 
 use crate::application::ApphubApplication;
-use crate::navigator::Page;
+use crate::navigator::{Page, Navigator};
 use crate::utils::Findable;
 use adw::subclass::prelude::*;
 use glib::subclass::InitializingObject;
 use gtk::CompositeTemplate;
 
-use crate::views::ApphubAppPage;
-use crate::views::ApphubHomePage;
-use crate::views::InstalledAppsPage;
-use crate::views::UpdatesAppsPage;
+
 mod imp {
     use super::*;
 
@@ -31,7 +28,7 @@ mod imp {
         #[template_child]
         pub nav_stack: TemplateChild<adw::NavigationView>,
         #[template_child]
-        pub home_page: TemplateChild<ApphubHomePage>,
+        pub home_page: TemplateChild<adw::NavigationPage>,
     }
 
     #[glib::object_subclass]
@@ -54,13 +51,8 @@ mod imp {
             self.parent_constructed();
 
             // Setup UI
-            let home_page = adw::NavigationPage::builder()
-                .title("Explore")
-                .child(&self.home_page.get())
-                .tag("home_page")
-                .build();
-
-            self.nav_stack.push(&home_page);
+           
+            self.nav_stack.push(&self.home_page.get());
 
             // Connect signals
             self.view_stack.connect_visible_child_notify({
@@ -92,7 +84,7 @@ mod imp {
                     nav_stack.pop();
                 }
             });
-            
+
             // Setup actions
             let visit_action = gio::SimpleAction::new(
                 "navigator.visit",
@@ -134,10 +126,8 @@ impl ApphubWindow {
 
     pub fn show_error_page(&self, err: crate::error::Error) {
         let page = crate::views::ErrorPage::new(err);
-        let page = adw::NavigationPage::builder()
-            .title("Error")
-            .child(&page)
-            .build();
+        let current = self.imp().nav_stack.get().visible_page().unwrap();
+        current.set_child(Some(&page));
     }
 
     fn navigate_to(&self, url: &str) {

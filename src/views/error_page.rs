@@ -1,4 +1,3 @@
-
 pub use adw::subclass::prelude::*;
 use gtk::CompositeTemplate;
 
@@ -35,7 +34,7 @@ mod imp {
 }
 
 glib::wrapper! {
-    pub struct ErrorPage(ObjectSubclass<imp::ErrorPage>) 
+    pub struct ErrorPage(ObjectSubclass<imp::ErrorPage>)
         @extends gtk::Widget, adw::Bin;
 }
 
@@ -43,7 +42,9 @@ impl ErrorPage {
     pub fn new(err: crate::error::Error) -> Self {
         let this: Self = glib::Object::builder().build();
         let imp = this.imp();
-        imp.status.set_description(Some(err.to_string().as_str()));
+
+        imp.status
+            .set_description(Some(err.to_string().replace("&", "&amp;").as_str()));
         return this;
     }
 }

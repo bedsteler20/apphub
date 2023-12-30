@@ -4,7 +4,7 @@ use gtk::prelude::*;
 use std::cell::RefCell;
 
 use crate::{
-    utils::{call_me_maybe},
+    utils::call_me_maybe,
     widgets::{ApphubAppLinks, ApphubInstallBtn},
 };
 use adw::prelude::*;
@@ -13,6 +13,8 @@ use glib::subclass::InitializingObject;
 use gtk::CompositeTemplate;
 
 mod imp {
+    use crate::{views::ApphubWindow, utils::Findable};
+
     use super::*;
     #[derive(CompositeTemplate, Default, glib::Properties)]
     #[template(file = "src/views/app_page.blp")]
@@ -70,7 +72,8 @@ mod imp {
                         if let Ok(data) = data {
                             this.load_data(data);
                         } else if let Err(err) = data {
-                            println!("Failed to load app page data {}", err);
+                            println!("Error Page");
+                            ApphubWindow::find().show_error_page(err.into());
                         }
                     }
                 });
@@ -139,8 +142,6 @@ impl ApphubAppPage {
         imp.obj().set_child(Some(&imp.root.get()));
     }
 }
-
-
 
 fn format_description(description: &String) -> String {
     description

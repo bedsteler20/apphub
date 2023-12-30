@@ -1,10 +1,12 @@
-use glib::IsA;
 use tokio::runtime::Runtime;
 mod call_me_maybe;
 mod http;
 mod sendable;
 mod transaction_runner;
 mod xdg;
+mod load_grid;
+
+pub use load_grid::load_grid;
 pub use http::configure_http;
 pub use http::http;
 

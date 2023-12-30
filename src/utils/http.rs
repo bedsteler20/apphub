@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use http_cache_reqwest::{CACacheManager, Cache, CacheMode, HttpCache, HttpCacheOptions};
 use once_cell::sync::OnceCell;
 use reqwest_middleware::{ClientBuilder, ClientWithMiddleware};
@@ -17,6 +19,8 @@ pub fn configure_http() {
             crate::config::APP_ID,
             crate::config::APP_VERSION
         ))
+        .timeout(Duration::from_secs(30))
+        .https_only(true)
         .build()
         .unwrap();
     let client = ClientBuilder::new(client)

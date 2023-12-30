@@ -35,7 +35,7 @@ fn register_resource() {
         &gdk::Display::default().expect("Could not connect to a display."),
         &provider,
         gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
-    )
+    );
 }
 
 fn register_types() {
@@ -48,6 +48,9 @@ fn register_types() {
     views::ApphubAppPage::ensure_type();
     views::ApphubHomePage::ensure_type();
     views::ApphubWindow::ensure_type();
+    views::InstalledAppsPage::ensure_type();
+    views::UpdatesAppsPage::ensure_type();
+    views::ErrorPage::ensure_type();
 
     // enums
     models::TransactionType::ensure_type();

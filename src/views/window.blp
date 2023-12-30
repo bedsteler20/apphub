@@ -53,8 +53,11 @@ template $ApphubWindow: Adw.ApplicationWindow {
     };
 }
 
-$ApphubHomePage home_page {}
-
+Adw.NavigationPage home_page {
+    tag: "/home";
+    title: "Explore";
+    child: $ApphubHomePage {};
+}
 Adw.ViewStack view_stack {
 
     Adw.ViewStackPage {
