@@ -9,7 +9,7 @@ template $ApphubInstallBtn: Gtk.Box {
 
     Button install_btn {
         visible: true;
-        label: "Install";
+        label: _("Install");
         clicked => $on_install_btn_clicked() swapped;
 
         styles [
@@ -29,7 +29,7 @@ template $ApphubInstallBtn: Gtk.Box {
 
     Button open_btn {
         visible: false;
-        label: "Open";
+        label: _("Open");
         clicked => $on_open_btn_clicked() swapped;
 
         styles [
@@ -44,7 +44,7 @@ template $ApphubInstallBtn: Gtk.Box {
         vexpand: true;
 
         Label progress_label {
-            label: "Updating...";
+            label: _("Updating...");
             margin-bottom: 4;
 
             styles [

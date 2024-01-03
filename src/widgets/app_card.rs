@@ -6,6 +6,7 @@ use gtk::CompositeTemplate;
 use crate::models::InstallLocation;
 
 use super::load_image;
+use tr::tr;
 
 mod imp {
 
@@ -76,11 +77,11 @@ impl AppCard {
         self.imp().install_location_label.set_visible(true);
         match location {
             InstallLocation::System => {
-                self.imp().install_location_label.set_text("System");
+                self.imp().install_location_label.set_text(&tr!("System"));
                 self.imp().install_location_label.add_css_class("system-install-label");
             }
             InstallLocation::User => {
-                self.imp().install_location_label.set_text("User");
+                self.imp().install_location_label.set_text(&tr!("User"));
                 self.imp().install_location_label.add_css_class("user-install-label");
             }
         }

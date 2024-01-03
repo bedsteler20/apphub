@@ -11,7 +11,7 @@ use adw::prelude::*;
 use adw::subclass::prelude::*;
 use glib::subclass::InitializingObject;
 use gtk::CompositeTemplate;
-
+use tr::tr;
 mod imp {
     use crate::{views::ApphubWindow, utils::Findable};
 
@@ -102,20 +102,20 @@ impl ApphubAppPage {
         if let Some(ref developer_name) = data.developer_name {
             imp.dev_label.set_text(&developer_name);
         } else {
-            imp.dev_label.set_text("Unknown developer");
+            imp.dev_label.set_text(&tr!("Unknown developer"));
         }
 
         if let Some(ref summary) = data.summary {
             imp.summary_label.set_text(&summary);
         } else {
-            imp.summary_label.set_text("No summary available");
+            imp.summary_label.set_text(&tr!("No summary available"));
         }
 
         if let Some(ref description) = data.description {
             imp.description_label
                 .set_text(&format_description(description));
         } else {
-            imp.description_label.set_text("No description available");
+            imp.description_label.set_text(&tr!("No description available"));
         }
 
         if let Some(ref icon) = data.icon {

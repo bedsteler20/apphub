@@ -7,7 +7,7 @@ use gtk::prelude::*;
 use gtk::CompositeTemplate;
 
 use super::ApphubWindow;
-
+use tr::tr;
 mod imp {
     use super::*;
 
@@ -233,15 +233,15 @@ impl Navigator for PagerNavigator {
     fn create_page(&self) -> adw::NavigationPage {
         match self {
             PagerNavigator::NewApps(_) => adw::NavigationPage::builder()
-                .title("New Apps")
+                .title(tr!("New Apps"))
                 .child(&PagerPage::new(self.clone()))
                 .build(),
             PagerNavigator::Popular(_) => adw::NavigationPage::builder()
-                .title("Popular")
+                .title(tr!("Popular"))
                 .child(&PagerPage::new(self.clone()))
                 .build(),
             PagerNavigator::RecentlyUpdated(_) => adw::NavigationPage::builder()
-                .title("Recently Updated")
+                .title(tr!("Recently Updated"))
                 .child(&PagerPage::new(self.clone()))
                 .build(),
         }

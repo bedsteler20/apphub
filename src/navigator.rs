@@ -4,6 +4,7 @@ use crate::{
     utils::Findable,
     views::{self, PagerNavigator},
 };
+use tr::tr;
 
 pub trait Navigator {
     fn route(&self) -> String;
@@ -83,17 +84,17 @@ impl Navigator for Page {
         match self {
             Page::Home => views::ApphubWindow::find().imp().home_page.get(),
             Page::Installed => adw::NavigationPage::builder()
-                .title("Installed Apps")
+                .title(&tr!("Installed Apps"))
                 .tag(self.route())
                 .child(&views::InstalledAppsPage::new())
                 .build(),
             Page::Updates => adw::NavigationPage::builder()
-                .title("Updates")
+                .title(&tr!("Updates"))
                 .tag(self.route())
                 .child(&views::UpdatesAppsPage::new())
                 .build(),
             Page::App(id) => adw::NavigationPage::builder()
-                .title("App")
+                .title(&tr!("App"))
                 .tag(self.route())
                 .child(&views::ApphubAppPage::new(id))
                 .build(),

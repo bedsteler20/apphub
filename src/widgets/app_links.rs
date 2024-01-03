@@ -5,7 +5,7 @@ use gtk::prelude::*;
 use adw::subclass::prelude::*;
 use glib::subclass::InitializingObject;
 use gtk::CompositeTemplate;
-
+use tr::tr;
 mod imp {
     use super::*;
 
@@ -83,7 +83,7 @@ impl ApphubAppLinks {
             .build();
 
         let description_widget = gtk::Label::builder()
-            .label(description.unwrap_or(url.unwrap_or("No description provided")))
+            .label(description.unwrap_or(url.unwrap_or(&tr!("No description provided"))))
             .halign(gtk::Align::Start)
             .wrap(true)
             .overflow(gtk::Overflow::Hidden)
@@ -121,24 +121,24 @@ impl ApphubAppLinks {
     pub fn load_data(&self, data: &flathub_rs::Appstream) {
         if let Some(links) = data.urls.as_ref() {
             if let Some(bug_tracker) = links.bug_tracker.as_ref() {
-                self.build_card("Report an Issue", "bug-symbolic", Some(&bug_tracker), None);
+                self.build_card(&tr!("Report an Issue"), "bug-symbolic", Some(&bug_tracker), None);
             }
 
             if let Some(contribute) = links.contribute.as_ref() {
-                self.build_card("Contribute", "merge-symbolic", Some(&contribute), None);
+                self.build_card(&tr!("Contribute"), "merge-symbolic", Some(&contribute), None);
             }
 
             if let Some(donation) = links.donation.as_ref() {
-                self.build_card("Donate", "heart-filled-symbolic", Some(&donation), None);
+                self.build_card(&tr!("Donate"), "heart-filled-symbolic", Some(&donation), None);
             }
 
             if let Some(help) = links.help.as_ref() {
-                self.build_card("Help", "open-book-symbolic", Some(&help), None);
+                self.build_card(&tr!("Help"), "open-book-symbolic", Some(&help), None);
             }
 
             if let Some(translate) = links.translate.as_ref() {
                 self.build_card(
-                    "Contribute Translation",
+                    &tr!("Contribute Translation"),
                     "language-symbolic",
                     Some(&translate),
                     None,
@@ -146,11 +146,11 @@ impl ApphubAppLinks {
             }
 
             if let Some(homepage) = links.homepage.as_ref() {
-                self.build_card("Homepage", "globe-symbolic", Some(&homepage), None);
+                self.build_card(&tr!("Homepage"), "globe-symbolic", Some(&homepage), None);
             }
 
             if let Some(vcs_browser) = links.vcs_browser.as_ref() {
-                self.build_card("Source Code", "git-symbolic", Some(&vcs_browser), None);
+                self.build_card(&tr!("Source Code"), "git-symbolic", Some(&vcs_browser), None);
             }
 
             if let Some(contact) = links.contact.as_ref() {
@@ -164,16 +164,16 @@ impl ApphubAppLinks {
             }
 
             if let Some(faq) = links.faq.as_ref() {
-                self.build_card("FAQ", "about-symbolic", Some(&faq), None);
+                self.build_card(&tr!("FAQ"), "about-symbolic", Some(&faq), None);
             }
         }
 
         if let Some(license) = data.project_license.as_ref() {
-            self.build_card("License", "bank-symbolic", None, Some(&license));
+            self.build_card(&tr!("License"), "bank-symbolic", None, Some(&license));
         }
 
         self.build_card(
-            "Manifest",
+            &tr!("Manifest"),
             "code-symbolic",
             Some(&format!("https://github.com/flathub/{}", data.id)),
             None,
