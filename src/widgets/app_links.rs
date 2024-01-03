@@ -119,7 +119,6 @@ impl ApphubAppLinks {
     }
 
     pub fn load_data(&self, data: &flathub_rs::Appstream) {
-        let imp = self.imp();
         if let Some(links) = data.urls.as_ref() {
             if let Some(bug_tracker) = links.bug_tracker.as_ref() {
                 self.build_card("Report an Issue", "bug-symbolic", Some(&bug_tracker), None);
@@ -150,7 +149,23 @@ impl ApphubAppLinks {
                 self.build_card("Homepage", "globe-symbolic", Some(&homepage), None);
             }
 
-            //  TODO: add vcs_browser, contact  and faq
+            if let Some(vcs_browser) = links.vcs_browser.as_ref() {
+                self.build_card("Source Code", "git-symbolic", Some(&vcs_browser), None);
+            }
+
+            if let Some(contact) = links.contact.as_ref() {
+                // cspell: disable-next-line
+                self.build_card(
+                    "Contact",
+                    "chat-bubble-emtpy-symbolic",
+                    Some(&contact),
+                    None,
+                );
+            }
+
+            if let Some(faq) = links.faq.as_ref() {
+                self.build_card("FAQ", "about-symbolic", Some(&faq), None);
+            }
         }
 
         if let Some(license) = data.project_license.as_ref() {
