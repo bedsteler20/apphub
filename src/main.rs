@@ -16,6 +16,7 @@ use glib::StaticTypeExt;
 use gtk::gdk;
 use utils::configure_http;
 
+
 fn main() -> glib::ExitCode {
     configure_http();
     register_types();

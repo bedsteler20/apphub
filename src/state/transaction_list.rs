@@ -78,6 +78,12 @@ impl TransactionList {
             let this = self.clone();
             move |transaction| {
                 if let Some(error) = transaction.error() {
+                    // flatpak throws a glib error when cancelled by the user
+                    // since we already remove the transaction form the list 
+                    // when the user cancels it, we can just return here
+                    if error.contains("Operation was cancelled") {
+                        return;
+                    }
                     // TODO: Show error (probably trigger a gtk action)
                     println!("Transaction error: {:?}", error);
                     this.remove(transaction);
