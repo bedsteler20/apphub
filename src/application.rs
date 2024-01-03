@@ -4,8 +4,10 @@ use glib::once_cell::sync::OnceCell;
 use gtk::gio;
 use gtk::glib;
 
-use crate::utils::Findable;
+use crate::config::APP_ID;
+use crate::config::RESOURCE_PATH;
 use crate::utils::xdg_open;
+use crate::utils::Findable;
 use crate::views::ApphubWindow;
 
 mod imp {
@@ -70,9 +72,9 @@ glib::wrapper! {
 impl ApphubApplication {
     pub fn new() -> Self {
         glib::Object::builder()
-            .property("application-id", "dev.bedsteler20.Apphub")
+            .property("application-id", APP_ID)
             .property("flags", gio::ApplicationFlags::empty())
-            .property("resource-base-path", "/dev/bedsteler20/Apphub/")
+            .property("resource-base-path", RESOURCE_PATH)
             .build()
     }
 
@@ -132,7 +134,15 @@ impl ApphubApplication {
     }
 
     fn show_about_dialog(&self) {
-        unimplemented!()
+        let dialog = adw::AboutWindow::from_appdata(
+            format!(
+                "{}/dev.bedsteler20.Apphub.metainfo.xml",
+                self.resource_base_path().unwrap()
+            )
+            .as_str(),
+            None,
+        );
+        dialog.present();
     }
 
     pub fn run(&self) -> glib::ExitCode {
@@ -140,7 +150,6 @@ impl ApphubApplication {
         ApplicationExtManual::run(self)
     }
 }
-
 
 impl Findable for ApphubApplication {
     fn find() -> Self {

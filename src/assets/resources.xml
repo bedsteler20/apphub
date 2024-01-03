@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
     <gresource prefix="/dev/bedsteler20/Apphub">
+        <file preprocess="xml-stripblanks">dev.bedsteler20.Apphub.metainfo.xml</file>
         <file preprocess="xml-stripblanks">icons/scalable/actions/arrow3-down-symbolic.svg</file>
         <file preprocess="xml-stripblanks">icons/scalable/actions/bank-symbolic.svg</file>
         <file preprocess="xml-stripblanks">icons/scalable/actions/bug-symbolic.svg</file>

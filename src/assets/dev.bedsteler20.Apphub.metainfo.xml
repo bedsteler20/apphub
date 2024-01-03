@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<component type="desktop">
+  <!--Created with jdAppStreamEdit 8.0-->
+  <id>dev.bedsteler20.Apphub</id>
+  <name>Apphub</name>
+  <summary>A modern software center for linux built around flathub</summary>
+  <developer_name>Cameron Dehning</developer_name>
+  <metadata_license>GFDL-1.3</metadata_license>
+  <project_license>LGPL-3.0-or-later</project_license>
+  <update_contact>bedsteler2.0+apphub@gmail.com</update_contact>
+  <project_group>GNOME</project_group>
+  <description/>
+  <content_rating type="oars-1.1"/>
+</component>
