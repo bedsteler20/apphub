@@ -21,7 +21,7 @@ pub fn load_grid(grid: &gtk::FlowBox, data: &Vec<AppHit>) {
         let btn = gtk::Button::builder()
             .child(&app_widget)
             .css_classes(vec!["card"])
-            .action_name("win.navigator.visit")
+            .action_name("navigation.visit")
             .action_target(&format!("/app/{}", app.app_id).to_variant())
             .build();
 

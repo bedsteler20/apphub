@@ -16,6 +16,12 @@ template $ApphubWindow: Adw.ApplicationWindow {
         }
     }
 
+    // Handels mouse back button
+    GestureClick {
+        button: 8;
+        pressed => $on_back_mouse_btn() swapped;
+    }
+
     content: Adw.ToolbarView {
         [top]
         Adw.HeaderBar header_bar {
@@ -23,6 +29,7 @@ template $ApphubWindow: Adw.ApplicationWindow {
             Button back_btn {
                 icon-name: "go-previous-symbolic";
                 visible: false;
+                clicked => $on_back_menu_btn() swapped;
 
                 styles [
                     "flat",
@@ -43,6 +50,7 @@ template $ApphubWindow: Adw.ApplicationWindow {
         }
 
         content: Adw.NavigationView nav_stack {
+            notify::visible-page => $on_nav_stack_page_changed() swapped;
         };
 
         [bottom]
@@ -56,9 +64,12 @@ template $ApphubWindow: Adw.ApplicationWindow {
 Adw.NavigationPage home_page {
     tag: "/home";
     title: "Explore";
+
     child: $ApphubHomePage {};
 }
+
 Adw.ViewStack view_stack {
+    notify::visible-child => $on_view_stack_child_changed() swapped;
 
     Adw.ViewStackPage {
         title: "Explore";
@@ -95,7 +106,5 @@ Adw.ViewStack view_stack {
 
 menu primary_menu {
     item (_("Preferences"), "app.preferences")
-    item (_("Keyboard Shortcuts"), "win.show-help-overlay")
-    item (_("Open in Browser"), "app.open-browser")
     item (_("About Apphub"), "app.about")
 }

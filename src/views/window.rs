@@ -2,12 +2,11 @@ use adw::prelude::*;
 use glib::subclass::types::ObjectSubclassIsExt;
 
 use crate::application::ApphubApplication;
-use crate::navigator::{Page, Navigator};
+use crate::navigator::{Navigator, Page};
 use crate::utils::Findable;
 use adw::subclass::prelude::*;
 use glib::subclass::InitializingObject;
 use gtk::CompositeTemplate;
-
 
 mod imp {
     use super::*;
@@ -39,6 +38,12 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             klass.bind_template();
+            klass.bind_template_callbacks();
+            klass.install_action(
+                "navigation.visit",
+                Some("s"),
+                super::ApphubWindow::on_navigate_action,
+            );
         }
 
         fn instance_init(obj: &InitializingObject<Self>) {
@@ -46,60 +51,48 @@ mod imp {
         }
     }
 
+    #[gtk::template_callbacks]
+    impl ApphubWindow {
+        // The view stack isn't acutely displaying the page we are
+        // just using it for the buttons and the listing for when it
+        // thinks it should change the page so we can tell the nav stack
+        // to change the page
+        #[template_callback]
+        fn on_view_stack_child_changed(&self) {
+            let visible_child = self.view_stack.visible_child_name().unwrap();
+            let tag = visible_child.as_str();
+            self.obj().navigate_to(tag);
+        }
+
+        // When the mouse button is clicked by default libadwaita will
+        // go back in the nav stack but it propagates a some waring
+        // message about a invalid state so we just do it ourselves
+        #[template_callback]
+        fn on_back_mouse_btn(&self) {
+            self.obj().navigate_back();
+        }
+
+        // When the nav stack changes page we want to update the back
+        // button to be visible or not
+        #[template_callback]
+        fn on_nav_stack_page_changed(&self) {
+            self.back_btn.set_visible(
+                self.nav_stack
+                    .previous_page(&self.nav_stack.visible_page().unwrap())
+                    .is_some(),
+            );
+        }
+
+        #[template_callback]
+        fn on_back_menu_btn(&self) {
+            self.obj().navigate_back();
+        }
+    }
+
     impl ObjectImpl for ApphubWindow {
         fn constructed(&self) {
             self.parent_constructed();
-
-            // Setup UI
-           
             self.nav_stack.push(&self.home_page.get());
-
-            // Connect signals
-            self.view_stack.connect_visible_child_notify({
-                let obj = self.obj().clone();
-                move |view_stack| {
-                    let visible_child = view_stack.visible_child_name().unwrap();
-                    let tag = visible_child.as_str();
-                    obj.navigate_to(tag);
-                }
-            });
-
-            self.nav_stack.connect_visible_page_notify({
-                let btn = self.back_btn.get();
-                move |nav_stack| {
-                    if nav_stack
-                        .previous_page(&nav_stack.visible_page().unwrap())
-                        .is_none()
-                    {
-                        btn.set_visible(false);
-                    } else {
-                        btn.set_visible(true);
-                    }
-                }
-            });
-
-            self.back_btn.connect_clicked({
-                let nav_stack = self.nav_stack.get();
-                move |_| {
-                    nav_stack.pop();
-                }
-            });
-
-            // Setup actions
-            let visit_action = gio::SimpleAction::new(
-                "navigator.visit",
-                Some(&glib::VariantType::new("s").unwrap()),
-            );
-
-            visit_action.connect_activate({
-                let obj = self.obj().clone();
-                move |_, parameter| {
-                    let url = parameter.unwrap().get::<String>().unwrap();
-                    obj.navigate_to(&url);
-                }
-            });
-
-            self.obj().add_action(&visit_action);
         }
     }
     impl ApplicationWindowImpl for ApphubWindow {}
@@ -140,6 +133,16 @@ impl ApphubWindow {
         } else {
             nav_stack.push(&nav_page);
         }
+    }
+
+    pub fn navigate_back(&self) {
+        let nav_stack = self.imp().nav_stack.get();
+        nav_stack.pop();
+    }
+
+    fn on_navigate_action(&self, _: &str, parameter: Option<&glib::Variant>) {
+        let url = parameter.unwrap().get::<String>().unwrap();
+        self.navigate_to(&url);
     }
 }
 

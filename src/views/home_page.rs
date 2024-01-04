@@ -50,11 +50,11 @@ mod imp {
         fn constructed(&self) {
             self.parent_constructed();
             self.popular_btn
-                .set_action_name(Some("win.navigator.visit"));
+                .set_action_name(Some("navigation.visit"));
             self.recently_added_btn
-                .set_action_name(Some("win.navigator.visit"));
+                .set_action_name(Some("navigation.visit"));
             self.recently_updated_btn
-                .set_action_name(Some("win.navigator.visit"));
+                .set_action_name(Some("navigation.visit"));
             self.popular_btn
                 .set_action_target(Some("/pager/popular/1".to_variant()));
             self.recently_added_btn
