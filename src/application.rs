@@ -119,6 +119,17 @@ impl ApphubApplication {
                     app.show_about_dialog();
                 })
                 .build(),
+            // Open URL
+            gio::ActionEntry::builder("open-url")
+                .activate(|_, _, opts| {
+                    if let Some(opts) = opts {
+                        if let Some(url) = opts.get::<String>() {
+                            xdg_open(url.as_str());
+                        }
+                    }
+                })
+                .parameter_type(Some(&glib::VariantType::new("s").unwrap()))
+                .build(),
         ]);
     }
 
