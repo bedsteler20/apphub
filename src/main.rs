@@ -9,6 +9,7 @@ mod utils;
 mod views;
 mod widgets;
 mod navigator;
+mod router;
 
 use application::ApphubApplication;
 use gio::prelude::ApplicationExt;
