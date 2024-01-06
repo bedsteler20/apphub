@@ -16,92 +16,43 @@ template $ApphubWindow: Adw.ApplicationWindow {
         }
     }
 
-    // Handels mouse back button
-    GestureClick {
-        button: 8;
-        pressed => $on_back_mouse_btn() swapped;
-    }
+    content: $Router router {
+        child: Adw.ToolbarView {
+            [top]
+            Adw.HeaderBar header_bar {
+                [start]
+                Button back_btn {
+                    icon-name: "go-previous-symbolic";
+                    visible: bind router.can-go-back;
+                    action-name: "router.go-back";
 
-    content: Adw.ToolbarView {
-        [top]
-        Adw.HeaderBar header_bar {
-            [start]
-            Button back_btn {
-                icon-name: "go-previous-symbolic";
-                visible: false;
-                clicked => $on_back_menu_btn() swapped;
+                    styles [
+                        "flat",
+                        "symbolic"
+                    ]
+                }
 
-                styles [
-                    "flat",
-                    "symbolic"
-                ]
+                title-widget: Adw.ViewSwitcher view_switcher {
+                    stack: bind router.main-pages;
+                    policy: wide;
+                };
+
+                [end]
+                MenuButton {
+                    icon-name: "open-menu-symbolic";
+                    menu-model: primary_menu;
+                }
             }
 
-            title-widget: Adw.ViewSwitcher view_switcher {
-                stack: view_stack;
-                policy: wide;
-            };
+            content: bind router.view;
 
-            [end]
-            MenuButton {
-                icon-name: "open-menu-symbolic";
-                menu-model: primary_menu;
+            [bottom]
+            Adw.ViewSwitcherBar switcher_bar {
+                reveal: false;
+                stack: bind router.main-pages;
             }
-        }
-
-        content: Adw.NavigationView nav_stack {
-            notify::visible-page => $on_nav_stack_page_changed() swapped;
         };
-
-        [bottom]
-        Adw.ViewSwitcherBar switcher_bar {
-            reveal: false;
-            stack: view_stack;
-        }
     };
-}
-
-Adw.NavigationPage home_page {
-    tag: "/home";
-    title: "Explore";
-
-    child: $ApphubHomePage {};
-}
-
-Adw.ViewStack view_stack {
-    notify::visible-child => $on_view_stack_child_changed() swapped;
-
-    Adw.ViewStackPage {
-        title: "Explore";
-        name: "/home";
-        icon-name: "compass-symbolic";
-
-        child: Box {};
-    }
-
-    Adw.ViewStackPage {
-        title: "Find";
-        name: "/find";
-        icon-name: "edit-find-symbolic";
-
-        child: Box {};
-    }
-
-    Adw.ViewStackPage {
-        title: "Installed";
-        name: "/installed";
-        icon-name: "folder-symbolic";
-
-        child: Box {};
-    }
-
-    Adw.ViewStackPage {
-        title: "Updates";
-        name: "/updates";
-        icon-name: "update-symbolic";
-
-        child: Box {};
-    }
 }
 
 menu primary_menu {

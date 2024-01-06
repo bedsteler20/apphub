@@ -2,14 +2,13 @@ use adw::prelude::*;
 use adw::subclass::prelude::*;
 use gtk::CompositeTemplate;
 
+use crate::router::Route;
+
 mod imp {
 
     use gtk::Widget;
 
-    use crate::{
-        models::InstalledApp, state::Context, utils::Findable, views::ApphubWindow,
-        widgets::AppCard,
-    };
+    use crate::{models::InstalledApp, state::Context, widgets::AppCard};
 
     use super::*;
 
@@ -118,7 +117,8 @@ mod imp {
                 move |_, row| {
                     let item = apps.item(row.index() as u32).unwrap();
                     let app = item.downcast_ref::<InstalledApp>().unwrap();
-                    ApphubWindow::find().navigate_to(&format!("/app/{}", app.app_id()));
+                    // TODO fix this
+                    // ApphubWindow::find().navigate_to(&format!("/app/{}", app.app_id()));
                 }
             });
 
@@ -127,7 +127,8 @@ mod imp {
                 move |_, row| {
                     let item = apps.item(row.index() as u32).unwrap();
                     let app = item.downcast_ref::<InstalledApp>().unwrap();
-                    ApphubWindow::find().navigate_to(&format!("/app/{}", app.app_id()));
+                    // TODO fix this
+                    // ApphubWindow::find().navigate_to(&format!("/app/{}", app.app_id()));
                 }
             });
 
@@ -150,5 +151,23 @@ glib::wrapper! {
 impl InstalledAppsPage {
     pub fn new() -> Self {
         glib::Object::builder().build()
+    }
+}
+
+impl Route for InstalledAppsPage {
+    fn route() -> &'static str {
+        "installed"
+    }
+
+    fn is_top_level() -> bool {
+        true
+    }
+
+    fn is_static() -> bool {
+        true
+    }
+
+    fn build(_parameter: Option<Self::Parameter>) -> impl IsA<gtk::Widget> {
+        Self::new()
     }
 }

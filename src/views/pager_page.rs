@@ -1,5 +1,4 @@
 use crate::{
-    navigator::Navigator,
     utils::{call_me_maybe, load_grid, Findable},
 };
 use adw::subclass::prelude::*;
@@ -83,25 +82,25 @@ impl PagerPage {
     }
 
     fn load_data(&self, nav: PagerNavigator) {
-        let this = self.clone();
-        let path = nav
-            .route()
-            .split("/")
-            .collect::<Vec<&str>>()
-            .split_last()
-            .unwrap()
-            .1
-            .join("/");
+        // let this = self.clone();
+        // let path = nav
+        //     .route()
+        //     .split("/")
+        //     .collect::<Vec<&str>>()
+        //     .split_last()
+        //     .unwrap()
+        //     .1
+        //     .join("/");
 
-        call_me_maybe(async move { Self::fetch_data(nav).await }, move |data| {
-            if let Ok(data) = data {
-                load_grid(&this.imp().flow_box, &data.hits);
-                this.imp().stack.set_visible_child(&this.imp().root.get());
-                this.setup_dots(data.page, data.total_pages, &path);
-            } else if let Err(err) = data {
-                ApphubWindow::find().show_error_page(err.into());
-            }
-        });
+        // call_me_maybe(async move { Self::fetch_data(nav).await }, move |data| {
+        //     if let Ok(data) = data {
+        //         load_grid(&this.imp().flow_box, &data.hits);
+        //         this.imp().stack.set_visible_child(&this.imp().root.get());
+        //         this.setup_dots(data.page, data.total_pages, &path);
+        //     } else if let Err(err) = data {
+        //         ApphubWindow::find().show_error_page(err.into());
+        //     }
+        // });
     }
 
     fn setup_dots(&self, current_page: i32, max_pages: i32, path: &str) {
@@ -109,7 +108,8 @@ impl PagerPage {
             let path = path.to_string();
             btn.connect_clicked(move |btn| {
                 let page = btn.label().unwrap().parse::<i32>().unwrap();
-                ApphubWindow::find().navigate_to(&format!("{}/{}", path, page));
+                    // TODO fix this
+                // ApphubWindow::find().navigate_to(&format!("{}/{}", path, page));
             });
         }
         let imp = self.imp();
@@ -188,62 +188,62 @@ pub enum PagerNavigator {
     NewApps(i32),
 }
 
-impl Navigator for PagerNavigator {
-    fn route(&self) -> String {
-        match self {
-            PagerNavigator::Popular(p) => format!("/pager/popular/{}", p),
-            PagerNavigator::RecentlyUpdated(p) => format!("/pager/recently-updated/{}", p),
-            PagerNavigator::NewApps(p) => format!("/pager/new-apps/{}", p),
-        }
-    }
+// impl Navigator for PagerNavigator {
+//     fn route(&self) -> String {
+//         match self {
+//             PagerNavigator::Popular(p) => format!("/pager/popular/{}", p),
+//             PagerNavigator::RecentlyUpdated(p) => format!("/pager/recently-updated/{}", p),
+//             PagerNavigator::NewApps(p) => format!("/pager/new-apps/{}", p),
+//         }
+//     }
 
-    fn matches(&self, route: &str) -> bool {
-        match self {
-            PagerNavigator::Popular(p) => route == format!("/pager/popular/{}", p),
-            PagerNavigator::RecentlyUpdated(p) => route == format!("/pager/recently-updated/{}", p),
-            PagerNavigator::NewApps(p) => route == format!("/pager/new-apps/{}", p),
-        }
-    }
+//     fn matches(&self, route: &str) -> bool {
+//         match self {
+//             PagerNavigator::Popular(p) => route == format!("/pager/popular/{}", p),
+//             PagerNavigator::RecentlyUpdated(p) => route == format!("/pager/recently-updated/{}", p),
+//             PagerNavigator::NewApps(p) => route == format!("/pager/new-apps/{}", p),
+//         }
+//     }
 
-    fn parse(route: &str) -> Self {
-        let parts: Vec<&str> = route.split("/").collect();
-        if parts.len() < 4 {
-            panic!("Invalid route {}", route)
-        } else if parts.len() == 4 {
-            let page = parts[2];
-            let page_num = parts[3].parse::<i32>().unwrap();
-            match page {
-                "popular" => PagerNavigator::Popular(page_num),
-                "recently-updated" => PagerNavigator::RecentlyUpdated(page_num),
-                "new-apps" => PagerNavigator::NewApps(page_num),
-                _ => panic!("Invalid route {}", route),
-            }
-        } else if parts.len() == 5 {
-            let page = parts[2];
-            let option = parts[3];
-            let page_num = parts[4].parse::<i32>().unwrap();
+//     fn parse(route: &str) -> Self {
+//         let parts: Vec<&str> = route.split("/").collect();
+//         if parts.len() < 4 {
+//             panic!("Invalid route {}", route)
+//         } else if parts.len() == 4 {
+//             let page = parts[2];
+//             let page_num = parts[3].parse::<i32>().unwrap();
+//             match page {
+//                 "popular" => PagerNavigator::Popular(page_num),
+//                 "recently-updated" => PagerNavigator::RecentlyUpdated(page_num),
+//                 "new-apps" => PagerNavigator::NewApps(page_num),
+//                 _ => panic!("Invalid route {}", route),
+//             }
+//         } else if parts.len() == 5 {
+//             let page = parts[2];
+//             let option = parts[3];
+//             let page_num = parts[4].parse::<i32>().unwrap();
 
-            println!("page: {}, option: {}, page_num: {}", page, option, page_num);
-            panic!("Invalid route {}", route)
-        } else {
-            panic!("Invalid route {}", route)
-        }
-    }
+//             println!("page: {}, option: {}, page_num: {}", page, option, page_num);
+//             panic!("Invalid route {}", route)
+//         } else {
+//             panic!("Invalid route {}", route)
+//         }
+//     }
 
-    fn create_page(&self) -> adw::NavigationPage {
-        match self {
-            PagerNavigator::NewApps(_) => adw::NavigationPage::builder()
-                .title(tr!("New Apps"))
-                .child(&PagerPage::new(self.clone()))
-                .build(),
-            PagerNavigator::Popular(_) => adw::NavigationPage::builder()
-                .title(tr!("Popular"))
-                .child(&PagerPage::new(self.clone()))
-                .build(),
-            PagerNavigator::RecentlyUpdated(_) => adw::NavigationPage::builder()
-                .title(tr!("Recently Updated"))
-                .child(&PagerPage::new(self.clone()))
-                .build(),
-        }
-    }
-}
+//     fn create_page(&self) -> adw::NavigationPage {
+//         match self {
+//             PagerNavigator::NewApps(_) => adw::NavigationPage::builder()
+//                 .title(tr!("New Apps"))
+//                 .child(&PagerPage::new(self.clone()))
+//                 .build(),
+//             PagerNavigator::Popular(_) => adw::NavigationPage::builder()
+//                 .title(tr!("Popular"))
+//                 .child(&PagerPage::new(self.clone()))
+//                 .build(),
+//             PagerNavigator::RecentlyUpdated(_) => adw::NavigationPage::builder()
+//                 .title(tr!("Recently Updated"))
+//                 .child(&PagerPage::new(self.clone()))
+//                 .build(),
+//         }
+//     }
+// }

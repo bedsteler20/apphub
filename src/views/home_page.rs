@@ -2,7 +2,10 @@ use adw::subclass::prelude::*;
 use glib::subclass::InitializingObject;
 use gtk::CompositeTemplate;
 
-use crate::utils::{call_me_maybe, Findable};
+use crate::{
+    router::Route,
+    utils::{call_me_maybe, Findable},
+};
 use gtk::prelude::*;
 
 mod imp {
@@ -49,8 +52,7 @@ mod imp {
     impl ObjectImpl for ApphubHomePage {
         fn constructed(&self) {
             self.parent_constructed();
-            self.popular_btn
-                .set_action_name(Some("navigation.visit"));
+            self.popular_btn.set_action_name(Some("navigation.visit"));
             self.recently_added_btn
                 .set_action_name(Some("navigation.visit"));
             self.recently_updated_btn
@@ -75,7 +77,8 @@ mod imp {
                         load_grid(&popular_box, &data.popular_apps);
                         stack.set_visible_child(&root);
                     } else if let Err(e) = data {
-                        ApphubWindow::find().show_error_page(e.into());
+                        // TODO fix this
+                        // ApphubWindow::find().show_error_page(e.into());
                     }
                 }
             });
@@ -96,5 +99,23 @@ glib::wrapper! {
 impl ApphubHomePage {
     pub fn new() -> Self {
         glib::Object::builder().build()
+    }
+}
+
+impl Route for ApphubHomePage {
+    fn route() -> &'static str {
+        "home"
+    }
+
+    fn is_top_level() -> bool {
+        true
+    }
+
+    fn is_static() -> bool {
+        true
+    }
+
+    fn build(_parameter: Option<Self::Parameter>) -> impl IsA<gtk::Widget> {
+        Self::new()
     }
 }

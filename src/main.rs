@@ -8,13 +8,13 @@ mod state;
 mod utils;
 mod views;
 mod widgets;
-mod navigator;
 mod router;
 
 use application::ApphubApplication;
 use gio::prelude::ApplicationExt;
 use glib::StaticTypeExt;
 use gtk::gdk;
+use router::Router;
 use utils::configure_http;
 
 
@@ -69,4 +69,5 @@ fn register_types() {
 
     // application
     ApphubApplication::ensure_type();
+    Router::ensure_type();
 }

@@ -13,7 +13,7 @@ use glib::subclass::InitializingObject;
 use gtk::CompositeTemplate;
 use tr::tr;
 mod imp {
-    use crate::{views::ApphubWindow, utils::Findable};
+    use crate::{utils::Findable, views::ApphubWindow};
 
     use super::*;
     #[derive(CompositeTemplate, Default, glib::Properties)]
@@ -72,7 +72,8 @@ mod imp {
                         if let Ok(data) = data {
                             this.load_data(data);
                         } else if let Err(err) = data {
-                            ApphubWindow::find().show_error_page(err.into());
+                            // TODO fix this
+                            // ApphubWindow::find().show_error_page(err.into());
                         }
                     }
                 });
@@ -115,7 +116,8 @@ impl ApphubAppPage {
             imp.description_label
                 .set_text(&format_description(description));
         } else {
-            imp.description_label.set_text(&tr!("No description available"));
+            imp.description_label
+                .set_text(&tr!("No description available"));
         }
 
         if let Some(ref icon) = data.icon {

@@ -2,6 +2,8 @@ use adw::prelude::*;
 use adw::subclass::prelude::*;
 use gtk::CompositeTemplate;
 
+use crate::router::Route;
+
 mod imp {
 
     use gtk::Widget;
@@ -112,17 +114,18 @@ mod imp {
                 move |_, row| {
                     let item = apps.item(row.index() as u32).unwrap();
                     let app = item.downcast_ref::<InstalledApp>().unwrap();
-                    ApphubWindow::find().navigate_to(&format!("/app/{}", app.app_id()));
+                    // TODO fix this
+                    // ApphubWindow::find().navigate_to(&format!("/app/{}", app.app_id()));
                 }
             });
 
             self.runtime_list_box.connect_row_activated({
                 let apps = runtime_model.clone();
                 move |_, row| {
-                        let item = apps.item(row.index() as u32).unwrap();
-                        let app = item.downcast_ref::<InstalledApp>().unwrap();
-                        ApphubWindow::find().navigate_to(&format!("/app/{}", app.app_id()));
-                    
+                    let item = apps.item(row.index() as u32).unwrap();
+                    let app = item.downcast_ref::<InstalledApp>().unwrap();
+                    // TODO fix this
+                    // ApphubWindow::find().navigate_to(&format!("/app/{}", app.app_id()));
                 }
             });
 
@@ -145,5 +148,23 @@ glib::wrapper! {
 impl UpdatesAppsPage {
     pub fn new() -> Self {
         glib::Object::builder().build()
+    }
+}
+
+impl Route for UpdatesAppsPage {
+    fn route() -> &'static str {
+        "updates"
+    }
+
+    fn is_top_level() -> bool {
+        true
+    }
+
+    fn is_static() -> bool {
+        false
+    }
+
+    fn build(_: Option<Self::Parameter>) -> impl IsA<gtk::Widget> {
+        Self::new()
     }
 }
