@@ -9,7 +9,6 @@ pub fn load_grid(grid: &gtk::FlowBox, data: &Vec<AppHit>) {
         app_widget.set_description(app.summary.to_string());
         app_widget.set_icon_url(app.icon.to_string());
         app_widget.set_name(app.name.to_string());
-
         let app_widget = adw::Clamp::builder()
             .child(&app_widget)
             .orientation(gtk::Orientation::Horizontal)

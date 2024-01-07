@@ -16,10 +16,10 @@ glib = "0.18.4"
 gtk = { version = "0.7.3", package = "gtk4", features = [
     "gnome_45",
     "blueprint",
-    "xml_validation",
 ] }
 libflatpak = "0.4.0"
 flathub-rs = { git = "https://github.com/bedsteler20/flathub-rs.git", branch = "main" }
+rose = { git = "https://github.com/bedsteler20/rose-gtk.git", branch = "main", package = "rose-gtk" }
 tokio = { version = "1.35.1", features = ["full"] }
 reqwest = { version = "0.11", default-features = false, features = [
     "rustls-tls",

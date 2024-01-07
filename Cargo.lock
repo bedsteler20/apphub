@@ -49,6 +49,7 @@ dependencies = [
  "once_cell",
  "reqwest",
  "reqwest-middleware",
+ "rose-gtk",
  "tokio",
  "tr",
 ]
@@ -787,7 +788,6 @@ dependencies = [
  "proc-macro-crate 1.3.1",
  "proc-macro-error",
  "proc-macro2",
- "quick-xml",
  "quote",
  "syn 1.0.109",
 ]
@@ -1487,15 +1487,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "quick-xml"
-version = "0.30.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eff6510e86862b57b210fd8cbe8ed3f0d7d600b9c2863cd4549a2e033c66e956"
-dependencies = [
- "memchr",
-]
-
-[[package]]
 name = "quote"
 version = "1.0.33"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1626,6 +1617,17 @@ dependencies = [
  "spin",
  "untrusted",
  "windows-sys 0.48.0",
+]
+
+[[package]]
+name = "rose-gtk"
+version = "0.1.0"
+source = "git+https://github.com/bedsteler20/rose-gtk.git?branch=main#393dafa6b6d63f0f258d2d0f6511aeffde54509c"
+dependencies = [
+ "async-channel",
+ "gtk4",
+ "libadwaita",
+ "tokio",
 ]
 
 [[package]]

@@ -8,17 +8,17 @@ mod state;
 mod utils;
 mod views;
 mod widgets;
-mod router;
 
 use application::ApphubApplication;
 use gio::prelude::ApplicationExt;
 use glib::StaticTypeExt;
 use gtk::gdk;
-use router::Router;
 use utils::configure_http;
 
 
+
 fn main() -> glib::ExitCode {
+    rose::init();
     configure_http();
     register_types();
     let app = ApphubApplication::new();
@@ -69,5 +69,4 @@ fn register_types() {
 
     // application
     ApphubApplication::ensure_type();
-    Router::ensure_type();
 }

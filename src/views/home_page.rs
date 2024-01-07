@@ -1,12 +1,9 @@
+use crate::utils::{call_me_maybe, Findable};
 use adw::subclass::prelude::*;
 use glib::subclass::InitializingObject;
-use gtk::CompositeTemplate;
-
-use crate::{
-    router::Route,
-    utils::{call_me_maybe, Findable},
-};
 use gtk::prelude::*;
+use gtk::CompositeTemplate;
+use rose::Route;
 
 mod imp {
 
@@ -103,6 +100,7 @@ impl ApphubHomePage {
 }
 
 impl Route for ApphubHomePage {
+    type Parameter = ();
     fn route() -> &'static str {
         "home"
     }

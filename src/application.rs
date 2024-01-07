@@ -1,5 +1,6 @@
 use adw::prelude::*;
 use adw::subclass::prelude::*;
+use rose::subclass::prelude::*;
 use glib::once_cell::sync::OnceCell;
 use gtk::gio;
 use gtk::glib;
@@ -24,7 +25,7 @@ mod imp {
     impl ObjectSubclass for ApphubApplication {
         const NAME: &'static str = "ApphubApplication";
         type Type = super::ApphubApplication;
-        type ParentType = adw::Application;
+        type ParentType = rose::Application;
     }
 
     impl ObjectImpl for ApphubApplication {}
@@ -61,11 +62,12 @@ mod imp {
     }
     impl GtkApplicationImpl for ApphubApplication {}
     impl AdwApplicationImpl for ApphubApplication {}
+    impl RoseApplicationImpl for ApphubApplication {}
 }
 
 glib::wrapper! {
     pub struct ApphubApplication(ObjectSubclass<imp::ApphubApplication>)
-        @extends gio::Application, gtk::Application, adw::Application,
+        @extends rose::Application, gio::Application, gtk::Application, adw::Application,
         @implements gio::ActionMap, gio::ActionGroup;
 }
 

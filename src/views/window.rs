@@ -15,7 +15,7 @@ mod imp {
     #[template(file = "src/views/window.blp")]
     pub struct ApphubWindow {
         #[template_child]
-        pub router: TemplateChild<crate::router::Router>,
+        pub router: TemplateChild<rose::Router>,
     }
 
     #[glib::object_subclass]
@@ -42,7 +42,7 @@ mod imp {
                 .add_main_route::<InstalledAppsPage>("Installed", "folder-symbolic");
             self.router
                 .add_main_route::<UpdatesAppsPage>("Updates", "update-symbolic");
-            self.router.navigate_to::<ApphubHomePage>(None);
+            rose::visit::<ApphubHomePage>(None);
         }
     }
     impl ApplicationWindowImpl for ApphubWindow {}
@@ -57,7 +57,6 @@ glib::wrapper! {
              gtk::Window, gtk::Widget,
     @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget,
                 gtk::Native, gtk::Root, gtk::ShortcutManager,
-                gio::ActionGroup, gio::ActionMap;
 }
 
 impl ApphubWindow {
