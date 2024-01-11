@@ -3,7 +3,6 @@ use adw::subclass::prelude::*;
 use glib::subclass::InitializingObject;
 use gtk::prelude::*;
 use gtk::CompositeTemplate;
-use rose::Route;
 
 mod imp {
 
@@ -69,13 +68,7 @@ mod imp {
                 let root = self.root.clone();
                 move |data| {
                     if let Ok(data) = data {
-                        load_grid(&recently_added_box, &data.new_apps);
-                        load_grid(&recently_updated_box, &data.updated_apps);
-                        load_grid(&popular_box, &data.popular_apps);
-                        stack.set_visible_child(&root);
-                    } else if let Err(e) = data {
-                        // TODO fix this
-                        // ApphubWindow::find().show_error_page(e.into());
+                        load_grid(&recently_added_box, &data.new_aperrr>(e.into());
                     }
                 }
             });
@@ -99,7 +92,7 @@ impl ApphubHomePage {
     }
 }
 
-impl Route for ApphubHomePage {
+impl rose::PageRoute for ApphubHomePage {
     type Parameter = ();
     fn route() -> &'static str {
         "home"

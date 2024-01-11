@@ -13,7 +13,6 @@ use glib::subclass::InitializingObject;
 use gtk::CompositeTemplate;
 use tr::tr;
 mod imp {
-    use crate::{utils::Findable, views::ApphubWindow};
 
     use super::*;
     #[derive(CompositeTemplate, Default, glib::Properties)]
@@ -72,8 +71,7 @@ mod imp {
                         if let Ok(data) = data {
                             this.load_data(data);
                         } else if let Err(err) = data {
-                            // TODO fix this
-                            // ApphubWindow::find().show_error_page(err.into());
+                            rose::show_error_page::<crate::error::Error>(err.into());
                         }
                     }
                 });
@@ -141,6 +139,18 @@ impl ApphubAppPage {
         imp.app_links.load_data(&data);
         // Replace the loading spinner with the page
         imp.obj().set_child(Some(&imp.root.get()));
+    }
+}
+
+impl rose::PageRoute for ApphubAppPage {
+    type Parameter = String;
+    fn route() -> &'static str {
+        "app"
+    }
+
+    fn build(parameter: Option<Self::Parameter>) -> impl IsA<gtk::Widget> {
+        let app_id = parameter.unwrap();
+        ApphubAppPage::new(&app_id)
     }
 }
 

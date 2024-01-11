@@ -2,7 +2,6 @@ use adw::prelude::*;
 use adw::subclass::prelude::*;
 use gtk::CompositeTemplate;
 
-use rose::Route;
 
 mod imp {
 
@@ -154,7 +153,7 @@ impl InstalledAppsPage {
     }
 }
 
-impl Route for InstalledAppsPage {
+impl rose::PageRoute for InstalledAppsPage {
     type Parameter = ();
     fn route() -> &'static str {
         "installed"

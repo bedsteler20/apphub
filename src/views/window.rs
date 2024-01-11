@@ -5,9 +5,10 @@ use crate::utils::Findable;
 use adw::subclass::prelude::*;
 use glib::subclass::InitializingObject;
 use gtk::CompositeTemplate;
+use rose::prelude::RoseRouterExt;
 
 mod imp {
-    use crate::views::{ApphubHomePage, InstalledAppsPage, UpdatesAppsPage};
+    use crate::views::{ApphubHomePage, InstalledAppsPage, UpdatesAppsPage, ApphubAppPage};
 
     use super::*;
 
@@ -36,6 +37,7 @@ mod imp {
     impl ObjectImpl for ApphubWindow {
         fn constructed(&self) {
             self.parent_constructed();
+            self.router.add_route::<ApphubAppPage>();
             self.router
                 .add_main_route::<ApphubHomePage>("Explore", "compass-symbolic");
             self.router
@@ -56,7 +58,7 @@ glib::wrapper! {
     @extends adw::ApplicationWindow, gtk::ApplicationWindow,
              gtk::Window, gtk::Widget,
     @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget,
-                gtk::Native, gtk::Root, gtk::ShortcutManager,
+                gtk::Native, gtk::Root, gtk::ShortcutManager;
 }
 
 impl ApphubWindow {

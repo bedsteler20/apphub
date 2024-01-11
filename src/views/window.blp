@@ -7,6 +7,7 @@ template $ApphubWindow: Adw.ApplicationWindow {
     default-width: 800;
     width-request: 462;
 
+
     Adw.Breakpoint {
         condition ("max-width: 700sp")
 
@@ -24,7 +25,7 @@ template $ApphubWindow: Adw.ApplicationWindow {
                 Button back_btn {
                     icon-name: "go-previous-symbolic";
                     visible: bind router.can-go-back;
-                    action-name: "router.go-back";
+                    action-name: "router.back";
 
                     styles [
                         "flat",
@@ -33,7 +34,7 @@ template $ApphubWindow: Adw.ApplicationWindow {
                 }
 
                 title-widget: Adw.ViewSwitcher view_switcher {
-                    stack: bind router.main-pages;
+                    stack: bind router.view-switcher-pages;
                     policy: wide;
                 };
 
@@ -49,7 +50,7 @@ template $ApphubWindow: Adw.ApplicationWindow {
             [bottom]
             Adw.ViewSwitcherBar switcher_bar {
                 reveal: false;
-                stack: bind router.main-pages;
+                stack: bind router.view-switcher-pages;
             }
         };
     };

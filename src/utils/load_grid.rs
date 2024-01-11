@@ -4,6 +4,7 @@ use glib::ToVariant;
 use crate::widgets::AppCard;
 
 pub fn load_grid(grid: &gtk::FlowBox, data: &Vec<AppHit>) {
+
     for app in data {
         let app_widget = AppCard::new();
         app_widget.set_description(app.summary.to_string());
@@ -20,8 +21,11 @@ pub fn load_grid(grid: &gtk::FlowBox, data: &Vec<AppHit>) {
         let btn = gtk::Button::builder()
             .child(&app_widget)
             .css_classes(vec!["card"])
-            .action_name("navigation.visit")
-            .action_target(&format!("/app/{}", app.app_id).to_variant())
+            .action_name("router.visit.app")
+            .action_target(&app.app_id.to_variant())
+            .focus_on_click(false)
+            .focusable(false)
+            .can_focus(false)
             .build();
 
         let child = gtk::FlowBoxChild::builder()

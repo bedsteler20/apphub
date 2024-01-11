@@ -1,3 +1,4 @@
+use tr::tr;
 //pub type Result<T> = core::result::Result<T, Error>;
 
 pub enum Error {
@@ -83,9 +84,18 @@ impl ToString for Error {
             Error::Other(e) => format!("OtherError: {:?}", e),
             Error::GlibError(domain, msg) => {
                 format!("GlibError:\n\tDomain: {}\n\tMessage: {}", domain, msg)
-            },
+            }
             Error::RequestsMiddleware(e) => format!("RequestsMiddleware: {:?}", e),
             Error::Requests(e) => format!("Requests: {:?}", e),
         }
+    }
+}
+impl rose::DisplayableError for Error {
+    fn body(&self) -> String {
+        self.to_string()
+    }
+
+    fn title(&self) -> String {
+        tr!("Error")
     }
 }
