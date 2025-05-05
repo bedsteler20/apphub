@@ -3,9 +3,6 @@
 *.log
 *.pyc
 *.swp
-*.g.dart
-*.freezed.dart
-*.gr.dart
 .DS_Store
 .atom/
 .buildlog/
@@ -17,9 +14,6 @@ migrate_working_dir/
 *.ipr
 *.iws
 .idea/
-.flatpak-builder/
-host-util/target/
-
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
