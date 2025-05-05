@@ -1,0 +1,42 @@
+version: "0.2"
+ignorePaths:
+  - build/**/*
+  - linux/flutter/**/*
+  - "*.log"
+  - "*.g.dart"
+  - "*.freezed.dart"
+  - .dart_tool/**/*
+  - CMakeLists.txt
+  - "*.cc"
+  - "*.h"
+dictionaryDefinitions: []
+dictionaries: []
+words:
+  - appdata
+  - Apphub
+  - autodelete
+  - bedsteler
+  - bugtracker
+  - dbus
+  - deckhub
+  - devs
+  - distro
+  - Flathub
+  - Flatpaks
+  - freedesktop
+  - iface
+  - Launchable
+  - Maximizable
+  - mimetypes
+  - Minimizable
+  - odrs
+  - prefs
+  - riverpod
+  - runtimes
+  - Titlebar
+  - unref
+  - Yaru
+  - zbus
+  - zvariant
+ignoreWords: []
+import: []
