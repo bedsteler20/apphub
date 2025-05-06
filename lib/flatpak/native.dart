@@ -51,7 +51,6 @@ class FlatpakNativeApi extends FlatpakApi {
 
           final installedApp = InstalledApp.fromFlatpakRef(app, install);
           newApps.add(installedApp);
-          app.unref();
         }
         apps.free();
         install.unref();
