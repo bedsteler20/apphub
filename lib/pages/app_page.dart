@@ -46,7 +46,10 @@ class AppPage extends HookConsumerWidget {
         return PageContentLayout(
           contentPadding: const EdgeInsets.all(20),
           children: [
-            AppPageHeader(appstream: appstream),
+            AppPageHeader(
+              appstream: appstream,
+              installedApp: installedApp,
+            ),
             if (appstream is FlathubAppstreamDesktop)
               Padding(
                 padding: const EdgeInsets.only(top: 20),
@@ -388,10 +391,12 @@ class AppPageScreenshots extends HookWidget {
 
 class AppPageHeader extends ConsumerWidget {
   final FlathubAppstream appstream;
+  final InstalledApp? installedApp;
 
   const AppPageHeader({
     super.key,
     required this.appstream,
+    required this.installedApp,
   });
 
   @override
@@ -446,7 +451,10 @@ class AppPageHeader extends ConsumerWidget {
         Expanded(child: Container())
       else
         const SizedBox(height: 20),
-      AppPageInstallButton(appstream: appstream),
+      AppPageInstallButton(
+        appstream: appstream,
+        installedApp: installedApp,
+      ),
     ];
 
     if (isLargeScreen) {
@@ -470,7 +478,7 @@ class AppPageInstallButton extends ConsumerWidget {
   const AppPageInstallButton({
     super.key,
     required this.appstream,
-    this.installedApp,
+    required this.installedApp,
   });
 
   Future<void> onInstall(BuildContext context, WidgetRef ref) async {
@@ -536,18 +544,22 @@ class AppPageInstallButton extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           FilledButton(
-            onPressed: () => onInstall(context, ref),
+            onPressed: () => onOpen(context),
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.all(
                 context.colorScheme.primary,
               ),
               padding: WidgetStateProperty.all(
-                const EdgeInsets.symmetric(horizontal: 0, vertical: 11),
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
               ),
             ),
-            child: const Icon(
-              Icons.refresh_rounded,
-              size: 32,
+            child: Text(
+              "Open",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: context.colorScheme.onPrimary,
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -578,7 +590,7 @@ class AppPageInstallButton extends ConsumerWidget {
             context.colorScheme.primary,
           ),
           padding: WidgetStateProperty.all(
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           ),
         ),
         child: Text(

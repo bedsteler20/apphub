@@ -39,7 +39,7 @@ Future<AppPageData> appPage(Ref ref, String appId) async {
     }),
     ref.watch(installedAppsProvider.future).then((value) {
       installedApp = value.firstWhereOrNull(
-        (e) => e.name == appstream?.name,
+        (e) => e.name == appId,
       );
     }),
   ]);
@@ -116,15 +116,12 @@ Future<InstalledPageData> installedPage(Ref ref) async {
   List<InstalledApp>? apps;
   List<InstalledApp>? runtimes;
   List<InstalledApp>? updates;
-  
+
   await Future.wait<void>([
     ref.watch(installedAppsProvider.future).then((value) {
-      apps = value
-          .where((app) => app.kind == FlatpakRefKind.app)
-          .toList();
-      runtimes = value
-          .where((app) => app.kind == FlatpakRefKind.runtime)
-          .toList();
+      apps = value.where((app) => app.kind == FlatpakRefKind.app).toList();
+      runtimes =
+          value.where((app) => app.kind == FlatpakRefKind.runtime).toList();
     }),
     ref
         .watch(installedAppsWithUpdatesProvider.future)
