@@ -13,7 +13,7 @@ abstract class FlatpakApi {
   static late final FlatpakApi instance;
 
   static Future<void> init() async {
-    if (true) {
+    if (isSandBoxed) {
       await FlatpakSandboxedApi.init();
       instance = FlatpakSandboxedApi();
     } else {
