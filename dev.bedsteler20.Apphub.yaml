@@ -10,7 +10,7 @@ finish-args:
     - --socket=wayland
     - --talk-name=org.freedesktop.Flatpak
     - --filesystem=xdg-data/flatpak
-    - --filesystem=host
+    - --filesystem=/var/lib/flatpak
 modules:
     - name: apphub
       buildsystem: simple
