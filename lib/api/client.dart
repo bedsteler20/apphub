@@ -10,7 +10,11 @@ part 'client.g.dart';
 
 @RestApi(baseUrl: "https://flathub.org/api/v2")
 abstract class FlathubClient {
-  factory FlathubClient(Dio dio, {String baseUrl}) = _FlathubClient;
+  factory FlathubClient(
+    Dio dio, {
+    String baseUrl,
+    ParseErrorLogger? errorLogger,
+  }) = _FlathubClient;
 
   @GET("/summary/{id}")
   @CacheControl(maxAge: 86400) // 1 day
@@ -27,7 +31,6 @@ abstract class FlathubClient {
   @GET("/addon/{id}")
   @CacheControl(maxAge: 3600) // 1 hour
   Future<List<String>> appAddons(@Path("id") String id);
-
 
   @GET("/appstream")
   @CacheControl(maxAge: 3600) // 1 hour

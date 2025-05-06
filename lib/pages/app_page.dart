@@ -8,7 +8,6 @@ import 'package:deckhub/api/extensions.dart';
 import 'package:deckhub/api/summary.dart';
 import 'package:deckhub/flatpak/base.dart';
 import 'package:deckhub/flatpak/installed_app.dart';
-import 'package:deckhub/hooks/util_hooks.dart';
 import 'package:deckhub/providers/flatpak.dart';
 import 'package:deckhub/providers/pages.dart';
 import 'package:deckhub/router.gr.dart';
@@ -317,7 +316,7 @@ class AppPageScreenshots extends HookWidget {
         .where((s) => s != null)
         .cast<FlathubAppstreamScreenShotSize>()
         .toList());
-    final controller = useCarouselController();
+    final controller = useMemoized(() => CarouselSliderController());
     final index = useState<int>(0);
     final caption = useState<String?>(
         screenshots.isNotEmpty ? screenshots.first.caption : null);
