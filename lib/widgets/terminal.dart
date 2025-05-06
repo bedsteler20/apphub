@@ -1,7 +1,7 @@
 // cspell: ignore assumeyes noninteractive
 import 'dart:convert';
 
-import 'package:deckhub/native/flatpak.dart';
+import 'package:deckhub/flatpak/base.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pty/flutter_pty.dart';
 import 'package:flux/flux.dart';

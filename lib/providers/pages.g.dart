@@ -6,7 +6,7 @@ part of 'pages.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appPageHash() => r'685aea53b90991d0802c683d996bae6a31bcd37f';
+String _$appPageHash() => r'3a2a84194e02f6a40ed042e8a45e5393de5a98f2';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -172,5 +172,23 @@ final homePageProvider = AutoDisposeFutureProvider<HomePageData>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef HomePageRef = AutoDisposeFutureProviderRef<HomePageData>;
+String _$installedPageHash() => r'e801e4fed68ed0a0536f3b81ab8fe5b3a61153ad';
+
+/// See also [installedPage].
+@ProviderFor(installedPage)
+final installedPageProvider =
+    AutoDisposeFutureProvider<InstalledPageData>.internal(
+  installedPage,
+  name: r'installedPageProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$installedPageHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef InstalledPageRef = AutoDisposeFutureProviderRef<InstalledPageData>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

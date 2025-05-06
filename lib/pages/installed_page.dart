@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
-import 'package:deckhub/native/flatpak.dart';
+import 'package:deckhub/flatpak/ffi.dart';
+import 'package:deckhub/flatpak/installed_app.dart';
 import 'package:deckhub/providers/flatpak.dart';
+import 'package:deckhub/providers/pages.dart';
 import 'package:deckhub/router.gr.dart';
-import 'package:deckhub/utils/std.dart';
 import 'package:deckhub/widgets/page_content_layout.dart';
 import 'package:deckhub/widgets/terminal.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +24,7 @@ class InstalledAppsPage extends ConsumerWidget {
       subtitle: Text(app.appdataSummary ?? ""),
       leading: app.kind == FlatpakRefKind.app
           ? app.icon != null
-              ? Image.file((app.icon!))
+              ? Image.file(File(app.icon!))
               : const Icon(Icons.apps, size: 48)
           : null,
       trailing: trailing,
@@ -49,97 +52,96 @@ class InstalledAppsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final installedApps = ref.watch(installedAppsProvider);
-    final filtered = installedApps.unique((app) => app.name).toList();
-    final installedAppsWithUpdates =
-        ref.watch(installedAppsWithUpdatesProvider);
+    final data = ref.watch(installedPageProvider);
 
-    if (installedAppsWithUpdates.isLoading) {
-      return const Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
+    return data.when(
+      data: (value) {
+        final (:apps, :runtimes, :updates) = value;
+        return PageContentLayout(
+          width: context.breakpoint(LG),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          contentPadding: const EdgeInsets.all(16),
           children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            Text("Checking for updates..."),
-          ],
-        ),
-      );
-    }
-
-    final withUpdates = (installedAppsWithUpdates.value ?? [])
-        .where((app) => app.kind == FlatpakRefKind.app)
-        .toList();
-    final runtimes =
-        filtered.where((app) => app.kind == FlatpakRefKind.runtime).toList();
-    final apps =
-        filtered.where((app) => app.kind == FlatpakRefKind.app).toList();
-
-    return PageContentLayout(
-      width: context.breakpoint(LG),
-      crossAxisAlignment: CrossAxisAlignment.start,
-      contentPadding: const EdgeInsets.all(16),
-      children: [
-        if (withUpdates.isNotEmpty) buildHeader(context, "Updates"),
-        if (withUpdates.isNotEmpty)
-          Card(
-            clipBehavior: Clip.antiAlias,
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: withUpdates.length,
-              itemBuilder: (context, index) {
-                final app = withUpdates[index];
-                return buildCard(
-                  context,
-                  app,
-                  trailing: FilledButton(
-                    onPressed: () => onUpdateApp(context, ref, app.name),
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all(
-                        context.colorScheme.primary,
+            if (updates.isNotEmpty) buildHeader(context, "Updates"),
+            if (updates.isNotEmpty)
+              Card(
+                clipBehavior: Clip.antiAlias,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: updates.length,
+                  itemBuilder: (context, index) {
+                    final app = updates[index];
+                    return buildCard(
+                      context,
+                      app,
+                      trailing: FilledButton(
+                        onPressed: () => onUpdateApp(context, ref, app.name),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all(
+                            context.colorScheme.primary,
+                          ),
+                          padding: WidgetStateProperty.all(
+                            const EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 12),
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.download_outlined,
+                          size: 32,
+                        ),
                       ),
-                      padding: WidgetStateProperty.all(
-                        const EdgeInsets.symmetric(horizontal: 0, vertical: 12),
-                      ),
-                    ),
-                    child: const Icon(
-                      Icons.download_outlined,
-                      size: 32,
-                    ),
-                  ),
-                );
-              },
+                    );
+                  },
+                ),
+              ),
+            buildHeader(context, "Apps"),
+            Card(
+              clipBehavior: Clip.antiAlias,
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: apps.length,
+                itemBuilder: (context, index) {
+                  final app = apps[index];
+                  return buildCard(context, app);
+                },
+              ),
             ),
+            if (runtimes.isNotEmpty) buildHeader(context, "Runtimes"),
+            Card(
+              clipBehavior: Clip.antiAlias,
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: runtimes.length,
+                itemBuilder: (context, index) {
+                  final app = runtimes[index];
+                  return buildCard(context, app);
+                },
+              ),
+            ),
+          ],
+        );
+      },
+      error: (_, __) {
+        return const Center(
+          child: Text("Error loading installed apps"),
+        );
+      },
+      loading: () {
+        return const Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 16),
+              Text("Checking for updates..."),
+            ],
           ),
-        buildHeader(context, "Apps"),
-        Card(
-          clipBehavior: Clip.antiAlias,
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: apps.length,
-            itemBuilder: (context, index) {
-              final app = apps[index];
-              return buildCard(context, app);
-            },
-          ),
-        ),
-        if (runtimes.isNotEmpty) buildHeader(context, "Runtimes"),
-        Card(
-          clipBehavior: Clip.antiAlias,
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: runtimes.length,
-            itemBuilder: (context, index) {
-              final app = runtimes[index];
-              return buildCard(context, app);
-            },
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 

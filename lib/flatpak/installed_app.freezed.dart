@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'flatpak.dart';
+part of 'installed_app.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,6 +13,10 @@ T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+InstalledApp _$InstalledAppFromJson(Map<String, dynamic> json) {
+  return _InstalledApp.fromJson(json);
+}
 
 /// @nodoc
 mixin _$InstalledApp {
@@ -34,7 +38,10 @@ mixin _$InstalledApp {
   String? get eol => throw _privateConstructorUsedError;
   String? get eolRebase => throw _privateConstructorUsedError;
   bool get isUser => throw _privateConstructorUsedError;
-  File? get icon => throw _privateConstructorUsedError;
+  String? get icon => throw _privateConstructorUsedError;
+
+  /// Serializes this InstalledApp to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of InstalledApp
   /// with the given fields replaced by the non-null parameter values.
@@ -68,7 +75,7 @@ abstract class $InstalledAppCopyWith<$Res> {
       String? eol,
       String? eolRebase,
       bool isUser,
-      File? icon});
+      String? icon});
 }
 
 /// @nodoc
@@ -182,7 +189,7 @@ class _$InstalledAppCopyWithImpl<$Res, $Val extends InstalledApp>
       icon: freezed == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
-              as File?,
+              as String?,
     ) as $Val);
   }
 }
@@ -214,7 +221,7 @@ abstract class _$$InstalledAppImplCopyWith<$Res>
       String? eol,
       String? eolRebase,
       bool isUser,
-      File? icon});
+      String? icon});
 }
 
 /// @nodoc
@@ -326,13 +333,13 @@ class __$$InstalledAppImplCopyWithImpl<$Res>
       icon: freezed == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
-              as File?,
+              as String?,
     ));
   }
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$InstalledAppImpl implements _InstalledApp {
   const _$InstalledAppImpl(
       {required this.name,
@@ -354,6 +361,9 @@ class _$InstalledAppImpl implements _InstalledApp {
       required this.eolRebase,
       required this.isUser,
       required this.icon});
+
+  factory _$InstalledAppImpl.fromJson(Map<String, dynamic> json) =>
+      _$$InstalledAppImplFromJson(json);
 
   @override
   final String name;
@@ -392,7 +402,7 @@ class _$InstalledAppImpl implements _InstalledApp {
   @override
   final bool isUser;
   @override
-  final File? icon;
+  final String? icon;
 
   @override
   String toString() {
@@ -435,6 +445,7 @@ class _$InstalledAppImpl implements _InstalledApp {
             (identical(other.icon, icon) || other.icon == icon));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
@@ -466,6 +477,13 @@ class _$InstalledAppImpl implements _InstalledApp {
   @pragma('vm:prefer-inline')
   _$$InstalledAppImplCopyWith<_$InstalledAppImpl> get copyWith =>
       __$$InstalledAppImplCopyWithImpl<_$InstalledAppImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$InstalledAppImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _InstalledApp implements InstalledApp {
@@ -488,7 +506,10 @@ abstract class _InstalledApp implements InstalledApp {
       required final String? eol,
       required final String? eolRebase,
       required final bool isUser,
-      required final File? icon}) = _$InstalledAppImpl;
+      required final String? icon}) = _$InstalledAppImpl;
+
+  factory _InstalledApp.fromJson(Map<String, dynamic> json) =
+      _$InstalledAppImpl.fromJson;
 
   @override
   String get name;
@@ -527,7 +548,7 @@ abstract class _InstalledApp implements InstalledApp {
   @override
   bool get isUser;
   @override
-  File? get icon;
+  String? get icon;
 
   /// Create a copy of InstalledApp
   /// with the given fields replaced by the non-null parameter values.

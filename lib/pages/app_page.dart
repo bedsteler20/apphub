@@ -5,8 +5,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:deckhub/api/appstream.dart';
 import 'package:deckhub/api/extensions.dart';
 import 'package:deckhub/api/summary.dart';
+import 'package:deckhub/flatpak/base.dart';
+import 'package:deckhub/flatpak/installed_app.dart';
 import 'package:deckhub/hooks/util_hooks.dart';
-import 'package:deckhub/native/flatpak.dart';
 import 'package:deckhub/providers/flatpak.dart';
 import 'package:deckhub/providers/pages.dart';
 import 'package:deckhub/router.gr.dart';
@@ -39,7 +40,7 @@ class AppPage extends HookConsumerWidget {
     return AsyncPageBuilder(
       value: data,
       builder: (BuildContext context, AppPageData data) {
-        final (:appstream, :summary, :devsOtherApps) = data;
+        final (:appstream, :summary, :devsOtherApps, :installedApp) = data;
 
         return PageContentLayout(
           contentPadding: const EdgeInsets.all(20),
@@ -460,10 +461,12 @@ class AppPageHeader extends ConsumerWidget {
 
 class AppPageInstallButton extends ConsumerWidget {
   final FlathubAppstream appstream;
+  final InstalledApp? installedApp;
 
   const AppPageInstallButton({
     super.key,
     required this.appstream,
+    this.installedApp,
   });
 
   Future<void> onInstall(BuildContext context, WidgetRef ref) async {
@@ -477,7 +480,6 @@ class AppPageInstallButton extends ConsumerWidget {
   }
 
   Future<void> onUninstall(BuildContext context, WidgetRef ref) async {
-    final app = ref.read(installedAppProvider(appstream.id));
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -494,7 +496,7 @@ class AppPageInstallButton extends ConsumerWidget {
               CommandTerminalDialog.showUninstall(
                 ref.context,
                 appstream.id,
-                user: app?.isUser ?? false,
+                user: installedApp?.isUser ?? false,
                 onExit: (success) {
                   if (success) ref.invalidate(installedAppsProvider);
                 },
@@ -524,9 +526,7 @@ class AppPageInstallButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isInstalled = ref.watch(installedAppProvider(appstream.id)) != null;
-
-    if (isInstalled) {
+    if (installedApp != null) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -578,7 +578,7 @@ class AppPageInstallButton extends ConsumerWidget {
           ),
         ),
         child: const Icon(
-          Icons.play_arrow_rounded,
+          Icons.download_rounded,
           size: 32,
         ),
       );

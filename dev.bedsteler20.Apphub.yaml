@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/flatpak/flatpak-builder/refs/heads/main/data/flatpak-manifest.schema.json
+app-id: dev.bedsteler20.Apphub
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+command: /app/apphub
+finish-args:
+  - --share=network
+  - --device=dri
+  - --socket=wayland
+  - --talk-name=org.freedesktop.Flatpak
+  - --filesystem=xdg-data/flatpak
+  - --filesystem=host
+modules:
+  - name: apphub
+    buildsystem: simple
+    build-commands:
+      - cp -r * /app
+      - chmod +x /app/apphub
+    sources:
+      - type: dir
+        path: build/linux/x64/release/bundle
+  - name: apphub_host
+    buildsystem: simple
+    build-commands:
+      - cp apphub_host /app
+      - chmod +x /app/apphub_host
+    sources:
+      - type: file
+        path: build/apphub_host
