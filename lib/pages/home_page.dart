@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:deckhub/api/appstream.dart';
 import 'package:deckhub/api/extensions.dart';
 import 'package:deckhub/providers/pages.dart';
@@ -182,8 +183,8 @@ class FeaturedAppTile extends StatelessWidget {
                         height: 128,
                       )
                     else
-                      Image.network(
-                        appIcon,
+                      CachedNetworkImage(
+                        imageUrl: appIcon,
                         width: 128,
                         height: 128,
                       ),

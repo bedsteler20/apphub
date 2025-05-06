@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:deckhub/api/appstream.dart';
 import 'package:deckhub/api/extensions.dart';
@@ -55,8 +56,8 @@ class WeeklyAppsCard extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.network(
-                        app.icon!,
+                      CachedNetworkImage(
+                        imageUrl: app.icon!,
                         width: 128,
                         height: 128,
                       ),
@@ -84,9 +85,9 @@ class WeeklyAppsCard extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: SizedBox(
                       width: constraints.maxWidth * 0.666 - 100,
-                      child: Image.network(
+                      child: CachedNetworkImage(
+                        imageUrl: app.screenshots.first.sizes.first.src,
                         alignment: Alignment.topCenter,
-                        app.screenshots.first.sizes.first.src,
                         width: constraints.maxWidth * 0.666 - 100,
                         fit: BoxFit.fitWidth,
                       ),

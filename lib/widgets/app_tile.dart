@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:deckhub/api/extensions.dart';
 import 'package:deckhub/api/pagination.dart';
 import 'package:auto_route/auto_route.dart';
@@ -27,11 +28,12 @@ class AppTile extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.network(
-                  app.icon ?? '',
-                  height: 96,
-                  width: 96,
-                ),
+                if (app.icon != null)
+                  CachedNetworkImage(
+                    imageUrl: app.icon!,
+                    height: 96,
+                    width: 96,
+                  ),
                 const SizedBox(width: 16),
                 SizedBox(
                   width: constraints.maxWidth - 160,

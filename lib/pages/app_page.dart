@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:deckhub/api/appstream.dart';
 import 'package:deckhub/api/extensions.dart';
@@ -338,8 +339,8 @@ class AppPageScreenshots extends HookWidget {
               ),
               items: [
                 for (final screenshot in screenshots)
-                  Image.network(
-                    screenshot.src,
+                  CachedNetworkImage(
+                    imageUrl: screenshot.src,
                     fit: BoxFit.fitHeight,
                   ),
               ],
@@ -397,7 +398,10 @@ class AppPageHeader extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isLargeScreen = context.width > 600;
     final children = [
-      if (appstream.icon != null) Image.network(appstream.icon!),
+      if (appstream.icon != null)
+        CachedNetworkImage(
+          imageUrl: appstream.icon!,
+        ),
       if (isLargeScreen) const SizedBox(width: 40),
       Column(
         crossAxisAlignment: isLargeScreen
@@ -568,18 +572,22 @@ class AppPageInstallButton extends ConsumerWidget {
       );
     } else {
       return FilledButton(
-        onPressed: () => onOpen(context),
+        onPressed: () => onInstall(context, ref),
         style: ButtonStyle(
           backgroundColor: WidgetStateProperty.all(
             context.colorScheme.primary,
           ),
           padding: WidgetStateProperty.all(
-            const EdgeInsets.symmetric(horizontal: 0, vertical: 11),
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           ),
         ),
-        child: const Icon(
-          Icons.download_rounded,
-          size: 32,
+        child: Text(
+          "Install",
+          style: context.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: context.colorScheme.onPrimary,
+            fontSize: 18,
+          ),
         ),
       );
     }
