@@ -1,10 +1,6 @@
-import 'dart:isolate';
 
 import 'package:deckhub/flatpak/base.dart';
-import 'package:deckhub/flatpak/ffi.dart';
 import 'package:deckhub/flatpak/installed_app.dart';
-import 'package:deckhub/utils/std.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'flatpak.g.dart';
