@@ -24,56 +24,33 @@ class ScaffoldPage extends StatelessWidget {
       }
     }
 
-    return Scaffold(
-      appBar: FluxTitlebar(
-        leading: [
-          if (router.canPop())
-            FluxTitlebarButton(
-              icon: Icons.arrow_back,
-              onPressed: () => router.back(),
-            ),
-          if (!router.canPop() || router.currentPath == "/search")
-            FluxTitlebarButton(
-              icon: Icons.search_rounded,
-              onPressed: () => SearchPallet.show(context),
-            ),
-        ],
-        title: context.isScreenSize(SM)
-            ? showTabSwitcher
-                ? FluxTabSwitcher(
-                    tabs: const [
-                      FluxTab(title: "Home", icon: Icons.home),
-                      FluxTab(title: "Installed", icon: Icons.apps),
-                    ],
-                    onTabChanged: onTabChanged,
-                    selectedTab: tabIndex,
-                  )
-                : null
-            : null,
-      ),
-      body: CallbackShortcuts(
+    return FluxScaffold(
+      onTabSelected: onTabChanged,
+      selectedTab: tabIndex,
+      showTabSwitcher: showTabSwitcher,
+      titlebarLeading: [
+        if (router.canPop())
+          FluxTitlebarButton(
+            icon: Icons.arrow_back,
+            onPressed: () => router.back(),
+          ),
+        if (!router.canPop() || router.currentPath == "/search")
+          FluxTitlebarButton(
+            icon: Icons.search_rounded,
+            onPressed: () => SearchPallet.show(context),
+          ),
+      ],
+      tabs: const [
+        FluxTab(title: "Home", icon: Icons.home),
+        FluxTab(title: "Installed", icon: Icons.apps),
+      ],
+      child: CallbackShortcuts(
         bindings: {
           const SingleActivator(LogicalKeyboardKey.keyF, control: true): () =>
               SearchPallet.show(context),
         },
         child: const AutoRouter(),
       ),
-      bottomNavigationBar: context.isScreenSize(SM)
-          ? null
-          : BottomNavigationBar(
-              currentIndex: tabIndex,
-              onTap: onTabChanged,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: "Home",
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.apps),
-                  label: "Installed",
-                ),
-              ],
-            ),
     );
   }
 }

@@ -62,7 +62,20 @@ class InstalledAppsPage extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           contentPadding: const EdgeInsets.all(16),
           children: [
-            if (updates.isNotEmpty) buildHeader(context, "Updates"),
+            if (updates.isNotEmpty)
+              Row(
+                children: [
+                  buildHeader(context, "Updates"),
+                  const Spacer(),
+                  TextButton(
+                    onPressed: () => onUpdateAllApps(context, ref),
+                    child: const Text(
+                      "Update All",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
             if (updates.isNotEmpty)
               Card(
                 clipBehavior: Clip.antiAlias,
@@ -75,20 +88,11 @@ class InstalledAppsPage extends ConsumerWidget {
                     return buildCard(
                       context,
                       app,
-                      trailing: FilledButton(
+                      trailing: IconButton(
                         onPressed: () => onUpdateApp(context, ref, app.name),
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all(
-                            context.colorScheme.primary,
-                          ),
-                          padding: WidgetStateProperty.all(
-                            const EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 12),
-                          ),
-                        ),
-                        child: const Icon(
+                        icon: const Icon(
                           Icons.download_outlined,
-                          size: 32,
+                          size: 28,
                         ),
                       ),
                     );
@@ -149,6 +153,15 @@ class InstalledAppsPage extends ConsumerWidget {
     CommandTerminalDialog.showUpdateApp(
       context,
       appId,
+      onExit: (success) {
+        if (success) ref.invalidate(installedAppsWithUpdatesProvider);
+      },
+    );
+  }
+
+  void onUpdateAllApps(BuildContext context, WidgetRef ref) {
+    CommandTerminalDialog.showUpdateAll(
+      context,
       onExit: (success) {
         if (success) ref.invalidate(installedAppsWithUpdatesProvider);
       },

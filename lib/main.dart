@@ -21,10 +21,10 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'DeckHub',
+      title: 'Apphub',
       routerConfig: router.config(),
       debugShowCheckedModeBanner: false,
-      theme: Flux.config.theme,
+      theme: generateFluxTheme(),
     );
   }
 }
