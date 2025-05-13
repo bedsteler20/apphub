@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:deckhub/gen/strings.g.dart';
 import 'package:deckhub/providers/flathub.dart';
 import 'package:deckhub/router.gr.dart';
 import 'package:deckhub/widgets/pagination_layout.dart';
@@ -45,7 +46,7 @@ class PopularAppsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PaginationLayout(
-      label: 'Popular Apps',
+      label: t.pageNames.popular,
       onPageChanged: (page) {
         context.router.replace(PopularAppsRoute(page: page));
       },
@@ -71,7 +72,7 @@ class UpdatedAppsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PaginationLayout(
-      label: 'Recently Updated Apps',
+      label: t.pageNames.recentlyUpdated,
       onPageChanged: (page) {
         context.router.replace(UpdatedAppsRoute(page: page));
       },
@@ -97,7 +98,7 @@ class NewAppsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PaginationLayout(
-      label: 'New Apps',
+      label: t.pageNames.recentlyAdded,
       onPageChanged: (page) {
         context.router.replace(NewAppsRoute(page: page));
       },
@@ -125,7 +126,7 @@ class DeveloperPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PaginationLayout(
-      label: 'Apps by $name',
+      label: t.pageNames.developer(developer: name),
       onPageChanged: (page) {
         context.router.replace(DeveloperRoute(name: name, page: page));
       },

@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:deckhub/gen/strings.g.dart';
 import 'package:deckhub/router.gr.dart';
 import 'package:deckhub/widgets/search_pallet.dart';
 import 'package:flutter/material.dart';
@@ -40,9 +41,9 @@ class ScaffoldPage extends StatelessWidget {
             onPressed: () => SearchPallet.show(context),
           ),
       ],
-      tabs: const [
-        FluxTab(title: "Home", icon: Icons.home),
-        FluxTab(title: "Installed", icon: Icons.apps),
+      tabs: [
+        FluxTab(title: t.tabBar.home, icon: Icons.home),
+        FluxTab(title: t.tabBar.installed, icon: Icons.apps),
       ],
       child: CallbackShortcuts(
         bindings: {

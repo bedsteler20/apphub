@@ -6,6 +6,7 @@ import 'package:deckhub/api/client.dart';
 import 'package:deckhub/api/pagination.dart';
 import 'package:deckhub/api/search.dart';
 import 'package:deckhub/api/summary.dart';
+import 'package:deckhub/gen/strings.g.dart';
 import 'package:deckhub/utils/std.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
@@ -19,10 +20,12 @@ part 'flathub.g.dart';
 @riverpod
 Dio dio(Ref ref) {
   final dio = Dio();
-  dio.options.headers['User-Agent'] = 'DeckHub/1.0';
+  dio.options.headers['User-Agent'] = 'Apphub/1.0';
+  dio.options.queryParameters['locale'] =
+      LocaleSettings.currentLocale.languageCode;
   dio.interceptors.add(DioCacheInterceptor(
     options: CacheOptions(
-      store: FileCacheStore('${xdg.cacheHome.path}/dev.bedsteler20.Deckhub'),
+      store: FileCacheStore('${xdg.cacheHome.path}/dev.bedsteler20.Apphub'),
       allowPostMethod: false,
       policy: CachePolicy.refresh,
     ),

@@ -8,6 +8,7 @@ import 'package:deckhub/api/extensions.dart';
 import 'package:deckhub/api/summary.dart';
 import 'package:deckhub/flatpak/base.dart';
 import 'package:deckhub/flatpak/installed_app.dart';
+import 'package:deckhub/gen/strings.g.dart';
 import 'package:deckhub/providers/flatpak.dart';
 import 'package:deckhub/providers/pages.dart';
 import 'package:deckhub/router.gr.dart';
@@ -103,8 +104,11 @@ class AppPage extends HookConsumerWidget {
                 child: AppGrid(
                   onMore: () => context.router
                       .push(DeveloperRoute(name: appstream.developerName!)),
-                  showMoreLabel: devsOtherApps.length >= 6 ? "See more" : null,
-                  title: 'Other apps by ${appstream.developerName}',
+                  showMoreLabel:
+                      devsOtherApps.length >= 6 ? t.appPage.seeMore : null,
+                  title: t.appPage.otherAppsByDeveloper(
+                      developer: appstream.developerName ??
+                          t.appPage.developerNameFallback),
                   data: devsOtherApps,
                 ),
               ),
@@ -158,7 +162,9 @@ class AppPageLicenseCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              appstream.isFreeLicense ? "Community built" : "Proprietary",
+              appstream.isFreeLicense
+                  ? t.appPage.communityBuilt
+                  : t.appPage.proprietary,
               style: context.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -166,8 +172,9 @@ class AppPageLicenseCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               appstream.isFreeLicense
-                  ? "This app is developed in the open by an international community, and released under the ${appstream.projectLicense}."
-                  : "This app is not developed in the open, so only its developers know how it works. It may be insecure in ways that are hard to detect, and it may change without oversight.",
+                  ? t.appPage.freeLicenseMessage(
+                      license: appstream.projectLicense ?? '')
+                  : t.appPage.proprietaryMessage,
               textAlign: TextAlign.center,
               style: context.textTheme.bodyLarge?.copyWith(
                 color: context.textTheme.bodyMedium?.color?.withOpacity(0.8),
@@ -196,17 +203,17 @@ class AppPageDownloadInfo extends StatelessWidget {
         children: [
           ListTile(
             leading: const Icon(Icons.storage_rounded),
-            title: const Text('Install Size'),
+            title: Text(t.appPage.installSize),
             subtitle: Text("~${summary.installedSize.toFileSize()}"),
           ),
           ListTile(
             leading: const Icon(Icons.file_download_outlined),
-            title: const Text('Download Size'),
+            title: Text(t.appPage.downloadSize),
             subtitle: Text(summary.downloadSize.toFileSize()),
           ),
           ListTile(
             leading: const Icon(Icons.devices_rounded),
-            title: const Text('Available Architectures'),
+            title: Text(t.appPage.availableArchitectures),
             subtitle: Text(summary.arches.join(', ')),
           ),
         ],
@@ -242,26 +249,29 @@ class AppPageLinks extends StatelessWidget {
       child: Column(
         children: [
           if (links.homepage != null)
-            buildLink(context, Icons.home_rounded, 'Homepage', links.homepage!),
+            buildLink(context, Icons.home_rounded, t.appPage.links.homePage,
+                links.homepage!),
           if (links.donation != null)
-            buildLink(context, Icons.monetization_on_rounded, 'Donate',
-                links.donation!),
+            buildLink(context, Icons.monetization_on_rounded,
+                t.appPage.links.donate, links.donation!),
           if (links.help != null)
-            buildLink(context, Icons.help_rounded, 'Help', links.help!),
+            buildLink(
+                context, Icons.help_rounded, t.appPage.links.help, links.help!),
           if (links.faq != null)
-            buildLink(
-                context, Icons.question_answer_rounded, 'FAQ', links.faq!),
+            buildLink(context, Icons.question_answer_rounded,
+                t.appPage.links.faq, links.faq!),
           if (links.contact != null)
-            buildLink(context, Icons.mail_rounded, 'Contact', links.contact!),
+            buildLink(context, Icons.mail_rounded, t.appPage.links.contact,
+                links.contact!),
           if (links.vcsBrowser != null)
-            buildLink(
-                context, Icons.code_rounded, 'Source code', links.vcsBrowser!),
+            buildLink(context, Icons.code_rounded, t.appPage.links.sourceCode,
+                links.vcsBrowser!),
           if (links.translate != null)
-            buildLink(context, Icons.translate_rounded, 'Translate',
-                links.translate!),
+            buildLink(context, Icons.translate_rounded,
+                t.appPage.links.translate, links.translate!),
           if (links.bugtracker != null)
-            buildLink(context, Icons.bug_report_rounded, 'Bugtracker',
-                links.bugtracker!),
+            buildLink(context, Icons.bug_report_rounded,
+                t.appPage.links.bugTracker, links.bugtracker!),
         ],
       ),
     );
@@ -422,7 +432,9 @@ class AppPageHeader extends ConsumerWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            "by ${appstream.developerName ?? 'Unknown'}",
+            t.appPage.byDeveloper(
+                developer:
+                    appstream.developerName ?? t.appPage.developerNameFallback),
             style: context.textTheme.bodyMedium?.copyWith(
               color: context.textTheme.bodyMedium?.color?.withOpacity(0.5),
             ),
@@ -496,12 +508,14 @@ class AppPageInstallButton extends ConsumerWidget {
       barrierDismissible: false,
       builder: (context) {
         return FluxConfirmDialog(
-          title: 'Uninstall App',
-          message: 'Are you sure you want to uninstall ${appstream.name}?',
-          confirmText: 'Uninstall',
+          title: t.appPage.uninstallDialog.title,
+          message: t.appPage.uninstallDialog.message(
+            appName: appstream.name ?? '',
+          ),
+          confirmText: t.appPage.uninstallDialog.confirm,
           confirmButtonColor: context.colorScheme.error.withAlpha(30),
           confirmTextColor: context.colorScheme.error,
-          cancelText: 'Cancel',
+          cancelText: t.appPage.uninstallDialog.cancel,
           onResult: (result) async {
             if (result) {
               CommandTerminalDialog.showUninstall(
@@ -553,7 +567,7 @@ class AppPageInstallButton extends ConsumerWidget {
               ),
             ),
             child: Text(
-              "Open",
+              t.appPage.openApp,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -593,7 +607,7 @@ class AppPageInstallButton extends ConsumerWidget {
           ),
         ),
         child: Text(
-          "Install",
+          t.appPage.installApp,
           style: context.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
             color: context.colorScheme.onPrimary,

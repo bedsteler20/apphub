@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:deckhub/flatpak/base.dart';
+import 'package:deckhub/gen/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pty/flutter_pty.dart';
 import 'package:flux/flux.dart';
@@ -140,13 +141,13 @@ class CommandTerminalDialog extends StatelessWidget {
               onClose: () {
                 FluxConfirmDialog.show(
                   context: context,
-                  title: 'Stop Command',
-                  message: 'Are you sure you want to stop the command?',
-                  confirmText: 'Stop',
+                  title: t.terminal.stopCommand,
+                  message: t.terminal.stopCommandMessage,
+                  confirmText: t.terminal.stop,
                   confirmButtonColor:
                       context.theme.colorScheme.error.withValues(alpha: 0.3),
                   confirmTextColor: context.theme.colorScheme.error,
-                  cancelText: 'Cancel',
+                  cancelText: t.terminal.cancel,
                   onResult: (result) {
                     if (result) {
                       Navigator.of(context).pop();

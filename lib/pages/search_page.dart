@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:deckhub/gen/strings.g.dart';
 import 'package:deckhub/providers/flathub.dart';
 import 'package:deckhub/router.gr.dart';
 import 'package:deckhub/widgets/pagination_layout.dart';
@@ -21,7 +22,7 @@ class SearchPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PaginationLayout(
-      label: 'Results for "$query"',
+      label: t.search.searchResult(query: query),
       onPageChanged: (page) {
         context.router.replace(SearchRoute(
           page: page,

@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:deckhub/gen/strings.g.dart';
 import 'package:deckhub/router.gr.dart';
 
 @AutoRouterConfig()
@@ -7,7 +8,7 @@ class AppRouter extends RootStackRouter {
   final routes = [
     AutoRoute(
       path: '/',
-      title: (context, data) => 'Home',
+      title: (context, data) => t.pageNames.home,
       page: ScaffoldRoute.page,
       children: [
         AutoRoute(
@@ -16,13 +17,13 @@ class AppRouter extends RootStackRouter {
           initial: true,
           children: [
             AutoRoute(
-              title: (context, data) => 'Home',
+              title: (context, data) => t.pageNames.home,
               page: HomeRoute.page,
               initial: true,
               path: '',
             ),
             AutoRoute(
-              title: (context, data) => 'Installed Apps',
+              title: (context, data) => t.pageNames.installedApps,
               page: InstalledAppsRoute.page,
               path: 'installed',
             ),
@@ -33,18 +34,22 @@ class AppRouter extends RootStackRouter {
           path: 'search',
         ),
         AutoRoute(
+          title: (context, data) => t.pageNames.trending,
           page: TrendingAppsRoute.page,
           path: 'apps/collection/trending/:page',
         ),
         AutoRoute(
+          title: (context, data) => t.pageNames.popular,
           page: PopularAppsRoute.page,
           path: 'apps/collection/popular/:page',
         ),
         AutoRoute(
+          title: (context, data) => t.pageNames.recentlyUpdated,
           page: UpdatedAppsRoute.page,
           path: 'apps/collection/recently-updated/:page',
         ),
         AutoRoute(
+          title: (context, data) => t.pageNames.recentlyAdded,
           page: NewAppsRoute.page,
           path: 'apps/collection/recently-added/:page',
         ),

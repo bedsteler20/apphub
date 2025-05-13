@@ -1,0 +1,71 @@
+{
+    "appName": "Apphub",
+    "tabBar": {
+        "home": "Home",
+        "installed": "Installed"
+    },
+    "pageNames": {
+        "home": "Home",
+        "installedApps": "Installed Apps",
+        "trending": "Trending Apps",
+        "recentlyUpdated": "Recently Updated Apps",
+        "popular": "Popular Apps",
+        "recentlyAdded": "New Apps",
+        "developer": "Apps by $developer"
+    },
+    "terminal": {
+        "cancel": "Cancel",
+        "stop": "Stop",
+        "stopCommand": "Stop Command",
+        "stopCommandMessage": "Are you sure you want to stop this command?"
+    },
+    "search": {
+        "search": "Search",
+        "searchPlaceholder": "Search for apps",
+        "searchResult": "Results for \"$query\""
+    },
+    "installedPage": {
+        "updatesTitle": "Updates",
+        "updateAllButton": "Update All",
+        "appsTitle": "Apps",
+        "runtimesTitle": "Runtimes",
+        "loadingError": "Error loading installed apps",
+        "checkingForUpdates": "Checking for updates..."
+    },
+    "homePage": {
+        "gnomeCircle": "GNOME Circle",
+        "appOfTheDay": "App of the Day",
+        "more": "More"
+    },
+    "appPage": {
+        "seeMore": "See More",
+        "otherAppsByDeveloper": "Other Apps by $developer",
+        "communityBuilt": "Community Built",
+        "proprietary": "Proprietary",
+        "freeLicenseMessage": "This app is developed in the open by an international community, and released under the $license.",
+        "proprietaryMessage": "This app is not developed in the open, so only its developers know how it works. It may be insecure in ways that are hard to detect, and it may change without oversight.",
+        "installSize": "Install Size",
+        "downloadSize": "Download Size",
+        "availableArchitectures": "Available Architectures",
+        "links": {
+            "homePage": "Home Page",
+            "donate": "Donate",
+            "help": "Help",
+            "faq": "FAQ",
+            "contact": "Contact",
+            "sourceCode": "Source Code",
+            "translate": "Translate",
+            "bugTracker": "Bug Tracker"
+        },
+        "byDeveloper": "by $developer",
+        "developerNameFallback": "Unknown",
+        "openApp": "Open",
+        "installApp": "Install",
+        "uninstallDialog": {
+            "title": "Uninstall App",
+            "message": "Are you sure you want to uninstall $appName?",
+            "confirm": "Uninstall",
+            "cancel": "Cancel"
+        }
+    }
+}

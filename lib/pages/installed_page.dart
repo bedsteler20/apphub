@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:deckhub/flatpak/ffi.dart';
 import 'package:deckhub/flatpak/installed_app.dart';
+import 'package:deckhub/gen/strings.g.dart';
 import 'package:deckhub/providers/flatpak.dart';
 import 'package:deckhub/providers/pages.dart';
 import 'package:deckhub/router.gr.dart';
@@ -65,12 +66,12 @@ class InstalledAppsPage extends ConsumerWidget {
             if (updates.isNotEmpty)
               Row(
                 children: [
-                  buildHeader(context, "Updates"),
+                  buildHeader(context, t.installedPage.updatesTitle),
                   const Spacer(),
                   TextButton(
                     onPressed: () => onUpdateAllApps(context, ref),
-                    child: const Text(
-                      "Update All",
+                    child: Text(
+                      t.installedPage.updateAllButton,
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
@@ -99,7 +100,7 @@ class InstalledAppsPage extends ConsumerWidget {
                   },
                 ),
               ),
-            buildHeader(context, "Apps"),
+            buildHeader(context, t.installedPage.appsTitle),
             Card(
               clipBehavior: Clip.antiAlias,
               child: ListView.builder(
@@ -112,7 +113,8 @@ class InstalledAppsPage extends ConsumerWidget {
                 },
               ),
             ),
-            if (runtimes.isNotEmpty) buildHeader(context, "Runtimes"),
+            if (runtimes.isNotEmpty)
+              buildHeader(context, t.installedPage.runtimesTitle),
             Card(
               clipBehavior: Clip.antiAlias,
               child: ListView.builder(
@@ -129,19 +131,19 @@ class InstalledAppsPage extends ConsumerWidget {
         );
       },
       error: (_, __) {
-        return const Center(
-          child: Text("Error loading installed apps"),
+        return  Center(
+          child: Text(t.installedPage.loadingError),
         );
       },
       loading: () {
-        return const Center(
+        return  Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 16),
-              Text("Checking for updates..."),
+              const CircularProgressIndicator(),
+              const SizedBox(height: 16),
+              Text(t.installedPage.checkingForUpdates),
             ],
           ),
         );

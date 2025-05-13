@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:deckhub/api/appstream.dart';
 import 'package:deckhub/api/extensions.dart';
+import 'package:deckhub/gen/strings.g.dart';
 import 'package:deckhub/providers/pages.dart';
 import 'package:deckhub/router.gr.dart';
 import 'package:deckhub/widgets/page_content_layout.dart';
@@ -41,7 +42,7 @@ class HomePage extends ConsumerWidget {
                     appIcon: appOfTheDay.icon!,
                     appId: appOfTheDay.id,
                     brandColor: appOfTheDay.getBrandColor(context),
-                    groupName: "App of the Day",
+                    groupName: t.homePage.appOfTheDay,
                     groupIcon: Icons.star_rounded,
                   ),
                 ),
@@ -53,7 +54,7 @@ class HomePage extends ConsumerWidget {
                     appSummary: data.circleAppOfTheDay.summary,
                     appIcon: data.circleAppOfTheDay.icon,
                     brandColor: data.circleAppOfTheDay.getBrandColor(context),
-                    groupName: "GNOME Circle",
+                    groupName: t.homePage.gnomeCircle,
                     groupIcon: Icons.circle_outlined,
                   ),
                 ),
@@ -62,29 +63,29 @@ class HomePage extends ConsumerWidget {
             const SizedBox(height: 24),
             AppGrid(
               data: data.trendingApps.hits,
-              title: "Trending Apps",
-              showMoreLabel: "More Trending",
+              title: t.pageNames.trending,
+              showMoreLabel: t.homePage.more,
               onMore: () => context.router.push(TrendingAppsRoute()),
             ),
             const SizedBox(height: 32),
             AppGrid(
               data: data.popularApps.hits,
-              title: "Popular Apps",
-              showMoreLabel: "More Popular",
+              title: t.pageNames.popular,
+              showMoreLabel: t.homePage.more,
               onMore: () => context.router.push(PopularAppsRoute()),
             ),
             const SizedBox(height: 32),
             AppGrid(
               data: data.newApps.hits,
-              title: "New Apps",
-              showMoreLabel: "More New",
+              title: t.pageNames.recentlyAdded,
+              showMoreLabel: t.homePage.more,
               onMore: () => context.router.push(NewAppsRoute()),
             ),
             const SizedBox(height: 32),
             AppGrid(
               data: data.updatedApps.hits,
-              title: "Recently Updated",
-              showMoreLabel: "More Updated",
+              title: t.pageNames.recentlyUpdated,
+              showMoreLabel: t.homePage.more,
               onMore: () => context.router.push(UpdatedAppsRoute()),
             ),
           ],

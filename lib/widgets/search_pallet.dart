@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:deckhub/gen/strings.g.dart';
 import 'package:deckhub/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -45,8 +46,8 @@ class SearchPallet extends HookConsumerWidget {
               }
             },
             decoration: InputDecoration(
-              labelText: "Search",
-              hintText: "Search for apps",
+              labelText: t.search.search,
+              hintText: t.search.searchPlaceholder,
               prefixIcon: const Icon(Icons.search_rounded),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8.0),
