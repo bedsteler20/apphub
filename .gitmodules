@@ -1,0 +1,3 @@
+[submodule "packages/flux"]
+	path = packages/flux
+	url = https://github.com/bedsteler20/flux
