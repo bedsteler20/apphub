@@ -157,7 +157,7 @@ class FeaturedAppTile extends StatelessWidget {
                           width: constraints.maxWidth >= 950 ? 300 : 200,
                           child: Text(
                             appName,
-                            style: context.textTheme.headlineMedium?.copyWith(
+                            style: context.textTheme.headlineSmall?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               overflow: TextOverflow.ellipsis,

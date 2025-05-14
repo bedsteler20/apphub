@@ -4,14 +4,16 @@ import 'package:deckhub/router.gr.dart';
 import 'package:deckhub/widgets/search_pallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flux/flux.dart';
 
 @RoutePage()
-class ScaffoldPage extends StatelessWidget {
+class ScaffoldPage extends HookWidget {
   const ScaffoldPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final navigationKey = useMemoized(() => GlobalKey<NavigatorState>());
     final router = context.watchRouter;
     final showTabSwitcher =
         router.currentPath == "/" || router.currentPath == "/installed";
@@ -33,7 +35,9 @@ class ScaffoldPage extends StatelessWidget {
         if (router.canPop())
           FluxTitlebarButton(
             icon: Icons.arrow_back,
-            onPressed: () => router.back(),
+            onPressed: () {
+              navigationKey.currentState?.maybePop();
+            },
           ),
         if (!router.canPop() || router.currentPath == "/search")
           FluxTitlebarButton(
@@ -50,7 +54,9 @@ class ScaffoldPage extends StatelessWidget {
           const SingleActivator(LogicalKeyboardKey.keyF, control: true): () =>
               SearchPallet.show(context),
         },
-        child: const AutoRouter(),
+        child: AutoRouter(
+          navigatorKey: navigationKey,
+        ),
       ),
     );
   }

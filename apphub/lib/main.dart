@@ -33,7 +33,7 @@ class App extends StatelessWidget {
       locale: TranslationProvider.of(context).flutterLocale, // use provider
       supportedLocales: AppLocaleUtils.supportedLocales,
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
-      theme: generateFluxTheme(),
+      theme: generateFluxTheme(fontFamily: "Adwaita Sans"),
     );
   }
 }
