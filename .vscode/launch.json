@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "deckhub",
+            "name": "apphub",
             "request": "launch",
             "type": "dart",
-            // "customTool": "/home/bedsteler20/Projects/deckhub/linux/phash_emulator.dart"
+            "cwd": "${workspaceFolder}/apphub",
         },
         {
-            "name": "deckhub (profile mode)",
+            "name": "apphub (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "deckhub (release mode)",
+            "name": "apphub (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

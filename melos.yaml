@@ -1,3 +1,4 @@
 name: project
 packages:
-  - packages/*/
+  - apphub
+  - flux
