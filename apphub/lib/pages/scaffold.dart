@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:deckhub/gen/strings.g.dart';
 import 'package:deckhub/router.gr.dart';
+import 'package:deckhub/widgets/menu.dart';
 import 'package:deckhub/widgets/search_pallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -45,6 +46,7 @@ class ScaffoldPage extends HookWidget {
             onPressed: () => SearchPallet.show(context),
           ),
       ],
+      titlebarFollowing: const [AppMenu()],
       tabs: [
         FluxTab(title: t.tabBar.home, icon: Icons.home),
         FluxTab(title: t.tabBar.installed, icon: Icons.apps),

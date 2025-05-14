@@ -42,6 +42,7 @@ dependencies:
     slang_flutter: ^3.32.0
     flutter_localizations: # add this
         sdk: flutter
+    shared_preferences: ^2.5.3
 dev_dependencies:
     flutter_test:
         sdk: flutter
@@ -63,3 +64,5 @@ flutter:
           - asset: assets/fonts/AdwaitaSans-Regular.ttf
           - asset: assets/fonts/AdwaitaSans-Italic.ttf
             style: italic
+    assets:
+      - assets/icons/

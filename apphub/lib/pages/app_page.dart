@@ -11,6 +11,7 @@ import 'package:deckhub/flatpak/installed_app.dart';
 import 'package:deckhub/gen/strings.g.dart';
 import 'package:deckhub/providers/flatpak.dart';
 import 'package:deckhub/providers/pages.dart';
+import 'package:deckhub/providers/settings.dart';
 import 'package:deckhub/router.gr.dart';
 import 'package:deckhub/utils/std.dart';
 import 'package:deckhub/widgets/app_grid.dart';
@@ -496,6 +497,7 @@ class AppPageInstallButton extends ConsumerWidget {
     CommandTerminalDialog.showInstall(
       context,
       appstream.id,
+      user: ref.read(settingsProvider).installLocation == "user",
       onExit: (success) {
         if (success) ref.invalidate(installedAppsProvider);
       },

@@ -67,5 +67,17 @@
             "confirm": "Uninstall",
             "cancel": "Cancel"
         }
-    }
+    },
+    "settings": "Settings",
+    "about": "About",
+    "aboutMenu": {
+        "developers": "Developers",
+        "designers": "Designers",
+        "translators": "Translators",
+        "github": "GitHub"
+    },
+    "system": "System",
+    "user": "User",
+    "installLocation": "Install Location",
+    "installLocationMessage": "Where a app is installed to"
 }

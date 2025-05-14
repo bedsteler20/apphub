@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 1
-/// Strings: 51
+/// Strings: 61
 ///
-/// Built on 2025-05-13 at 19:24 UTC
+/// Built on 2025-05-14 at 18:46 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -155,6 +155,13 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final _StringsInstalledPageEn installedPage = _StringsInstalledPageEn._(_root);
 	late final _StringsHomePageEn homePage = _StringsHomePageEn._(_root);
 	late final _StringsAppPageEn appPage = _StringsAppPageEn._(_root);
+	String get settings => 'Settings';
+	String get about => 'About';
+	late final _StringsAboutMenuEn aboutMenu = _StringsAboutMenuEn._(_root);
+	String get system => 'System';
+	String get user => 'User';
+	String get installLocation => 'Install Location';
+	String get installLocationMessage => 'Where a app is installed to';
 }
 
 // Path: tabBar
@@ -260,6 +267,19 @@ class _StringsAppPageEn {
 	late final _StringsAppPageUninstallDialogEn uninstallDialog = _StringsAppPageUninstallDialogEn._(_root);
 }
 
+// Path: aboutMenu
+class _StringsAboutMenuEn {
+	_StringsAboutMenuEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get developers => 'Developers';
+	String get designers => 'Designers';
+	String get translators => 'Translators';
+	String get github => 'GitHub';
+}
+
 // Path: appPage.links
 class _StringsAppPageLinksEn {
 	_StringsAppPageLinksEn._(this._root);
@@ -347,6 +367,16 @@ extension on Translations {
 			case 'appPage.uninstallDialog.message': return ({required Object appName}) => 'Are you sure you want to uninstall ${appName}?';
 			case 'appPage.uninstallDialog.confirm': return 'Uninstall';
 			case 'appPage.uninstallDialog.cancel': return 'Cancel';
+			case 'settings': return 'Settings';
+			case 'about': return 'About';
+			case 'aboutMenu.developers': return 'Developers';
+			case 'aboutMenu.designers': return 'Designers';
+			case 'aboutMenu.translators': return 'Translators';
+			case 'aboutMenu.github': return 'GitHub';
+			case 'system': return 'System';
+			case 'user': return 'User';
+			case 'installLocation': return 'Install Location';
+			case 'installLocationMessage': return 'Where a app is installed to';
 			default: return null;
 		}
 	}
