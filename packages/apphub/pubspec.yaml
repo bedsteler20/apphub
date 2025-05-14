@@ -31,8 +31,7 @@ dependencies:
     dbus: ^0.7.10
     auto_route: ^9.2.0
     number_paginator: ^0.4.1
-    flux:
-        git: https://github.com/bedsteler20/flux.git
+    flux: any
     ffi: ^2.1.4
     flutter_pty: ^0.4.2
     xterm: ^4.0.0
