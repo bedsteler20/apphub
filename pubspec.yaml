@@ -58,5 +58,9 @@ dev_dependencies:
     auto_route_generator: ^9.0.0
 flutter:
     uses-material-design: true
-    assets:
-        - assets/default_settings.yaml
+    fonts:
+      - family: Adwaita Sans
+        fonts:
+          - asset: assets/fonts/AdwaitaSans-Regular.ttf
+          - asset: assets/fonts/AdwaitaSans-Italic.ttf
+            style: italic

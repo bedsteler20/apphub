@@ -6,7 +6,7 @@ part of 'flathub.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$dioHash() => r'09a19fab27d497249599e272a1897bd0d08503ba';
+String _$dioHash() => r'02ba86bea8c151426e35027eec85049cbf84407b';
 
 /// See also [dio].
 @ProviderFor(dio)
