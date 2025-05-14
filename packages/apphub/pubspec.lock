@@ -517,9 +517,11 @@ packages:
   flux:
     dependency: "direct main"
     description:
-      path: "../flux"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "088252a3107c29c077b783afd035e01636b87250"
+      url: "https://github.com/bedsteler20/flux.git"
+    source: git
     version: "0.0.1"
   freezed:
     dependency: "direct dev"
